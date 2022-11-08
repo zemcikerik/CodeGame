@@ -4,31 +4,26 @@ import dev.zemco.codegame.execution.instructions.Instruction;
 
 import java.util.function.Supplier;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
+
 public class SupplierInstructionParser implements InstructionParser {
 
     private final String instructionName;
     private final Supplier<Instruction> instructionSupplier;
 
     public SupplierInstructionParser(String instructionName, Supplier<Instruction> instructionSupplier) {
-        if (instructionName == null) {
-            throw new IllegalArgumentException("Instruction name cannot be null!");
-        }
-
-        if (instructionSupplier == null) {
-            throw new IllegalArgumentException("Instruction supplier cannot be null!");
-        }
-
-        this.instructionName = instructionName;
-        this.instructionSupplier = instructionSupplier;
+        this.instructionName = checkArgumentNotNullAndNotEmpty(instructionName, "Instruction name");
+        this.instructionSupplier = checkArgumentNotNull(instructionSupplier, "Instruction supplier");
     }
 
     @Override
-    public boolean canParseInstruction(String instruction) {
-        return this.instructionName.equals(instruction);
+    public boolean canParseInstruction(String instructionLine) {
+        return this.instructionName.equals(instructionLine);
     }
 
     @Override
-    public Instruction parseInstruction(String instruction) {
+    public Instruction parseInstruction(String instructionLine) {
         return this.instructionSupplier.get();
     }
 

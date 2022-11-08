@@ -21,7 +21,7 @@ public class ProblemCaseMemorySettings {
         }
 
         this.size = size;
-        this.initialValues = initialValues != null ? Map.copyOf(initialValues) : Collections.emptyMap();
+        this.initialValues = initialValues != null ? Collections.unmodifiableMap(initialValues) : Collections.emptyMap();
     }
 
     public int getSize() {

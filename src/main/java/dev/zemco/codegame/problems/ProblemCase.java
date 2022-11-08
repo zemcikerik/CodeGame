@@ -30,8 +30,8 @@ public class ProblemCase {
             throw new IllegalArgumentException("Memory settings cannot be null!");
         }
 
-        this.inputs = inputs != null ? List.copyOf(inputs) : Collections.emptyList();
-        this.expectedOutputs = List.copyOf(expectedOutputs);
+        this.inputs = inputs != null ? Collections.unmodifiableList(inputs) : Collections.emptyList();
+        this.expectedOutputs = Collections.unmodifiableList(expectedOutputs);
         this.memorySettings = memorySettings;
     }
 

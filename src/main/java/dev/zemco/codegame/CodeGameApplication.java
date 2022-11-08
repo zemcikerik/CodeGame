@@ -26,7 +26,7 @@ import java.util.List;
 
 public class CodeGameApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ProblemRepository repository = new UrlObjectMapperProblemRepository(CodeGameApplication.class.getResource("/problems.json"), new ObjectMapper());
         Problem problem = repository.getAllProblems().get(0);
 

@@ -1,52 +1,102 @@
 package dev.zemco.codegame.compilation;
 
 import dev.zemco.codegame.compilation.parsing.InstructionParser;
+import dev.zemco.codegame.compilation.parsing.ParseException;
 import dev.zemco.codegame.execution.instructions.Instruction;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import static java.util.function.Predicate.not;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 public class CodeProgramCompiler implements ProgramCompiler {
 
+    private static final String COMMENT_PREFIX = ";";
+    private static final String JUMP_LABEL_PREFIX = ">";
     private final List<InstructionParser> instructionParsers;
 
     public CodeProgramCompiler(List<InstructionParser> instructionParsers) {
-        if (instructionParsers == null) {
-            throw new IllegalArgumentException("Instruction parsers cannot be null!");
-        }
-        this.instructionParsers = instructionParsers;
+        // TODO: or empty?
+        this.instructionParsers = checkArgumentNotNull(instructionParsers, "Instruction parsers");
     }
 
     @Override
-    public Program compileProgram(String rawProgram) {
-        if (rawProgram == null) {
-            throw new IllegalArgumentException("Raw program cannot be null!");
+    public Program compileProgram(String rawProgram) throws InvalidSyntaxException {
+        checkArgumentNotNull(rawProgram, "Raw program");
+
+        // first we split the program into individual lines
+        // \R since Java 8 matches any unicode line break sequence
+        String[] lines = rawProgram.split("\\R");
+
+        List<InstructionDescriptor> instructionDescriptors = new ArrayList<>();
+        Map<String, Integer> jumpLabelToPositionMap = new HashMap<>();
+
+        for (int position = 0; position < lines.length; position++) {
+            String lineWithoutComment = this.removeCommentFromLine(lines[position]);
+
+            // remove leading and trailing whitespace used by user for formatting
+            String instructionLine = lineWithoutComment.trim();
+
+            if (instructionLine.isEmpty()) {
+                // line was used by user for readability / comments, thus it does not contain any instruction or label
+                continue;
+            }
+
+            // if line is a jump label
+            if (instructionLine.startsWith(JUMP_LABEL_PREFIX)) {
+                if (this.containsAnyWhitespace(instructionLine)) {
+                    throw new InvalidSyntaxException("Whitespace is disallowed in jump labels!", position);
+                }
+
+                if (instructionLine.length() == JUMP_LABEL_PREFIX.length()) {
+                    throw new InvalidSyntaxException("Jump label name cannot be empty!", position);
+                }
+
+                jumpLabelToPositionMap.put(instructionLine, position);
+                continue;
+            }
+
+            Instruction instruction = this.parseInstruction(instructionLine, position);
+            // TODO: maybe factory
+            instructionDescriptors.add(new ImmutableInstructionDescriptor(instruction, position));
         }
 
-        // TODO: line separator
-        List<Instruction> instructions = Arrays.stream(rawProgram.split("\\r*\\n"))
-                .map(String::trim)
-                .filter(not(String::isBlank))
-                .filter(not(this::isLineWithComment))
-                .map(this::parseInstruction)
-                .collect(Collectors.toList());
-
-        return new Program(instructions);
+        return new Program(instructionDescriptors, jumpLabelToPositionMap);
     }
 
-    private boolean isLineWithComment(String line) {
-        return line.startsWith(";");
+    // removes all characters after comment prefix (including the comment prefix)
+    private String removeCommentFromLine(String line) {
+        int commentStartIndex = line.indexOf(COMMENT_PREFIX);
+        return commentStartIndex != -1 ? line.substring(0, commentStartIndex) : line;
     }
 
-    private Instruction parseInstruction(String instructionLine) {
-        return this.instructionParsers.stream()
-                .filter(parser -> parser.canParseInstruction(instructionLine))
-                .findFirst()
-                .map(parser -> parser.parseInstruction(instructionLine))
-                .orElseThrow(); // TODO: throw proper exception
+    private boolean containsAnyWhitespace(String string) {
+        for (int i = 0; i < string.length(); i++) {
+            if (Character.isWhitespace(string.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // try to parse instruction line using provided instruction parsers
+    private Instruction parseInstruction(String instructionLine, int position) throws InvalidSyntaxException {
+        for (InstructionParser parser : this.instructionParsers) {
+            // find first parser capable of parsing this instruction line
+            if (!parser.canParseInstruction(instructionLine)) {
+                continue;
+            }
+
+            try {
+                return parser.parseInstruction(instructionLine);
+            } catch (ParseException e) {
+                throw new InvalidSyntaxException("Exception occurred during instruction parsing!", e, position);
+            }
+        }
+        // no parser capable of parsing this instruction line was found
+        throw new InvalidSyntaxException("Unknown instruction!", position);
     }
 
 }

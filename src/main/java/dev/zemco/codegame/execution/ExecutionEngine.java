@@ -9,6 +9,8 @@ package dev.zemco.codegame.execution;
  */
 public interface ExecutionEngine {
 
+    void jumpTo(String label);
+
     void step();
 
 }

@@ -53,7 +53,7 @@ public class UrlObjectMapperProblemRepositoryTest {
     // TODO: exception
     @Test
     public void getAllProblemsShouldThrowTODOExceptionWhenObjectMapperFails() throws IOException {
-        when(this.objectMapper.readValue(this.url, any(CollectionType.class))).thenThrow(IOException.class);
+        when(this.objectMapper.readValue(eq(this.url), any(CollectionType.class))).thenThrow(IOException.class);
         new UrlObjectMapperProblemRepository(this.url, this.objectMapper).getAllProblems();
     }
 

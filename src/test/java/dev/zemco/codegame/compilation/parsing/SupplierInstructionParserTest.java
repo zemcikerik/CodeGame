@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -48,7 +49,7 @@ public class SupplierInstructionParserTest {
         when(instructionSupplier.get()).thenReturn(instruction);
 
         SupplierInstructionParser parser = new SupplierInstructionParser("test", instructionSupplier);
-        assertThat(parser.parseInstruction("test"), is(instruction));
+        assertThat(parser.parseInstruction("test"), sameInstance(instruction));
     }
 
 }
