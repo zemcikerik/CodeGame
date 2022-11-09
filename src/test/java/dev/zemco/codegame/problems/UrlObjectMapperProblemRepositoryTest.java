@@ -3,8 +3,8 @@ package dev.zemco.codegame.problems;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -24,21 +25,21 @@ public class UrlObjectMapperProblemRepositoryTest {
     private URL url;
     private ObjectMapper objectMapper;
 
-    @Before
+    @BeforeEach
     public void setup() throws MalformedURLException {
         this.url = new URL("file://test");
         this.objectMapper = mock(ObjectMapper.class);
         when(this.objectMapper.getTypeFactory()).thenReturn(TypeFactory.defaultInstance());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldThrowIllegalArgumentExceptionIfUrlIsNull() {
-        new UrlObjectMapperProblemRepository(null, this.objectMapper);
+        assertThrows(IllegalArgumentException.class, () -> new UrlObjectMapperProblemRepository(null, this.objectMapper));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldThrowIllegalArgumentExceptionIfObjectMapperIsNull() {
-        new UrlObjectMapperProblemRepository(this.url, null);
+        assertThrows(IllegalArgumentException.class, () -> new UrlObjectMapperProblemRepository(this.url, null));
     }
 
     @Test

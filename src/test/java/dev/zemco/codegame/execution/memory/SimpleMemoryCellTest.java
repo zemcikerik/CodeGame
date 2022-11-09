@@ -1,16 +1,17 @@
 package dev.zemco.codegame.execution.memory;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SimpleMemoryCellTest {
 
     private SimpleMemoryCell memoryCell;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.memoryCell = new SimpleMemoryCell();
     }
@@ -26,9 +27,9 @@ public class SimpleMemoryCellTest {
         assertThat(this.memoryCell.hasValue(), is(true));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void getValueShouldThrowIllegalStateExceptionIfHasNoValue() {
-        this.memoryCell.getValue();
+        assertThrows(IllegalStateException.class, () -> this.memoryCell.getValue());
     }
 
     @Test

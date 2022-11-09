@@ -5,12 +5,13 @@ import dev.zemco.codegame.execution.io.NotAcceptedException;
 import dev.zemco.codegame.execution.io.OutputSink;
 import dev.zemco.codegame.execution.memory.Memory;
 import dev.zemco.codegame.execution.memory.MemoryCell;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class OutputInstructionTest {
 
     @Mock
@@ -35,8 +36,8 @@ public class OutputInstructionTest {
 
     private OutputInstruction outputInstruction;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    public void setUp() {
         this.outputInstruction = new OutputInstruction();
         when(this.executionContext.getMemory()).thenReturn(this.memory);
         when(this.executionContext.getOutputSink()).thenReturn(this.outputSink);
@@ -54,19 +55,19 @@ public class OutputInstructionTest {
         verify(this.outputSink, times(1)).accept(42);
     }
 
-    @Test(expected = InstructionExecutionException.class)
-    public void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHasNoValue() throws InstructionExecutionException {
+    @Test
+    public void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHasNoValue() {
         when(this.workingCell.hasValue()).thenReturn(false);
-        this.outputInstruction.execute(this.executionContext);
+        assertThrows(InstructionExecutionException.class, () -> this.outputInstruction.execute(this.executionContext));
     }
 
-    @Test(expected = InstructionExecutionException.class)
-    public void executeShouldThrowInstructionExecutionExceptionIfOutputSinkRejectedTheValue() throws InstructionExecutionException {
+    @Test
+    public void executeShouldThrowInstructionExecutionExceptionIfOutputSinkRejectedTheValue() {
         when(this.workingCell.hasValue()).thenReturn(true);
         when(this.workingCell.getValue()).thenReturn(-5);
         doThrow(NotAcceptedException.class).when(this.outputSink).accept(anyInt());
 
-        this.outputInstruction.execute(this.executionContext);
+        assertThrows(InstructionExecutionException.class, () -> this.outputInstruction.execute(this.executionContext));
     }
 
 }

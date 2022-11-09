@@ -31,7 +31,7 @@ public class OutputInstruction implements Instruction {
         try {
             outputSink.accept(workingCell.getValue());
         } catch (NotAcceptedException e) {
-            throw new InstructionExecutionException("Output sink rejected the value from working cell!");
+            throw new InstructionExecutionException("Output sink rejected the value from working cell!", e);
         }
     }
 

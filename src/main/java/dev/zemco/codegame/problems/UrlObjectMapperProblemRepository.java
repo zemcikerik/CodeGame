@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+
 public class UrlObjectMapperProblemRepository implements ProblemRepository {
 
     private final URL url;
@@ -14,16 +16,8 @@ public class UrlObjectMapperProblemRepository implements ProblemRepository {
     private final CollectionType problemListType;
 
     public UrlObjectMapperProblemRepository(URL url, ObjectMapper objectMapper) {
-        if (url == null) {
-            throw new IllegalArgumentException("Url cannot be null!");
-        }
-
-        if (objectMapper == null) {
-            throw new IllegalArgumentException("Object mapper cannot be null!");
-        }
-
-        this.url = url;
-        this.objectMapper = objectMapper;
+        this.url = checkArgumentNotNull(url, "Url");
+        this.objectMapper = checkArgumentNotNull(objectMapper, "Object mapper");
         this.problemListType = this.objectMapper.getTypeFactory().constructCollectionType(List.class, Problem.class);
     }
 

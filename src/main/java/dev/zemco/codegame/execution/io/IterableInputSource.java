@@ -3,6 +3,8 @@ package dev.zemco.codegame.execution.io;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+
 /**
  * Input source that uses an {@link Iterable<Integer>} as source of inputs.
  * @author Erik Zemčík
@@ -17,10 +19,7 @@ public class IterableInputSource implements InputSource {
      * @throws IllegalArgumentException if iterable is null
      */
     public IterableInputSource(Iterable<Integer> iterable) {
-        if (iterable == null) {
-            throw new IllegalArgumentException("Iterable cannot be null!");
-        }
-        this.iterator = iterable.iterator();
+        this.iterator = checkArgumentNotNull(iterable, "Iterable").iterator();
     }
 
     // TODO: docs here?

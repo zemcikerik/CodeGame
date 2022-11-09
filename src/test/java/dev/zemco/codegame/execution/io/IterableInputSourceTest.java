@@ -1,6 +1,6 @@
 package dev.zemco.codegame.execution.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -8,12 +8,13 @@ import java.util.NoSuchElementException;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IterableInputSourceTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldThrowIllegalArgumentExceptionIfIterableNull() {
-        new IterableInputSource(null);
+        assertThrows(IllegalArgumentException.class, () -> new IterableInputSource(null));
     }
 
     @Test
@@ -39,9 +40,10 @@ public class IterableInputSourceTest {
         assertThat(inputSource.hasNextValue(), is(false));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void getNextValueShouldThrowNoSuchElementExceptionIfHasNoNextValue() {
-        new IterableInputSource(emptyList()).getNextValue();
+        IterableInputSource inputSource = new IterableInputSource(emptyList());
+        assertThrows(NoSuchElementException.class, inputSource::getNextValue);
     }
 
 }

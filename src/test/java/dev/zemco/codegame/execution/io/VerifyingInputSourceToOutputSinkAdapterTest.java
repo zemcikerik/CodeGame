@@ -1,37 +1,60 @@
 package dev.zemco.codegame.execution.io;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 public class VerifyingInputSourceToOutputSinkAdapterTest {
 
-    @Mock
     private InputSource inputSource;
+    private VerifyingInputSourceToOutputSinkAdapter adapter;
 
-    @Test(expected = IllegalArgumentException.class)
+    @BeforeEach
+    public void setUp() {
+        this.inputSource = mock(InputSource.class);
+        this.adapter = new VerifyingInputSourceToOutputSinkAdapter(this.inputSource);
+    }
+
+    @Test
     public void constructorShouldThrowIfInputSourceNull() {
-        new VerifyingInputSourceToOutputSinkAdapter(null);
+        assertThrows(IllegalArgumentException.class, () -> new VerifyingInputSourceToOutputSinkAdapter(null));
+    }
+
+    @Test
+    public void acceptShouldThrowNotAcceptedExceptionIfInputSourceHasNoNextValue() {
+        when(this.inputSource.hasNextValue()).thenReturn(false);
+        assertThrows(NotAcceptedException.class, () -> this.adapter.accept(42));
+    }
+
+    @Test
+    public void acceptShouldThrowNotAcceptedExceptionIfValueFromInputSourceDiffersFromPassedValue() {
+        when(this.inputSource.hasNextValue()).thenReturn(true);
+        when(this.inputSource.getNextValue()).thenReturn(10);
+        assertThrows(NotAcceptedException.class, () -> this.adapter.accept(2));
+    }
+
+    @Test
+    public void acceptShouldAcceptPassedValueIfItMatchesValueFromInputSource() {
+        when(this.inputSource.hasNextValue()).thenReturn(true);
+        when(this.inputSource.getNextValue()).thenReturn(42);
+        this.adapter.accept(42);
     }
 
     @Test
     public void isSatisfiedShouldReturnTrueIfInputSourceHasNoNextValue() {
         when(this.inputSource.hasNextValue()).thenReturn(false);
-        VerifyingInputSourceToOutputSinkAdapter adapter = new VerifyingInputSourceToOutputSinkAdapter(this.inputSource);
-        assertThat(adapter.isSatisfied(), is(true));
+        assertThat(this.adapter.isSatisfied(), is(true));
     }
 
     @Test
     public void isSatisfiedShouldReturnFalseIfInputSourceHasNextValue() {
         when(this.inputSource.hasNextValue()).thenReturn(true);
-        VerifyingInputSourceToOutputSinkAdapter adapter = new VerifyingInputSourceToOutputSinkAdapter(this.inputSource);
-        assertThat(adapter.isSatisfied(), is(false));
+        assertThat(this.adapter.isSatisfied(), is(false));
     }
 
 }

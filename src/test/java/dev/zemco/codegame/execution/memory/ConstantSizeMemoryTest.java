@@ -1,16 +1,17 @@
 package dev.zemco.codegame.execution.memory;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ConstantSizeMemoryTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void constructorShouldThrowIfSizeIsNegative() {
-        new ConstantSizeMemory(-5);
+    @Test
+    public void constructorShouldThrowIllegalArgumentExceptionIfSizeIsNegative() {
+        assertThrows(IllegalArgumentException.class, () -> new ConstantSizeMemory(-5));
     }
 
     @Test
@@ -25,14 +26,16 @@ public class ConstantSizeMemoryTest {
         assertThat(memory.getWorkingCell(), is(memory.getCellByAddress(0)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getCellByAddressShouldThrowIllegalArgumentExceptionIfAddressIsNegative() {
-        new ConstantSizeMemory(2).getCellByAddress(-1);
+        ConstantSizeMemory memory = new ConstantSizeMemory(2);
+        assertThrows(IllegalArgumentException.class, () -> memory.getCellByAddress(-1));
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test
     public void getCellByAddressShouldThrowIllegalArgumentExceptionIfAddressIsOutOfMemoryRange() {
-        new ConstantSizeMemory(2).getCellByAddress(5);
+        ConstantSizeMemory memory = new ConstantSizeMemory(2);
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.getCellByAddress(5));
     }
 
     @Test

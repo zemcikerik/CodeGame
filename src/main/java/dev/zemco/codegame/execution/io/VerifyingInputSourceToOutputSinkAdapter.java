@@ -1,15 +1,13 @@
 package dev.zemco.codegame.execution.io;
 
-// TODO: tests
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+
 public class VerifyingInputSourceToOutputSinkAdapter implements OutputSink {
 
     private final InputSource inputSource;
 
     public VerifyingInputSourceToOutputSinkAdapter(InputSource inputSource) {
-        if (inputSource == null) {
-            throw new IllegalArgumentException("Input source cannot be null!");
-        }
-        this.inputSource = inputSource;
+        this.inputSource = checkArgumentNotNull(inputSource, "Input source");
     }
 
     @Override

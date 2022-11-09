@@ -4,19 +4,20 @@ import dev.zemco.codegame.execution.ExecutionContext;
 import dev.zemco.codegame.execution.io.InputSource;
 import dev.zemco.codegame.execution.memory.Memory;
 import dev.zemco.codegame.execution.memory.MemoryCell;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class InputInstructionTest {
 
     @Mock
@@ -33,8 +34,8 @@ public class InputInstructionTest {
 
     private InputInstruction inputInstruction;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    public void setUp() {
         this.inputInstruction = new InputInstruction();
         when(this.executionContext.getInputSource()).thenReturn(this.inputSource);
         when(this.executionContext.getMemory()).thenReturn(this.memory);
@@ -52,10 +53,10 @@ public class InputInstructionTest {
         verify(this.workingCell, times(1)).setValue(42);
     }
 
-    @Test(expected = InstructionExecutionException.class)
-    public void executeShouldThrowInstructionExecutionExceptionIfInputSourceHasNoMoreValues() throws InstructionExecutionException {
+    @Test
+    public void executeShouldThrowInstructionExecutionExceptionIfInputSourceHasNoMoreValues() {
         when(this.inputSource.hasNextValue()).thenReturn(false);
-        this.inputInstruction.execute(this.executionContext);
+        assertThrows(InstructionExecutionException.class, () -> this.inputInstruction.execute(this.executionContext));
     }
 
 }

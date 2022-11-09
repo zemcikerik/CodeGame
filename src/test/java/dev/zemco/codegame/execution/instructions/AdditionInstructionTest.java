@@ -3,19 +3,20 @@ package dev.zemco.codegame.execution.instructions;
 import dev.zemco.codegame.execution.ExecutionContext;
 import dev.zemco.codegame.execution.memory.Memory;
 import dev.zemco.codegame.execution.memory.MemoryCell;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AdditionInstructionTest {
 
     @Mock
@@ -27,8 +28,8 @@ public class AdditionInstructionTest {
     @Mock
     private MemoryCell workingCell;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    public void setUp() {
         when(this.executionContext.getMemory()).thenReturn(this.memory);
         when(this.memory.getWorkingCell()).thenReturn(this.workingCell);
     }
@@ -44,10 +45,12 @@ public class AdditionInstructionTest {
         verify(this.workingCell, times(1)).setValue(30);
     }
 
-    @Test(expected = InstructionExecutionException.class)
-    public void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHoldsNoValue() throws InstructionExecutionException {
+    @Test
+    public void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHoldsNoValue() {
         when(this.workingCell.hasValue()).thenReturn(false);
-        new AdditionInstruction(1).execute(this.executionContext);
+
+        AdditionInstruction instruction = new AdditionInstruction(1);
+        assertThrows(InstructionExecutionException.class, () -> instruction.execute(this.executionContext));
     }
 
 }
