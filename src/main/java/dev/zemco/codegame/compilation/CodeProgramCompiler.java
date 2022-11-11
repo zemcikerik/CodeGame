@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
 public class CodeProgramCompiler implements ProgramCompiler {
 
@@ -18,8 +19,7 @@ public class CodeProgramCompiler implements ProgramCompiler {
     private final List<InstructionParser> instructionParsers;
 
     public CodeProgramCompiler(List<InstructionParser> instructionParsers) {
-        // TODO: or empty?
-        this.instructionParsers = checkArgumentNotNull(instructionParsers, "Instruction parsers");
+        this.instructionParsers = checkArgumentNotNullAndNotEmpty(instructionParsers, "Instruction parsers");
     }
 
     @Override
@@ -54,7 +54,8 @@ public class CodeProgramCompiler implements ProgramCompiler {
                     throw new InvalidSyntaxException("Jump label name cannot be empty!", position);
                 }
 
-                jumpLabelToPositionMap.put(instructionLine, position);
+                String label = instructionLine.substring(JUMP_LABEL_PREFIX.length());
+                jumpLabelToPositionMap.put(label, position);
                 continue;
             }
 

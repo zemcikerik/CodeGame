@@ -3,7 +3,7 @@
     "id": "07716f15-dd3a-47f9-89d7-1dac6bbfd772",
     "name": "Test Problem",
     "description": "Hello, World!",
-    "rating": 1,
+    "difficulty": 1,
     "cases": [
       {
         "inputs": [1, 2, 3],

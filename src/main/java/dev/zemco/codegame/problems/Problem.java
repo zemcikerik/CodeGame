@@ -6,14 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: null checks
+// TODO: param checks
 public class Problem {
 
-    // TODO: uuid?
     private final UUID id;
     private final String name;
     private final String description;
-    private final int rating;
+    private final int difficulty;
     private final List<ProblemCase> cases;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -21,13 +20,13 @@ public class Problem {
             @JsonProperty("id") UUID id,
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
-            @JsonProperty("rating") int rating,
+            @JsonProperty("difficulty") int difficulty,
             @JsonProperty("cases") List<ProblemCase> cases
     ) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.rating = rating;
+        this.difficulty = difficulty;
         this.cases = cases;
     }
 
@@ -43,8 +42,8 @@ public class Problem {
         return this.description;
     }
 
-    public int getRating() {
-        return this.rating;
+    public int getDifficulty() {
+        return this.difficulty;
     }
 
     public List<ProblemCase> getCases() {

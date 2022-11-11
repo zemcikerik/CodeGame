@@ -1,7 +1,8 @@
 package dev.zemco.codegame.compilation;
 
 import dev.zemco.codegame.execution.instructions.Instruction;
-import dev.zemco.codegame.util.Preconditions;
+
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 public class ImmutableInstructionDescriptor implements InstructionDescriptor {
 
@@ -9,7 +10,7 @@ public class ImmutableInstructionDescriptor implements InstructionDescriptor {
     private final int linePosition;
 
     public ImmutableInstructionDescriptor(Instruction instruction, int linePosition) {
-        this.instruction = Preconditions.checkArgumentNotNull(instruction, "Instruction");
+        this.instruction = checkArgumentNotNull(instruction, "Instruction");
         // TODO: check line position
         this.linePosition = linePosition;
     }

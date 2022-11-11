@@ -3,7 +3,10 @@ package dev.zemco.codegame.util;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PreconditionsTest {
@@ -18,33 +21,53 @@ public class PreconditionsTest {
     @Test
     public void checkArgumentNotNullShouldThrowIllegalArgumentExceptionContainingArgumentNameIfArgumentIsNull() {
         IllegalArgumentException e = assertThrows(
-                IllegalArgumentException.class,
-                () -> Preconditions.checkArgumentNotNull(null, "Test")
+            IllegalArgumentException.class,
+            () -> Preconditions.checkArgumentNotNull(null, "Test")
         );
         assertThat(e.getMessage(), containsString("Test"));
     }
 
     @Test
+    public void checkArgumentNotNullShouldThrowIllegalArgumentExceptionContainingDefaultArgumentName() {
+        IllegalArgumentException e = assertThrows(
+            IllegalArgumentException.class,
+            () -> Preconditions.checkArgumentNotNull(null, null)
+        );
+        assertThat(e.getMessage(), containsString("Argument"));
+    }
+
+    @Test
     @SuppressWarnings("ConstantConditions") // for checking method output
-    public void checkArgumentNotEmptyShouldReturnNullIfArgumentIsNull() {
-        Object result = Preconditions.checkArgumentNotEmpty(null, "Argument name");
+    public void checkArgumentNotEmptyStringShouldReturnNullIfArgumentIsNull() {
+        Object result = Preconditions.checkArgumentNotEmpty((String)null, "Argument name");
         assertThat(result, nullValue());
     }
 
     @Test
-    public void checkArgumentNotEmptyShouldReturnArgumentIfNotEmpty() {
+    public void checkArgumentNotEmptyStringShouldReturnArgumentIfNotEmpty() {
         String argument = "Hello, World!";
         String result = Preconditions.checkArgumentNotEmpty(argument, "Argument name");
         assertThat(result, is(argument));
     }
 
     @Test
-    public void checkArgumentNotEmptyShouldThrowIllegalStateExceptionWithArgumentNameIfArgumentIsEmpty() {
+    public void checkArgumentNotEmptyStringShouldThrowIllegalStateExceptionWithArgumentNameIfArgumentIsEmpty() {
         IllegalArgumentException e = assertThrows(
-                IllegalArgumentException.class,
-                () -> Preconditions.checkArgumentNotEmpty("", "Test")
+            IllegalArgumentException.class,
+            () -> Preconditions.checkArgumentNotEmpty("", "Test")
         );
         assertThat(e.getMessage(), containsString("Test"));
     }
+
+    @Test
+    public void checkArgumentNotEmptyStringShouldThrowIllegalStateExceptionWithDefaultArgumentName() {
+        IllegalArgumentException e = assertThrows(
+            IllegalArgumentException.class,
+            () -> Preconditions.checkArgumentNotEmpty("", null)
+        );
+        assertThat(e.getMessage(), containsString("Argument"));
+    }
+
+    // TODO: cover this with tests or remove string from identifiers
 
 }

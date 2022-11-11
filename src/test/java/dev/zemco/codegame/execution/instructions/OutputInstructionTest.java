@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -39,9 +40,9 @@ public class OutputInstructionTest {
     @BeforeEach
     public void setUp() {
         this.outputInstruction = new OutputInstruction();
-        when(this.executionContext.getMemory()).thenReturn(this.memory);
-        when(this.executionContext.getOutputSink()).thenReturn(this.outputSink);
-        when(this.memory.getWorkingCell()).thenReturn(this.workingCell);
+        lenient().when(this.executionContext.getMemory()).thenReturn(this.memory);
+        lenient().when(this.executionContext.getOutputSink()).thenReturn(this.outputSink);
+        lenient().when(this.memory.getWorkingCell()).thenReturn(this.workingCell);
     }
 
     @Test

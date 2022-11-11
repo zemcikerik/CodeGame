@@ -5,11 +5,13 @@ import dev.zemco.codegame.compilation.CodeProgramCompiler;
 import dev.zemco.codegame.compilation.Program;
 import dev.zemco.codegame.compilation.ProgramCompiler;
 import dev.zemco.codegame.compilation.parsing.AdditionInstructionParser;
+import dev.zemco.codegame.compilation.parsing.FactorySingleParameterInstructionParser;
 import dev.zemco.codegame.compilation.parsing.InstructionParser;
 import dev.zemco.codegame.compilation.parsing.SupplierInstructionParser;
 import dev.zemco.codegame.execution.CodeExecutionEngine;
 import dev.zemco.codegame.execution.ExecutionEngine;
 import dev.zemco.codegame.execution.instructions.InputInstruction;
+import dev.zemco.codegame.execution.instructions.JumpInstruction;
 import dev.zemco.codegame.execution.instructions.OutputInstruction;
 import dev.zemco.codegame.execution.io.InputSource;
 import dev.zemco.codegame.execution.io.IterableInputSource;
@@ -33,11 +35,12 @@ public class CodeGameApplication {
         List<InstructionParser> parsers = List.of(
                 new SupplierInstructionParser("in", InputInstruction::new),
                 new SupplierInstructionParser("out", OutputInstruction::new),
-                new AdditionInstructionParser()
+                new AdditionInstructionParser(),
+                new FactorySingleParameterInstructionParser("jump", JumpInstruction::new)
         );
         ProgramCompiler compiler = new CodeProgramCompiler(parsers);
 
-        String rawProgram = "in\n add 5\n out\n";
+        String rawProgram = ">test\nin\n add 5\n out\njump test";
         Program program = compiler.compileProgram(rawProgram);
 
         InputSource inputSource = new IterableInputSource(List.of(1, 2, 3));
@@ -45,9 +48,9 @@ public class CodeGameApplication {
         Memory memory = new LoggingMemoryDecorator(new ConstantSizeMemory(8));
         ExecutionEngine engine = new CodeExecutionEngine(program, memory, inputSource, outputSink);
 
-        engine.step();
-        engine.step();
-        engine.step();
+        while (true) {
+            engine.step();
+        }
     }
 
 }

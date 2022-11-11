@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,9 +38,9 @@ public class InputInstructionTest {
     @BeforeEach
     public void setUp() {
         this.inputInstruction = new InputInstruction();
-        when(this.executionContext.getInputSource()).thenReturn(this.inputSource);
-        when(this.executionContext.getMemory()).thenReturn(this.memory);
-        when(this.memory.getWorkingCell()).thenReturn(this.workingCell);
+        lenient().when(this.executionContext.getInputSource()).thenReturn(this.inputSource);
+        lenient().when(this.executionContext.getMemory()).thenReturn(this.memory);
+        lenient().when(this.memory.getWorkingCell()).thenReturn(this.workingCell);
     }
 
     @Test

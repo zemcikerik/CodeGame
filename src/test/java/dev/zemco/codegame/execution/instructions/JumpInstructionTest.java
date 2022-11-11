@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class JumpInstructionTest {
@@ -27,7 +27,7 @@ public class JumpInstructionTest {
 
     @BeforeEach
     public void setUp() {
-        when(this.executionContext.getExecutionEngine()).thenReturn(this.engine);
+        lenient().when(this.executionContext.getExecutionEngine()).thenReturn(this.engine);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class JumpInstructionTest {
     public void executeShouldRequestExecutionEngineToJumpToLabel() throws InstructionExecutionException {
         doNothing().when(this.engine).jumpTo(anyString());
         new JumpInstruction("test").execute(this.executionContext);
-        verify(engine, times(1)).jumpTo("test");
+        verify(this.engine, times(1)).jumpTo("test");
     }
 
     @Test

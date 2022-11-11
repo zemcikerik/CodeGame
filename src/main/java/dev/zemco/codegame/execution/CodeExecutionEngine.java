@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
 // position differs from line position!
 public class CodeExecutionEngine implements ExecutionEngine {
@@ -19,41 +20,44 @@ public class CodeExecutionEngine implements ExecutionEngine {
     private final Program program;
     private final ExecutionContext context;
     private int position;
+    private boolean moveToNextPosition;
 
     public CodeExecutionEngine(Program program, Memory memory, InputSource inputSource, OutputSink outputSink) {
         this.program = checkArgumentNotNull(program, "Program");
         this.context = new ImmutableExecutionContext(this, memory, inputSource, outputSink);
         this.position = 0;
+        this.moveToNextPosition = false;
     }
 
-    // TODO: clean me up
     @Override
     public void jumpTo(String label) {
-        // TODO: check if empty
-        checkArgumentNotNull(label, "Label");
+        checkArgumentNotNullAndNotEmpty(label, "Label");
 
         Map<String, Integer> jumpLabelToPositionMap = this.program.getJumpLabelToPositionMap();
 
         if (!jumpLabelToPositionMap.containsKey(label)) {
-            // TODO: proper exception
-            throw new IllegalStateException("Unknown jump label!");
+            String message = String.format("Unknown jump label '%s'!", label);
+            throw new UnknownJumpLabelException(message);
         }
 
         int position = jumpLabelToPositionMap.get(label);
-
-        // TODO: binary search
         List<InstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
 
         for (int i = 0; i < instructionDescriptors.size(); i++) {
             if (instructionDescriptors.get(i).getLinePosition() >= position) {
                 this.position = i;
+                this.moveToNextPosition = false;
                 return;
             }
         }
+
+        // TODO: handle me
+        throw new IllegalStateException("Couldn't find valid instruction to jump to!");
     }
 
     @Override
     public void step() {
+        this.moveToNextPosition = true;
         InstructionDescriptor descriptor = program.getInstructionDescriptors().get(this.position);
         Instruction instruction = descriptor.getInstruction();
 
@@ -64,7 +68,9 @@ public class CodeExecutionEngine implements ExecutionEngine {
             throw new RuntimeException(e);
         }
 
-        this.position++;
+        if (this.moveToNextPosition) {
+            this.position++;
+        }
     }
 
 }

@@ -6,13 +6,13 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEm
 
 public abstract class AbstractParametrizedInstructionParser implements InstructionParser {
 
-    protected final String instructionPrefix;
+    private final String instructionPrefix;
 
     public AbstractParametrizedInstructionParser(String instructionPrefix) {
         this.instructionPrefix = checkArgumentNotNullAndNotEmpty(instructionPrefix, "Instruction prefix");
     }
 
-    protected abstract Instruction parseInstructionWithParameters(String[] parameters) throws ParseException;
+    protected abstract Instruction parseInstructionWithParameters(String[] parameters);
 
     @Override
     public boolean canParseInstruction(String instructionLine) {
@@ -20,7 +20,7 @@ public abstract class AbstractParametrizedInstructionParser implements Instructi
     }
 
     @Override
-    public Instruction parseInstruction(String instructionLine) throws ParseException {
+    public Instruction parseInstruction(String instructionLine) {
         // remove the instruction prefix
         String parameterPartWithWhitespace = instructionLine.substring(this.instructionPrefix.length());
         String parameterPart = parameterPartWithWhitespace.trim();
@@ -28,6 +28,10 @@ public abstract class AbstractParametrizedInstructionParser implements Instructi
         // split into parameters separated by whitespace of 1 to n length
         String[] parameters = parameterPart.split("\\s+");
         return this.parseInstructionWithParameters(parameters);
+    }
+
+    protected String getInstructionPrefix() {
+        return this.instructionPrefix;
     }
 
 }

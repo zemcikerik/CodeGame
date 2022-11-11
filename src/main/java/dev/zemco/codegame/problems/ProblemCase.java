@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;
 import java.util.List;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
+
 public class ProblemCase {
 
     private final List<Integer> inputs;
@@ -18,21 +21,11 @@ public class ProblemCase {
             @JsonProperty("expectedOutputs") List<Integer> expectedOutputs,
             @JsonProperty("memorySettings") ProblemCaseMemorySettings memorySettings
     ) {
-        if (expectedOutputs == null) {
-            throw new IllegalArgumentException("Expected outputs cannot be null!");
-        }
-
-        if (expectedOutputs.isEmpty()) {
-            throw new IllegalArgumentException("Expected outputs cannot be empty!");
-        }
-
-        if (memorySettings == null) {
-            throw new IllegalArgumentException("Memory settings cannot be null!");
-        }
-
         this.inputs = inputs != null ? Collections.unmodifiableList(inputs) : Collections.emptyList();
-        this.expectedOutputs = Collections.unmodifiableList(expectedOutputs);
-        this.memorySettings = memorySettings;
+        this.expectedOutputs = Collections.unmodifiableList(
+            checkArgumentNotNullAndNotEmpty(expectedOutputs, "Expected outputs")
+        );
+        this.memorySettings = checkArgumentNotNull(memorySettings, "Memory settings");
     }
 
     public List<Integer> getInputs() {
