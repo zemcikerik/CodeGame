@@ -7,7 +7,7 @@ package dev.zemco.codegame.execution;
  * It works in steps, each step executes an instruction at a given position of a program.
  * @author Erik Zemčík
  */
-public interface ExecutionEngine {
+public interface IExecutionEngine {
 
     void jumpTo(String label);
 

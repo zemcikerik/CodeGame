@@ -6,7 +6,7 @@ package dev.zemco.codegame.execution.io;
  * Destination of output values during execution that expects values until satisfied.
  * @author Erik Zemčík
  */
-public interface OutputSink {
+public interface IOutputSink {
 
     /**
      * Attempts to write {@code value} to output.

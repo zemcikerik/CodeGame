@@ -4,7 +4,7 @@ package dev.zemco.codegame.execution.io;
  * Source of input values during execution.
  * @author Erik Zemčík
  */
-public interface InputSource {
+public interface IInputSource {
 
     /**
      * Returns true if input source has more values.

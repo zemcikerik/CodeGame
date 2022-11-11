@@ -12,7 +12,7 @@ package dev.zemco.codegame.execution.memory;
  *
  * @author Erik Zemčík
  */
-public interface Memory {
+public interface IMemory {
 
     // TODO: no such element exception?
 
@@ -26,12 +26,12 @@ public interface Memory {
      * @throws IllegalArgumentException if address is less than zero
      * @throws IndexOutOfBoundsException if address is out of range of memory
      */
-    MemoryCell getCellByAddress(int address);
+    IMemoryCell getCellByAddress(int address);
 
     /**
      * Retrieves working cell.
      * @return working cell
      */
-    MemoryCell getWorkingCell();
+    IMemoryCell getWorkingCell();
 
 }

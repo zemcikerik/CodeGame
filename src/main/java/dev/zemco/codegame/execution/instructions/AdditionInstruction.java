@@ -1,14 +1,14 @@
 package dev.zemco.codegame.execution.instructions;
 
-import dev.zemco.codegame.execution.ExecutionContext;
-import dev.zemco.codegame.execution.memory.Memory;
-import dev.zemco.codegame.execution.memory.MemoryCell;
+import dev.zemco.codegame.execution.IExecutionContext;
+import dev.zemco.codegame.execution.memory.IMemory;
+import dev.zemco.codegame.execution.memory.IMemoryCell;
 
 /**
  * Instruction that adds constant to value held in working cell.
  * @author Erik Zemčík
  */
-public class AdditionInstruction implements Instruction {
+public class AdditionInstruction implements IInstruction {
 
     private final int addend;
 
@@ -26,9 +26,9 @@ public class AdditionInstruction implements Instruction {
      * @throws InstructionExecutionException if working cell has no value
      */
     @Override
-    public void execute(ExecutionContext executionContext) throws InstructionExecutionException {
-        Memory memory = executionContext.getMemory();
-        MemoryCell workingCell = memory.getWorkingCell();
+    public void execute(IExecutionContext executionContext) throws InstructionExecutionException {
+        IMemory memory = executionContext.getMemory();
+        IMemoryCell workingCell = memory.getWorkingCell();
 
         if (!workingCell.hasValue()) {
             throw new InstructionExecutionException("Working cell does not hold value!");

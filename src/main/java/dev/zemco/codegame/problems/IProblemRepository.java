@@ -2,6 +2,6 @@ package dev.zemco.codegame.problems;
 
 import java.util.List;
 
-public interface ProblemRepository {
+public interface IProblemRepository {
     List<Problem> getAllProblems();
 }

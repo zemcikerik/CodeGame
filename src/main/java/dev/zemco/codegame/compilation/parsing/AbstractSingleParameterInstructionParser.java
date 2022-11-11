@@ -1,6 +1,6 @@
 package dev.zemco.codegame.compilation.parsing;
 
-import dev.zemco.codegame.execution.instructions.Instruction;
+import dev.zemco.codegame.execution.instructions.IInstruction;
 
 public abstract class AbstractSingleParameterInstructionParser extends AbstractParametrizedInstructionParser {
 
@@ -8,10 +8,10 @@ public abstract class AbstractSingleParameterInstructionParser extends AbstractP
         super(instructionPrefix);
     }
 
-    protected abstract Instruction parseInstructionWithParameter(String parameter);
+    protected abstract IInstruction parseInstructionWithParameter(String parameter);
 
     @Override
-    protected Instruction parseInstructionWithParameters(String[] parameters) {
+    protected IInstruction parseInstructionWithParameters(String[] parameters) {
         if (parameters.length != 1) {
             // TODO: pretty this lmao
             throw new ParseException(String.format(

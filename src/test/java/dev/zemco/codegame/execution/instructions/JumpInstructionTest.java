@@ -1,7 +1,7 @@
 package dev.zemco.codegame.execution.instructions;
 
-import dev.zemco.codegame.execution.ExecutionContext;
-import dev.zemco.codegame.execution.ExecutionEngine;
+import dev.zemco.codegame.execution.IExecutionContext;
+import dev.zemco.codegame.execution.IExecutionEngine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +20,10 @@ import static org.mockito.Mockito.verify;
 public class JumpInstructionTest {
 
     @Mock
-    private ExecutionContext executionContext;
+    private IExecutionContext executionContext;
 
     @Mock
-    private ExecutionEngine engine;
+    private IExecutionEngine engine;
 
     @BeforeEach
     public void setUp() {

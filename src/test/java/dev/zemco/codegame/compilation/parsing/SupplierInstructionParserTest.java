@@ -1,6 +1,6 @@
 package dev.zemco.codegame.compilation.parsing;
 
-import dev.zemco.codegame.execution.instructions.Instruction;
+import dev.zemco.codegame.execution.instructions.IInstruction;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;
@@ -42,8 +42,8 @@ public class SupplierInstructionParserTest {
 
     @Test
     public void parseInstructionShouldReturnInstructionFromInstructionSupplier() {
-        Instruction instruction = mock(Instruction.class);
-        Supplier<Instruction> instructionSupplier = () -> instruction;
+        IInstruction instruction = mock(IInstruction.class);
+        Supplier<IInstruction> instructionSupplier = () -> instruction;
 
         SupplierInstructionParser parser = new SupplierInstructionParser("test", instructionSupplier);
         assertThat(parser.parseInstruction("test"), sameInstance(instruction));

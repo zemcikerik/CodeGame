@@ -1,11 +1,11 @@
 package dev.zemco.codegame.execution.instructions;
 
-import dev.zemco.codegame.execution.ExecutionContext;
-import dev.zemco.codegame.execution.ExecutionEngine;
+import dev.zemco.codegame.execution.IExecutionContext;
+import dev.zemco.codegame.execution.IExecutionEngine;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
-public class JumpInstruction implements Instruction {
+public class JumpInstruction implements IInstruction {
 
     private final String label;
 
@@ -14,8 +14,8 @@ public class JumpInstruction implements Instruction {
     }
 
     @Override
-    public void execute(ExecutionContext executionContext) throws InstructionExecutionException {
-        ExecutionEngine engine = executionContext.getExecutionEngine();
+    public void execute(IExecutionContext executionContext) throws InstructionExecutionException {
+        IExecutionEngine engine = executionContext.getExecutionEngine();
 
         try {
             engine.jumpTo(this.label);

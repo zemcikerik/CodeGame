@@ -1,9 +1,9 @@
 package dev.zemco.codegame.execution.instructions;
 
-import dev.zemco.codegame.execution.ExecutionContext;
-import dev.zemco.codegame.execution.io.InputSource;
-import dev.zemco.codegame.execution.memory.Memory;
-import dev.zemco.codegame.execution.memory.MemoryCell;
+import dev.zemco.codegame.execution.IExecutionContext;
+import dev.zemco.codegame.execution.io.IInputSource;
+import dev.zemco.codegame.execution.memory.IMemory;
+import dev.zemco.codegame.execution.memory.IMemoryCell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,16 +22,16 @@ import static org.mockito.Mockito.when;
 public class InputInstructionTest {
 
     @Mock
-    private ExecutionContext executionContext;
+    private IExecutionContext executionContext;
 
     @Mock
-    private InputSource inputSource;
+    private IInputSource inputSource;
 
     @Mock
-    private Memory memory;
+    private IMemory memory;
 
     @Mock
-    private MemoryCell workingCell;
+    private IMemoryCell workingCell;
 
     private InputInstruction inputInstruction;
 

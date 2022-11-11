@@ -1,7 +1,7 @@
 package dev.zemco.codegame.execution.io;
 
 // TODO: remove me
-public class NoOpOutputSink implements OutputSink {
+public class NoOpOutputSink implements IOutputSink {
 
     @Override
     public void accept(int value) {

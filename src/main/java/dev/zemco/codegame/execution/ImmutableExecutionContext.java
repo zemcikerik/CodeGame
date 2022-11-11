@@ -1,19 +1,19 @@
 package dev.zemco.codegame.execution;
 
-import dev.zemco.codegame.execution.io.InputSource;
-import dev.zemco.codegame.execution.io.OutputSink;
-import dev.zemco.codegame.execution.memory.Memory;
+import dev.zemco.codegame.execution.io.IInputSource;
+import dev.zemco.codegame.execution.io.IOutputSink;
+import dev.zemco.codegame.execution.memory.IMemory;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-public class ImmutableExecutionContext implements ExecutionContext {
+public class ImmutableExecutionContext implements IExecutionContext {
 
-    private final ExecutionEngine engine;
-    private final Memory memory;
-    private final InputSource inputSource;
-    private final OutputSink outputSink;
+    private final IExecutionEngine engine;
+    private final IMemory memory;
+    private final IInputSource inputSource;
+    private final IOutputSink outputSink;
 
-    public ImmutableExecutionContext(ExecutionEngine engine, Memory memory, InputSource inputSource, OutputSink outputSink) {
+    public ImmutableExecutionContext(IExecutionEngine engine, IMemory memory, IInputSource inputSource, IOutputSink outputSink) {
         this.engine = checkArgumentNotNull(engine, "Engine");
         this.memory = checkArgumentNotNull(memory, "Memory");
         this.inputSource = checkArgumentNotNull(inputSource, "Input source");
@@ -21,22 +21,22 @@ public class ImmutableExecutionContext implements ExecutionContext {
     }
 
     @Override
-    public ExecutionEngine getExecutionEngine() {
+    public IExecutionEngine getExecutionEngine() {
         return this.engine;
     }
 
     @Override
-    public Memory getMemory() {
+    public IMemory getMemory() {
         return this.memory;
     }
 
     @Override
-    public InputSource getInputSource() {
+    public IInputSource getInputSource() {
         return this.inputSource;
     }
 
     @Override
-    public OutputSink getOutputSink() {
+    public IOutputSink getOutputSink() {
         return this.outputSink;
     }
 

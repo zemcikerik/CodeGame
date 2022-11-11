@@ -1,15 +1,15 @@
 package dev.zemco.codegame.execution.instructions;
 
-import dev.zemco.codegame.execution.ExecutionContext;
-import dev.zemco.codegame.execution.io.InputSource;
-import dev.zemco.codegame.execution.memory.Memory;
-import dev.zemco.codegame.execution.memory.MemoryCell;
+import dev.zemco.codegame.execution.IExecutionContext;
+import dev.zemco.codegame.execution.io.IInputSource;
+import dev.zemco.codegame.execution.memory.IMemory;
+import dev.zemco.codegame.execution.memory.IMemoryCell;
 
 /**
  * Instruction that takes next value from input source and copies it to working memory cell.
  * @author Erik Zemčík
  */
-public class InputInstruction implements Instruction {
+public class InputInstruction implements IInstruction {
 
     /**
      * Takes next value from input source and copies it to working memory cell.
@@ -17,15 +17,15 @@ public class InputInstruction implements Instruction {
      * @throws InstructionExecutionException if input source has no next value
      */
     @Override
-    public void execute(ExecutionContext executionContext) throws InstructionExecutionException {
-        InputSource inputSource = executionContext.getInputSource();
+    public void execute(IExecutionContext executionContext) throws InstructionExecutionException {
+        IInputSource inputSource = executionContext.getInputSource();
 
         if (!inputSource.hasNextValue()) {
             throw new InstructionExecutionException("Input source has no next value!");
         }
 
-        Memory memory = executionContext.getMemory();
-        MemoryCell workingCell = memory.getWorkingCell();
+        IMemory memory = executionContext.getMemory();
+        IMemoryCell workingCell = memory.getWorkingCell();
         workingCell.setValue(inputSource.getNextValue());
     }
 

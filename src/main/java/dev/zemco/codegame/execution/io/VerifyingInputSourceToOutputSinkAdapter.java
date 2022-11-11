@@ -2,11 +2,11 @@ package dev.zemco.codegame.execution.io;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-public class VerifyingInputSourceToOutputSinkAdapter implements OutputSink {
+public class VerifyingInputSourceToOutputSinkAdapter implements IOutputSink {
 
-    private final InputSource inputSource;
+    private final IInputSource inputSource;
 
-    public VerifyingInputSourceToOutputSinkAdapter(InputSource inputSource) {
+    public VerifyingInputSourceToOutputSinkAdapter(IInputSource inputSource) {
         this.inputSource = checkArgumentNotNull(inputSource, "Input source");
     }
 
