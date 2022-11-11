@@ -5,7 +5,7 @@ package dev.zemco.codegame.execution.memory;
  * Cells may hold no value at any point during their lifetime.
  * @author Erik Zemčík
  */
-public interface MemoryCell {
+public interface IMemoryCell {
 
     /**
      * Returns if cell currently holds an integer value.

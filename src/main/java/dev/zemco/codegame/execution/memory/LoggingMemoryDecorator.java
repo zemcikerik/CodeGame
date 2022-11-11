@@ -1,22 +1,22 @@
 package dev.zemco.codegame.execution.memory;
 
 // TODO: either remove me or add proper logger
-public class LoggingMemoryDecorator implements Memory {
+public class LoggingMemoryDecorator implements IMemory {
 
-    private final Memory memory;
+    private final IMemory memory;
 
-    public LoggingMemoryDecorator(Memory memory) {
+    public LoggingMemoryDecorator(IMemory memory) {
         this.memory = memory;
     }
 
     @Override
-    public MemoryCell getCellByAddress(int address) {
+    public IMemoryCell getCellByAddress(int address) {
         System.out.format("[Memory] Retrieving memory at address %d!", address);
         return this.memory.getCellByAddress(address);
     }
 
     @Override
-    public MemoryCell getWorkingCell() {
+    public IMemoryCell getWorkingCell() {
         System.out.println("[Memory] Retrieving working cell!");
         return this.memory.getWorkingCell();
     }

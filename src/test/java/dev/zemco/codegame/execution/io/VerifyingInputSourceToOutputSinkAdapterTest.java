@@ -11,12 +11,12 @@ import static org.mockito.Mockito.when;
 
 public class VerifyingInputSourceToOutputSinkAdapterTest {
 
-    private InputSource inputSource;
+    private IInputSource inputSource;
     private VerifyingInputSourceToOutputSinkAdapter adapter;
 
     @BeforeEach
     public void setUp() {
-        this.inputSource = mock(InputSource.class);
+        this.inputSource = mock(IInputSource.class);
         this.adapter = new VerifyingInputSourceToOutputSinkAdapter(this.inputSource);
     }
 

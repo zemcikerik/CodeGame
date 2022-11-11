@@ -1,12 +1,12 @@
 package dev.zemco.codegame.execution;
 
-import dev.zemco.codegame.compilation.InstructionDescriptor;
+import dev.zemco.codegame.compilation.IInstructionDescriptor;
 import dev.zemco.codegame.compilation.Program;
-import dev.zemco.codegame.execution.instructions.Instruction;
+import dev.zemco.codegame.execution.instructions.IInstruction;
 import dev.zemco.codegame.execution.instructions.InstructionExecutionException;
-import dev.zemco.codegame.execution.io.InputSource;
-import dev.zemco.codegame.execution.io.OutputSink;
-import dev.zemco.codegame.execution.memory.Memory;
+import dev.zemco.codegame.execution.io.IInputSource;
+import dev.zemco.codegame.execution.io.IOutputSink;
+import dev.zemco.codegame.execution.memory.IMemory;
 
 import java.util.List;
 import java.util.Map;
@@ -15,14 +15,14 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
 // position differs from line position!
-public class CodeExecutionEngine implements ExecutionEngine {
+public class CodeExecutionEngine implements IExecutionEngine {
 
     private final Program program;
-    private final ExecutionContext context;
+    private final IExecutionContext context;
     private int position;
     private boolean moveToNextPosition;
 
-    public CodeExecutionEngine(Program program, Memory memory, InputSource inputSource, OutputSink outputSink) {
+    public CodeExecutionEngine(Program program, IMemory memory, IInputSource inputSource, IOutputSink outputSink) {
         this.program = checkArgumentNotNull(program, "Program");
         this.context = new ImmutableExecutionContext(this, memory, inputSource, outputSink);
         this.position = 0;
@@ -41,7 +41,7 @@ public class CodeExecutionEngine implements ExecutionEngine {
         }
 
         int position = jumpLabelToPositionMap.get(label);
-        List<InstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
+        List<IInstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
 
         for (int i = 0; i < instructionDescriptors.size(); i++) {
             if (instructionDescriptors.get(i).getLinePosition() >= position) {
@@ -58,8 +58,8 @@ public class CodeExecutionEngine implements ExecutionEngine {
     @Override
     public void step() {
         this.moveToNextPosition = true;
-        InstructionDescriptor descriptor = program.getInstructionDescriptors().get(this.position);
-        Instruction instruction = descriptor.getInstruction();
+        IInstructionDescriptor descriptor = program.getInstructionDescriptors().get(this.position);
+        IInstruction instruction = descriptor.getInstruction();
 
         try {
             instruction.execute(this.context);

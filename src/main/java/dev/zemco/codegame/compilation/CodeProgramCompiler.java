@@ -1,8 +1,8 @@
 package dev.zemco.codegame.compilation;
 
-import dev.zemco.codegame.compilation.parsing.InstructionParser;
+import dev.zemco.codegame.compilation.parsing.IInstructionParser;
 import dev.zemco.codegame.compilation.parsing.ParseException;
-import dev.zemco.codegame.execution.instructions.Instruction;
+import dev.zemco.codegame.execution.instructions.IInstruction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,13 +12,13 @@ import java.util.Map;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
-public class CodeProgramCompiler implements ProgramCompiler {
+public class CodeProgramCompiler implements IProgramCompiler {
 
     private static final String COMMENT_PREFIX = ";";
     private static final String JUMP_LABEL_PREFIX = ">";
-    private final List<InstructionParser> instructionParsers;
+    private final List<IInstructionParser> instructionParsers;
 
-    public CodeProgramCompiler(List<InstructionParser> instructionParsers) {
+    public CodeProgramCompiler(List<IInstructionParser> instructionParsers) {
         this.instructionParsers = checkArgumentNotNullAndNotEmpty(instructionParsers, "Instruction parsers");
     }
 
@@ -30,7 +30,7 @@ public class CodeProgramCompiler implements ProgramCompiler {
         // \R since Java 8 matches any unicode line break sequence
         String[] lines = rawProgram.split("\\R");
 
-        List<InstructionDescriptor> instructionDescriptors = new ArrayList<>();
+        List<IInstructionDescriptor> instructionDescriptors = new ArrayList<>();
         Map<String, Integer> jumpLabelToPositionMap = new HashMap<>();
 
         for (int position = 0; position < lines.length; position++) {
@@ -59,7 +59,7 @@ public class CodeProgramCompiler implements ProgramCompiler {
                 continue;
             }
 
-            Instruction instruction = this.parseInstruction(instructionLine, position);
+            IInstruction instruction = this.parseInstruction(instructionLine, position);
             // TODO: maybe factory
             instructionDescriptors.add(new ImmutableInstructionDescriptor(instruction, position));
         }
@@ -83,8 +83,8 @@ public class CodeProgramCompiler implements ProgramCompiler {
     }
 
     // try to parse instruction line using provided instruction parsers
-    private Instruction parseInstruction(String instructionLine, int position) throws InvalidSyntaxException {
-        for (InstructionParser parser : this.instructionParsers) {
+    private IInstruction parseInstruction(String instructionLine, int position) throws InvalidSyntaxException {
+        for (IInstructionParser parser : this.instructionParsers) {
             // find first parser capable of parsing this instruction line
             if (!parser.canParseInstruction(instructionLine)) {
                 continue;

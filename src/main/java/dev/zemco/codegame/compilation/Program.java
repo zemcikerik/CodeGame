@@ -8,10 +8,10 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 public class Program {
 
-    private final List<InstructionDescriptor> instructionDescriptors;
+    private final List<IInstructionDescriptor> instructionDescriptors;
     private final Map<String, Integer> jumpLabelToPositionMap;
 
-    public Program(List<InstructionDescriptor> instructionDescriptors, Map<String, Integer> jumpLabelToPositionMap) {
+    public Program(List<IInstructionDescriptor> instructionDescriptors, Map<String, Integer> jumpLabelToPositionMap) {
         checkArgumentNotNull(instructionDescriptors, "Instruction descriptors");
         checkArgumentNotNull(jumpLabelToPositionMap, "Jump label to position map");
 
@@ -19,7 +19,7 @@ public class Program {
         this.jumpLabelToPositionMap = Collections.unmodifiableMap(jumpLabelToPositionMap);
     }
 
-    public List<InstructionDescriptor> getInstructionDescriptors() {
+    public List<IInstructionDescriptor> getInstructionDescriptors() {
         return this.instructionDescriptors;
     }
 

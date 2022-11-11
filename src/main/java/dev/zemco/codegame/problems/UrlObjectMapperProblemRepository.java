@@ -9,7 +9,7 @@ import java.util.List;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-public class UrlObjectMapperProblemRepository implements ProblemRepository {
+public class UrlObjectMapperProblemRepository implements IProblemRepository {
 
     private final URL url;
     private final ObjectMapper objectMapper;

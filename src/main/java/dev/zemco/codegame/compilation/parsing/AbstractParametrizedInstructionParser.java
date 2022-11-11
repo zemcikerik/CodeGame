@@ -1,10 +1,10 @@
 package dev.zemco.codegame.compilation.parsing;
 
-import dev.zemco.codegame.execution.instructions.Instruction;
+import dev.zemco.codegame.execution.instructions.IInstruction;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
-public abstract class AbstractParametrizedInstructionParser implements InstructionParser {
+public abstract class AbstractParametrizedInstructionParser implements IInstructionParser {
 
     private final String instructionPrefix;
 
@@ -12,7 +12,7 @@ public abstract class AbstractParametrizedInstructionParser implements Instructi
         this.instructionPrefix = checkArgumentNotNullAndNotEmpty(instructionPrefix, "Instruction prefix");
     }
 
-    protected abstract Instruction parseInstructionWithParameters(String[] parameters);
+    protected abstract IInstruction parseInstructionWithParameters(String[] parameters);
 
     @Override
     public boolean canParseInstruction(String instructionLine) {
@@ -20,7 +20,7 @@ public abstract class AbstractParametrizedInstructionParser implements Instructi
     }
 
     @Override
-    public Instruction parseInstruction(String instructionLine) {
+    public IInstruction parseInstruction(String instructionLine) {
         // remove the instruction prefix
         String parameterPartWithWhitespace = instructionLine.substring(this.instructionPrefix.length());
         String parameterPart = parameterPartWithWhitespace.trim();

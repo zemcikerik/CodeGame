@@ -1,6 +1,6 @@
 package dev.zemco.codegame.execution.memory;
 
-public class SimpleMemoryCell implements MemoryCell {
+public class SimpleMemoryCell implements IMemoryCell {
 
     private Integer value;
 

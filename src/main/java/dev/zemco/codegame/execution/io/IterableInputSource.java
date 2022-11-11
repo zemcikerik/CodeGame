@@ -9,7 +9,7 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
  * Input source that uses an {@link Iterable<Integer>} as source of inputs.
  * @author Erik Zemčík
  */
-public class IterableInputSource implements InputSource {
+public class IterableInputSource implements IInputSource {
 
     private final Iterator<Integer> iterator;
 
