@@ -8,7 +8,7 @@ public abstract class AbstractParametrizedInstructionParser implements IInstruct
 
     private final String instructionPrefix;
 
-    public AbstractParametrizedInstructionParser(String instructionPrefix) {
+    protected AbstractParametrizedInstructionParser(String instructionPrefix) {
         this.instructionPrefix = checkArgumentNotNullAndNotEmpty(instructionPrefix, "Instruction prefix");
     }
 

@@ -4,7 +4,7 @@ import dev.zemco.codegame.execution.instructions.IInstruction;
 
 public abstract class AbstractSingleParameterInstructionParser extends AbstractParametrizedInstructionParser {
 
-    public AbstractSingleParameterInstructionParser(String instructionPrefix) {
+    protected AbstractSingleParameterInstructionParser(String instructionPrefix) {
         super(instructionPrefix);
     }
 

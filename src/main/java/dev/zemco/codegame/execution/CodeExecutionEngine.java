@@ -40,25 +40,26 @@ public class CodeExecutionEngine implements IExecutionEngine {
             throw new UnknownJumpLabelException(message);
         }
 
-        int position = jumpLabelToPositionMap.get(label);
+        this.moveToNextPosition = false;
+        int jumpPosition = jumpLabelToPositionMap.get(label);
         List<IInstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
 
+        // TODO: binary search
         for (int i = 0; i < instructionDescriptors.size(); i++) {
-            if (instructionDescriptors.get(i).getLinePosition() >= position) {
+            if (instructionDescriptors.get(i).getLinePosition() >= jumpPosition) {
                 this.position = i;
-                this.moveToNextPosition = false;
                 return;
             }
         }
 
-        // TODO: handle me
-        throw new IllegalStateException("Couldn't find valid instruction to jump to!");
+        // label was defined after all instructions (for example at the end of the file), which is valid
+        this.position = instructionDescriptors.size();
     }
 
     @Override
     public void step() {
         this.moveToNextPosition = true;
-        IInstructionDescriptor descriptor = program.getInstructionDescriptors().get(this.position);
+        IInstructionDescriptor descriptor = this.program.getInstructionDescriptors().get(this.position);
         IInstruction instruction = descriptor.getInstruction();
 
         try {
