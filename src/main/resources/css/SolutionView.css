@@ -1,0 +1,14 @@
+.comment {
+    -fx-fill: gray;
+    -fx-font-style: italic;
+}
+
+.label {
+    -fx-fill: orange;
+}
+
+.syntax-error {
+    -rtfx-underline-width: 1px;
+    -rtfx-underline-cap: butt;
+    -rtfx-underline-color: red;
+}
