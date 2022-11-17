@@ -10,8 +10,15 @@ import javafx.scene.control.Slider;
 import javafx.scene.text.Text;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.model.Paragraph;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.reactfx.collection.ListModification;
 
 import java.net.URL;
+import java.time.Duration;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
@@ -52,26 +59,13 @@ public class SolutionController implements Initializable {
         Problem problem = this.model.getProblem();
         this.problemNameText.setText(problem.getName());
 
-        this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
+        this.codeArea.getParagraphs().addModificationObserver(this::onCodeAreaParagraphChanged);
+        this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
+        this.codeArea.setMouseOverTextDelay(Duration.ofSeconds(1));
 
         // TODO: ???
         this.codeArea.getStylesheets().add("/css/SolutionView.css");
-        this.codeArea.getParagraphs().addModificationObserver(modification -> {
-            // prevent triggering of this observer by changes done by this observer
-            if (modification.getAddedSize() == 0) {
-                return;
-            }
-
-            int paragraph = modification.getFrom();
-            int paragraphLength = this.codeArea.getParagraphLength(paragraph);
-            String modified = this.codeArea.getText(paragraph, 0, paragraph, paragraphLength);
-
-            this.codeArea.setStyleSpans(
-                    this.codeArea.getAbsolutePosition(paragraph, 0),
-                    this.highlightStyleComputer.computeHighlightStyles(modified)
-            );
-        });
 
         this.compileButton.disableProperty().bind(Bindings.not(this.model.canCompileProperty()));
 
@@ -83,25 +77,63 @@ public class SolutionController implements Initializable {
         );
 
         this.stepButton.disableProperty().bind(Bindings.not(this.model.canStepProperty()));
+
+        this.model.syntaxErrorProperty().addListener((observable, oldError, newError) ->
+                this.onSyntaxErrorModelChanged(oldError, newError)
+        );
     }
 
     @FXML
-    public void onCodeAreaTextChanged() {
+    private void onCodeAreaTextChanged() {
         this.model.resetAttempt();
     }
 
     @FXML
-    public void onCompileButtonClicked() {
+    private void onCompileButtonClicked() {
         this.model.submitAttemptForCompilation(this.codeArea.getText());
     }
 
     @FXML
-    public void onToggleExecutionButtonClicked() {
+    private void onToggleExecutionButtonClicked() {
         if (this.model.executionRunningProperty().get()) {
             this.model.stopExecution();
         } else {
             this.model.startExecution();
         }
+    }
+
+    // TODO: fix me
+    private void onCodeAreaParagraphChanged(
+            ListModification<? extends Paragraph<Collection<String>, String, Collection<String>>> modification
+    ) {
+        // prevent triggering of this observer by changes done by this observer
+        if (modification.getAddedSize() == 0) {
+            return;
+        }
+
+        int paragraph = modification.getFrom();
+        int paragraphLength = this.codeArea.getParagraphLength(paragraph);
+        String modified = this.codeArea.getText(paragraph, 0, paragraph, paragraphLength);
+
+        StyleSpans<Collection<String>> styles = this.highlightStyleComputer.computeHighlightStyles(modified);
+        int paragraphStartIndex = this.codeArea.getAbsolutePosition(paragraph, 0);
+
+        this.codeArea.setStyleSpans(paragraphStartIndex, styles);
+    }
+
+    private void onSyntaxErrorModelChanged(SyntaxErrorModel oldError, SyntaxErrorModel newError) {
+        if (oldError != null) {
+            this.codeArea.setParagraphStyle(oldError.getLinePosition(), Collections.emptyList());
+        }
+
+        if (newError != null) {
+            this.codeArea.setParagraphStyle(newError.getLinePosition(), List.of("syntax-error"));
+        }
+    }
+
+    @FXML
+    private void onTestClicked() {
+
     }
 
 }

@@ -9,22 +9,22 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 public class Program {
 
     private final List<IInstructionDescriptor> instructionDescriptors;
-    private final Map<String, Integer> jumpLabelToPositionMap;
+    private final Map<String, Integer> jumpLabelToLinePositionMap;
 
-    public Program(List<IInstructionDescriptor> instructionDescriptors, Map<String, Integer> jumpLabelToPositionMap) {
+    public Program(List<IInstructionDescriptor> instructionDescriptors, Map<String, Integer> jumpLabelToLinePositionMap) {
         checkArgumentNotNull(instructionDescriptors, "Instruction descriptors");
-        checkArgumentNotNull(jumpLabelToPositionMap, "Jump label to position map");
+        checkArgumentNotNull(jumpLabelToLinePositionMap, "Jump label to line position map");
 
         this.instructionDescriptors = Collections.unmodifiableList(instructionDescriptors);
-        this.jumpLabelToPositionMap = Collections.unmodifiableMap(jumpLabelToPositionMap);
+        this.jumpLabelToLinePositionMap = Collections.unmodifiableMap(jumpLabelToLinePositionMap);
     }
 
     public List<IInstructionDescriptor> getInstructionDescriptors() {
         return this.instructionDescriptors;
     }
 
-    public Map<String, Integer> getJumpLabelToPositionMap() {
-        return this.jumpLabelToPositionMap;
+    public Map<String, Integer> getJumpLabelToLinePositionMap() {
+        return this.jumpLabelToLinePositionMap;
     }
 
 }

@@ -7,8 +7,10 @@
     -fx-fill: orange;
 }
 
+.instruction {
+    -fx-fill: darkblue;
+}
+
 .syntax-error {
-    -rtfx-underline-width: 1px;
-    -rtfx-underline-cap: butt;
-    -rtfx-underline-color: red;
+    -fx-background-color: rgba(255, 0, 0, 0.2);
 }

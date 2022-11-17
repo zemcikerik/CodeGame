@@ -36,7 +36,7 @@ public class CodeGameApplication extends Application {
         );
         IProgramCompiler compiler = new CodeProgramCompiler(parsers);
 
-        IHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer();
+        IHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(List.of("in", "out", "add", "jump"));
         IViewSourceProvider viewSourceProvider = new FxmlResourceViewSourceProvider();
         IControllerFactory controllerFactory = (ignored) -> new SolutionController(new SolutionModel(compiler), highlightStyleComputer);
         IViewProvider viewProvider = new FxmlViewProvider(viewSourceProvider, controllerFactory);

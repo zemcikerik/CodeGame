@@ -5,32 +5,49 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 import static java.util.List.of;
 
 public class CodeHighlightStyleComputer implements IHighlightStyleComputer {
 
     private static final String COMMENT_GROUP_NAME = "comment";
     private static final String LABEL_GROUP_NAME = "label";
-
-    private static final Pattern CODE_HIGHLIGHT_PATTERN = Pattern.compile(
-            // captures comment = semicolon followed by any character until the end of string
-            // this group has to go first in order to avoid matching of other possible objects in the future
-            "(?<" + COMMENT_GROUP_NAME + ">;.*$)" + "|" +
-
-            // captures label = > followed by any non-whitespace character
-            "(?<" + LABEL_GROUP_NAME + ">>\\S+)"
-    );
+    private static final String INSTRUCTION_GROUP_NAME = "instruction";
 
     private static final Map<String, Collection<String>> GROUP_NAME_TO_STYLES_MAP = Map.of(
             COMMENT_GROUP_NAME, of("comment"),
-            LABEL_GROUP_NAME, of("label")
+            LABEL_GROUP_NAME, of("label"),
+            INSTRUCTION_GROUP_NAME, of("instruction")
     );
 
     private static final Collection<String> DEFAULT_STYLES = Collections.emptyList();
+
+    private final Pattern codeHighlightPattern;
+
+    public CodeHighlightStyleComputer(List<String> instructionNames) {
+        checkArgumentNotNullAndNotEmpty(instructionNames, "Instruction names");
+        // TODO: escape sequences?
+
+        String instructionNamesPattern = String.join("|", instructionNames);
+
+        // TODO: word boundary
+        this.codeHighlightPattern = Pattern.compile(
+                // captures comment = semicolon followed by any character until the end of string
+                // this group has to go first in order to avoid matching of other possible objects in the future
+                "(?<" + COMMENT_GROUP_NAME + ">;.*$)" + "|" +
+
+                // captures label = > followed by any non-whitespace character
+                "(?<" + LABEL_GROUP_NAME + ">>\\S+)" + "|" +
+
+                // captures instruction = TODO word boundary
+                "(?<" + INSTRUCTION_GROUP_NAME + ">\\b(" + instructionNamesPattern + "))\\b"
+        );
+    }
 
     @Override
     public StyleSpans<Collection<String>> computeHighlightStyles(String text) {
@@ -38,7 +55,7 @@ public class CodeHighlightStyleComputer implements IHighlightStyleComputer {
         StyleSpansBuilder<Collection<String>> builder = new StyleSpansBuilder<>();
 
         int lastEndIndex = 0;
-        Matcher matcher = CODE_HIGHLIGHT_PATTERN.matcher(text);
+        Matcher matcher = this.codeHighlightPattern.matcher(text);
 
         while (matcher.find()) {
             // add default styles to text between matches (that was not included in matches)

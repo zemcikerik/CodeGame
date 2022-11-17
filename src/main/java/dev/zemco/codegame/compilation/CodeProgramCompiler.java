@@ -31,7 +31,7 @@ public class CodeProgramCompiler implements IProgramCompiler {
         String[] lines = rawProgram.split("\\R");
 
         List<IInstructionDescriptor> instructionDescriptors = new ArrayList<>();
-        Map<String, Integer> jumpLabelToPositionMap = new HashMap<>();
+        Map<String, Integer> jumpLabelToLinePositionMap = new HashMap<>();
 
         for (int position = 0; position < lines.length; position++) {
             String lineWithoutComment = this.removeCommentFromLine(lines[position]);
@@ -55,7 +55,7 @@ public class CodeProgramCompiler implements IProgramCompiler {
                 }
 
                 String label = instructionLine.substring(JUMP_LABEL_PREFIX.length());
-                jumpLabelToPositionMap.put(label, position);
+                jumpLabelToLinePositionMap.put(label, position);
                 continue;
             }
 
@@ -64,7 +64,7 @@ public class CodeProgramCompiler implements IProgramCompiler {
             instructionDescriptors.add(new ImmutableInstructionDescriptor(instruction, position));
         }
 
-        return new Program(instructionDescriptors, jumpLabelToPositionMap);
+        return new Program(instructionDescriptors, jumpLabelToLinePositionMap);
     }
 
     // removes all characters after comment prefix (including the comment prefix)

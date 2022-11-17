@@ -33,20 +33,20 @@ public class CodeExecutionEngine implements IExecutionEngine {
     public void jumpTo(String label) {
         checkArgumentNotNullAndNotEmpty(label, "Label");
 
-        Map<String, Integer> jumpLabelToPositionMap = this.program.getJumpLabelToPositionMap();
+        Map<String, Integer> jumpLabelToLinePositionMap = this.program.getJumpLabelToLinePositionMap();
 
-        if (!jumpLabelToPositionMap.containsKey(label)) {
+        if (!jumpLabelToLinePositionMap.containsKey(label)) {
             String message = String.format("Unknown jump label '%s'!", label);
             throw new UnknownJumpLabelException(message);
         }
 
         this.moveToNextPosition = false;
-        int jumpPosition = jumpLabelToPositionMap.get(label);
+        int jumpLinePosition = jumpLabelToLinePositionMap.get(label);
         List<IInstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
 
         // TODO: binary search
         for (int i = 0; i < instructionDescriptors.size(); i++) {
-            if (instructionDescriptors.get(i).getLinePosition() >= jumpPosition) {
+            if (instructionDescriptors.get(i).getLinePosition() >= jumpLinePosition) {
                 this.position = i;
                 return;
             }
