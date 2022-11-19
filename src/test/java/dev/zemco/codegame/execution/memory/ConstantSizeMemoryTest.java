@@ -27,13 +27,13 @@ public class ConstantSizeMemoryTest {
     }
 
     @Test
-    public void getCellByAddressShouldThrowIllegalArgumentExceptionIfAddressIsNegative() {
+    public void getCellByAddressShouldThrowIndexOutOfBoundsExceptionIfAddressIsNegative() {
         ConstantSizeMemory memory = new ConstantSizeMemory(2);
-        assertThrows(IllegalArgumentException.class, () -> memory.getCellByAddress(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.getCellByAddress(-1));
     }
 
     @Test
-    public void getCellByAddressShouldThrowIllegalArgumentExceptionIfAddressIsOutOfMemoryRange() {
+    public void getCellByAddressShouldThrowIndexOutOfBoundsExceptionIfAddressIsOutOfMemoryRange() {
         ConstantSizeMemory memory = new ConstantSizeMemory(2);
         assertThrows(IndexOutOfBoundsException.class, () -> memory.getCellByAddress(5));
     }

@@ -4,7 +4,6 @@ import dev.zemco.codegame.execution.instructions.IInstruction;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-// TODO: rename
 public class FactorySingleParameterInstructionParser extends AbstractSingleParameterInstructionParser {
 
     private final IStringInstructionFactory instructionFactory;

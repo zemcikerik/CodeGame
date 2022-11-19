@@ -74,4 +74,8 @@ public class CodeExecutionEngine implements IExecutionEngine {
         }
     }
 
+    public IExecutionContext getExecutionContext() {
+        return this.context;
+    }
+
 }

@@ -2,6 +2,7 @@ package dev.zemco.codegame.execution.instructions;
 
 import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.IExecutionEngine;
+import dev.zemco.codegame.execution.UnknownJumpLabelException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,8 +50,7 @@ public class JumpInstructionTest {
 
     @Test
     public void executeShouldThrowInstructionExecutionExceptionIfEngineFailsToJumpToLabel() {
-        // TODO: adjust exception type
-        doThrow(RuntimeException.class).when(this.engine).jumpTo(anyString());
+        doThrow(UnknownJumpLabelException.class).when(this.engine).jumpTo(anyString());
         JumpInstruction instruction = new JumpInstruction("label");
         assertThrows(InstructionExecutionException.class, () -> instruction.execute(this.executionContext));
     }

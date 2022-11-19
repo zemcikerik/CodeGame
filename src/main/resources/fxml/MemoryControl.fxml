@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<fx:root fx:id="memoryTable" type="TableView" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/18">
+  <columns>
+    <TableColumn fx:id="addressColumn" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" text="Address" />
+    <TableColumn fx:id="valueColumn" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" text="Value" />
+  </columns>
+</fx:root>

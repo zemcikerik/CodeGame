@@ -17,9 +17,11 @@ public class CodeProgramCompiler implements IProgramCompiler {
     private static final String COMMENT_PREFIX = ";";
     private static final String JUMP_LABEL_PREFIX = ">";
     private final List<IInstructionParser> instructionParsers;
+    private final IInstructionDescriptorFactory instructionDescriptorFactory;
 
-    public CodeProgramCompiler(List<IInstructionParser> instructionParsers) {
+    public CodeProgramCompiler(List<IInstructionParser> instructionParsers, IInstructionDescriptorFactory instructionDescriptorFactory) {
         this.instructionParsers = checkArgumentNotNullAndNotEmpty(instructionParsers, "Instruction parsers");
+        this.instructionDescriptorFactory = checkArgumentNotNull(instructionDescriptorFactory, "Instruction descriptor factory");
     }
 
     @Override
@@ -60,8 +62,8 @@ public class CodeProgramCompiler implements IProgramCompiler {
             }
 
             IInstruction instruction = this.parseInstruction(instructionLine, position);
-            // TODO: maybe factory
-            instructionDescriptors.add(new ImmutableInstructionDescriptor(instruction, position));
+            IInstructionDescriptor descriptor = this.instructionDescriptorFactory.createInstructionDescriptor(instruction, position);
+            instructionDescriptors.add(descriptor);
         }
 
         return new Program(instructionDescriptors, jumpLabelToLinePositionMap);

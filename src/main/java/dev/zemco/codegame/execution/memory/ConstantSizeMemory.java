@@ -19,11 +19,9 @@ public class ConstantSizeMemory implements IMemory {
 
     @Override
     public IMemoryCell getCellByAddress(int address) {
-        if (address < 0) {
-            throw new IllegalArgumentException("Address must be a positive integer!");
-        }
-        if (address >= this.cells.length) {
-            throw new IndexOutOfBoundsException("Address references cell out of range!");
+        if (address < 0 || address >= this.cells.length) {
+            String message = String.format("Address %d was out of range <0, %d)!", address, this.cells.length);
+            throw new IndexOutOfBoundsException(message);
         }
         return this.cells[address];
     }

@@ -13,9 +13,8 @@ public abstract class AbstractSingleParameterInstructionParser extends AbstractP
     @Override
     protected IInstruction parseInstructionWithParameters(String[] parameters) {
         if (parameters.length != 1) {
-            // TODO: pretty this lmao
             throw new ParseException(String.format(
-                "Instruction %s expected 1 parameter, found %d!",
+                "Instruction '%s' expected 1 parameter, found %d!",
                 this.getInstructionPrefix(), parameters.length
             ));
         }

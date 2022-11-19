@@ -1,6 +1,5 @@
 package dev.zemco.codegame.execution.instructions;
 
-// TODO: javadoc
 public class InstructionExecutionException extends Exception {
 
     public InstructionExecutionException() {

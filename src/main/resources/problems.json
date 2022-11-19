@@ -13,5 +13,20 @@
         }
       }
     ]
+  },
+  {
+    "id": "12716f15-dd3a-47f9-89d7-1dac6bbfd772",
+    "name": "Test Problem 2",
+    "description": "Hello, World 2!",
+    "difficulty": 2,
+    "cases": [
+      {
+        "inputs": [1, 2, 3],
+        "expectedOutputs": [4, 5, 6],
+        "memorySettings": {
+          "size": 1
+        }
+      }
+    ]
   }
 ]

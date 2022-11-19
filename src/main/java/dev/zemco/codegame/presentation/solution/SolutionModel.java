@@ -2,33 +2,54 @@ package dev.zemco.codegame.presentation.solution;
 
 import dev.zemco.codegame.compilation.IProgramCompiler;
 import dev.zemco.codegame.compilation.InvalidSyntaxException;
+import dev.zemco.codegame.compilation.Program;
+import dev.zemco.codegame.execution.IExecutionService;
+import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
+import dev.zemco.codegame.presentation.errors.IProgramErrorModelFactory;
 import dev.zemco.codegame.problems.Problem;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableBooleanValue;
-import javafx.beans.value.ObservableValue;
-
-import java.util.UUID;
+import javafx.beans.value.ObservableObjectValue;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 public class SolutionModel implements ISolutionModel {
 
-    private final IProgramCompiler programCompiler;
-    private final SimpleBooleanProperty canCompileProperty;
-    private final SimpleBooleanProperty canExecuteProperty;
-    private final SimpleBooleanProperty executionRunningProperty;
-    private final SimpleBooleanProperty executionAutoEnabledProperty;
-    private final SimpleObjectProperty<SyntaxErrorModel> syntaxErrorProperty;
+    private final ReadOnlyObjectWrapper<Problem> problemProperty;
+    private final ReadOnlyBooleanWrapper canCompileProperty;
+    private final ReadOnlyBooleanWrapper canExecuteProperty;
+    private final ReadOnlyBooleanWrapper executionRunningProperty;
+    private final ReadOnlyBooleanWrapper executionAutoEnabledProperty;
+    private final ReadOnlyObjectWrapper<IProgramErrorModel> syntaxErrorProperty;
 
-    public SolutionModel(IProgramCompiler programCompiler) {
+    private final IProgramErrorModelFactory programErrorModelFactory;
+    private final IProgramCompiler programCompiler;
+    private final IExecutionService executionService;
+    private Program program;
+
+    public SolutionModel(
+            IProgramErrorModelFactory programErrorModelFactory,
+            IProgramCompiler programCompiler,
+            IExecutionService executionService
+    ) {
+        this.programErrorModelFactory = checkArgumentNotNull(programErrorModelFactory, "Program error model factory");
         this.programCompiler = checkArgumentNotNull(programCompiler, "Program compiler");
-        this.canCompileProperty = new SimpleBooleanProperty(true);
-        this.canExecuteProperty = new SimpleBooleanProperty(false);
-        this.executionRunningProperty = new SimpleBooleanProperty(false);
-        this.executionAutoEnabledProperty = new SimpleBooleanProperty(false);
-        this.syntaxErrorProperty = new SimpleObjectProperty<>(null);
+        this.executionService = checkArgumentNotNull(executionService, "Execution service");
+        this.program = null;
+
+        this.problemProperty = new ReadOnlyObjectWrapper<>(null);
+        this.canCompileProperty = new ReadOnlyBooleanWrapper(true);
+        this.canExecuteProperty = new ReadOnlyBooleanWrapper(false);
+        this.executionRunningProperty = new ReadOnlyBooleanWrapper(false);
+        this.executionAutoEnabledProperty = new ReadOnlyBooleanWrapper(false);
+        this.syntaxErrorProperty = new ReadOnlyObjectWrapper<>(null);
+    }
+
+    @Override
+    public void setProblem(Problem problem) {
+        this.problemProperty.set(problem);
     }
 
     @Override
@@ -41,13 +62,14 @@ public class SolutionModel implements ISolutionModel {
         this.canCompileProperty.set(false);
 
         try {
-            this.programCompiler.compileProgram(program);
+            this.program = this.programCompiler.compileProgram(program);
         } catch (InvalidSyntaxException e) {
-            this.syntaxErrorProperty.set(new SyntaxErrorModel(e.getLinePosition(), e.getMessage()));
+            IProgramErrorModel programErrorModel = this.programErrorModelFactory.createProgramErrorModel(e);
+            this.syntaxErrorProperty.set(programErrorModel);
             return;
         }
 
-        this.canExecuteProperty.set(true);
+        this.canExecuteProperty.set(this.program != null);
     }
 
     @Override
@@ -57,6 +79,7 @@ public class SolutionModel implements ISolutionModel {
             throw new IllegalStateException();
         }
 
+        this.executionService.getExecutionContextForSolutionAttempt(this.problemProperty.get().getCases().get(0), this.program);
         this.executionRunningProperty.set(true);
     }
 
@@ -75,22 +98,22 @@ public class SolutionModel implements ISolutionModel {
         this.canCompileProperty.set(true);
         this.canExecuteProperty.set(false);
         this.syntaxErrorProperty.set(null);
-        // this.executionRunningProperty.set(false);
+        // TODO: this.executionRunningProperty.set(false);
     }
 
     @Override
-    public Problem getProblem() {
-        return new Problem(UUID.randomUUID(), "Hello, World", "Description", 0, null);
+    public ObservableObjectValue<Problem> problemProperty() {
+        return this.problemProperty.getReadOnlyProperty();
     }
 
     @Override
     public ObservableBooleanValue canCompileProperty() {
-        return this.canCompileProperty;
+        return this.canCompileProperty.getReadOnlyProperty();
     }
 
     @Override
     public ObservableBooleanValue canExecuteProperty() {
-        return this.canExecuteProperty;
+        return this.canExecuteProperty.getReadOnlyProperty();
     }
 
     @Override
@@ -100,12 +123,12 @@ public class SolutionModel implements ISolutionModel {
 
     @Override
     public ObservableBooleanValue executionRunningProperty() {
-        return this.executionRunningProperty;
+        return this.executionRunningProperty.getReadOnlyProperty();
     }
 
     @Override
-    public ObservableValue<SyntaxErrorModel> syntaxErrorProperty() {
-        return this.syntaxErrorProperty;
+    public ObservableObjectValue<IProgramErrorModel> syntaxErrorProperty() {
+        return this.syntaxErrorProperty.getReadOnlyProperty();
     }
 
 }

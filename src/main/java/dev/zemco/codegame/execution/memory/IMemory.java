@@ -11,10 +11,9 @@ package dev.zemco.codegame.execution.memory;
  * {@link #getWorkingCell()} or its constant address {@code 0}.
  *
  * @author Erik Zemčík
+ * @see IMemoryCell
  */
 public interface IMemory {
-
-    // TODO: no such element exception?
 
     /**
      * Retrieves cell at a specified address.
@@ -23,7 +22,6 @@ public interface IMemory {
      *
      * @param address address of cell to return
      * @return cell at the specified address
-     * @throws IllegalArgumentException if address is less than zero
      * @throws IndexOutOfBoundsException if address is out of range of memory
      */
     IMemoryCell getCellByAddress(int address);

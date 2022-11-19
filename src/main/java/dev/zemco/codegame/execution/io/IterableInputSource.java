@@ -22,8 +22,6 @@ public class IterableInputSource implements IInputSource {
         this.iterator = checkArgumentNotNull(iterable, "Iterable").iterator();
     }
 
-    // TODO: docs here?
-
     @Override
     public boolean hasNextValue() {
         return this.iterator.hasNext();

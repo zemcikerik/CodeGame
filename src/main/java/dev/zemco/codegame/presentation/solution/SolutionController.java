@@ -1,13 +1,15 @@
 package dev.zemco.codegame.presentation.solution;
 
+import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
 import dev.zemco.codegame.problems.Problem;
+import dev.zemco.codegame.util.BindingUtils;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.text.Text;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.Paragraph;
@@ -26,7 +28,7 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 public class SolutionController implements Initializable {
 
     @FXML
-    private Text problemNameText;
+    private Label problemNameLabel;
 
     @FXML
     private CodeArea codeArea;
@@ -56,16 +58,14 @@ public class SolutionController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Problem problem = this.model.getProblem();
-        this.problemNameText.setText(problem.getName());
+        this.problemNameLabel.textProperty().bind(
+                BindingUtils.mapOrNull(this.model.problemProperty(), Problem::getName)
+        );
 
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
         this.codeArea.getParagraphs().addModificationObserver(this::onCodeAreaParagraphChanged);
         this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
         this.codeArea.setMouseOverTextDelay(Duration.ofSeconds(1));
-
-        // TODO: ???
-        this.codeArea.getStylesheets().add("/css/SolutionView.css");
 
         this.compileButton.disableProperty().bind(Bindings.not(this.model.canCompileProperty()));
 
@@ -78,9 +78,8 @@ public class SolutionController implements Initializable {
 
         this.stepButton.disableProperty().bind(Bindings.not(this.model.canStepProperty()));
 
-        this.model.syntaxErrorProperty().addListener((observable, oldError, newError) ->
-                this.onSyntaxErrorModelChanged(oldError, newError)
-        );
+        // TODO: weak
+        this.model.syntaxErrorProperty().addListener(this::onSyntaxErrorModelChanged);
     }
 
     @FXML
@@ -121,7 +120,7 @@ public class SolutionController implements Initializable {
         this.codeArea.setStyleSpans(paragraphStartIndex, styles);
     }
 
-    private void onSyntaxErrorModelChanged(SyntaxErrorModel oldError, SyntaxErrorModel newError) {
+    private void onSyntaxErrorModelChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {
         if (oldError != null) {
             this.codeArea.setParagraphStyle(oldError.getLinePosition(), Collections.emptyList());
         }
@@ -129,11 +128,6 @@ public class SolutionController implements Initializable {
         if (newError != null) {
             this.codeArea.setParagraphStyle(newError.getLinePosition(), List.of("syntax-error"));
         }
-    }
-
-    @FXML
-    private void onTestClicked() {
-
     }
 
 }

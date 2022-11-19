@@ -15,7 +15,7 @@ public class SimpleMemoryCell implements IMemoryCell {
 
     @Override
     public int getValue() {
-        if (this.value == null) {
+        if (!this.hasValue()) {
             throw new IllegalStateException("Cell holds no value!");
         }
         return this.value;

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<Scene xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.zemco.codegame.presentation.problems.ProblemListController">
+    <VBox prefHeight="360.0" prefWidth="640.0">
+      <children>
+         <HBox alignment="CENTER_LEFT" minWidth="40.0" prefHeight="40.0">
+            <padding>
+               <Insets left="16.0" right="16.0" />
+            </padding>
+            <children>
+               <Label text="CodeGame" />
+            </children>
+         </HBox>
+         <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+            <items>
+               <ListView fx:id="problemListView" prefHeight="200.0" prefWidth="200.0" />
+               <VBox fx:id="detailBox" spacing="8.0">
+                  <padding>
+                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                  </padding>
+                  <children>
+                     <VBox spacing="8.0" VBox.vgrow="ALWAYS">
+                        <children>
+                           <Label fx:id="problemNameLabel" text="Problem Name" />
+                           <Label fx:id="problemDescriptionLabel" text="Problem Description" />
+                        </children></VBox>
+                     <HBox alignment="TOP_RIGHT">
+                        <children>
+                           <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayButtonClicked" text="Button" />
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+            </items>
+         </SplitPane>
+      </children></VBox>
+</Scene>

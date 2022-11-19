@@ -2,6 +2,7 @@ package dev.zemco.codegame.execution.instructions;
 
 import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.IExecutionEngine;
+import dev.zemco.codegame.execution.UnknownJumpLabelException;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
@@ -19,8 +20,7 @@ public class JumpInstruction implements IInstruction {
 
         try {
             engine.jumpTo(this.label);
-            // TODO: catch proper exception once exception type is decided
-        } catch (RuntimeException e) {
+        } catch (UnknownJumpLabelException e) {
             throw new InstructionExecutionException("Failed to perform a jump to label!", e);
         }
     }
