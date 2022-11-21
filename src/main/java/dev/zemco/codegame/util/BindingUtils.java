@@ -8,7 +8,6 @@ import java.util.function.Function;
 
 public final class BindingUtils {
 
-    // TODO: javadoc :)
     // prevents "walking with string", lacking JavaFX api
     // monadic
     public static <F> StringBinding mapOrNull(ObservableValue<F> property, Function<F, String> mapper) {

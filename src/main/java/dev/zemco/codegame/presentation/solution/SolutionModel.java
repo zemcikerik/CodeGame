@@ -72,8 +72,7 @@ public class SolutionModel implements ISolutionModel {
     @Override
     public void submitAttemptForCompilation(String program) {
         if (!this.canCompileProperty.get()) {
-            // TODO: message
-            throw new IllegalStateException();
+            throw new IllegalStateException("Cannot compile program!");
         }
 
         this.canCompileProperty.set(false);
@@ -93,8 +92,7 @@ public class SolutionModel implements ISolutionModel {
     @Override
     public void startExecution() {
         if (!this.canExecuteProperty.get()) {
-            // TODO: message
-            throw new IllegalStateException();
+            throw new IllegalStateException("Cannot start program execution!");
         }
 
         // grab first problem case
@@ -118,8 +116,7 @@ public class SolutionModel implements ISolutionModel {
     @Override
     public void stepExecution() {
         if (!this.executionRunningProperty.get()) {
-            // TODO: message
-            throw new IllegalStateException();
+            throw new IllegalStateException("Cannot step execution while it is not running!");
         }
 
         this.executionContext.getExecutionEngine().step();
@@ -129,8 +126,7 @@ public class SolutionModel implements ISolutionModel {
     @Override
     public void stopExecution() {
         if (!this.executionRunningProperty.get()) {
-            // TODO: message
-            throw new IllegalStateException();
+            throw new IllegalStateException("Cannot stop execution while it is not running!");
         }
 
         this.executionRunningProperty.set(false);
