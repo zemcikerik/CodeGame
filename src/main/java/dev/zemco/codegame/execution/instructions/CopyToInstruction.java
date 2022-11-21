@@ -3,13 +3,14 @@ package dev.zemco.codegame.execution.instructions;
 import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger;
+
 public class CopyToInstruction extends AbstractCopyInstruction {
 
     private final int destinationCellAddress;
 
     public CopyToInstruction(int destinationCellAddress) {
-        // TODO: check address validity
-        this.destinationCellAddress = destinationCellAddress;
+        this.destinationCellAddress = checkArgumentPositiveInteger(destinationCellAddress, "Destination cell address");
     }
 
     @Override

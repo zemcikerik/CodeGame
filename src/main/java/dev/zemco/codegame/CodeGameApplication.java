@@ -45,6 +45,7 @@ import java.util.Map;
 // TODO: program and solution in code
 // TODO: maps and lists as parameters
 // TODO: line length?
+// TODO: static before
 public class CodeGameApplication extends Application {
 
     private INavigator navigator;

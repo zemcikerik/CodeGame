@@ -65,8 +65,7 @@ public class CodeExecutionEngine implements IExecutionEngine {
         try {
             instruction.execute(this.context);
         } catch (InstructionExecutionException e) {
-            // TODO: ???
-            throw new RuntimeException(e);
+            throw new StepExecutionException("Failed to execute instruction!", e);
         }
 
         if (this.moveToNextPosition) {

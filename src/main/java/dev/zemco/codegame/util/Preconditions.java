@@ -35,6 +35,13 @@ public final class Preconditions {
         return checkArgumentNotEmpty(argument, argumentName);
     }
 
+    public static int checkArgumentPositiveInteger(int argument, String argumentName) {
+        if (argument < 0) {
+            throwFormattedIllegalArgumentException("%s must be a positive integer!", argumentName);
+        }
+        return argument;
+    }
+
     private static void throwFormattedIllegalArgumentException(String format, String argumentName) {
         String message = String.format(format, argumentName != null ? argumentName : "Argument");
         throw new IllegalArgumentException(message);

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import dev.zemco.codegame.presentation.solution.MemoryView?>
+<?import dev.zemco.codegame.presentation.memory.MemoryView?>
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <?import org.fxmisc.richtext.CodeArea?>
 
@@ -43,16 +43,16 @@
                      <CodeArea fx:id="codeArea" onKeyTyped="#onCodeAreaTextChanged" />
                   </content>
                </VirtualizedScrollPane>
-               <Accordion>
+               <Accordion fx:id="infoAccordion" expandedPane="$descriptionPane">
                  <panes>
-                   <TitledPane animated="false" text="Description">
+                   <TitledPane fx:id="descriptionPane" animated="false" text="Description">
                      <content>
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                      </content>
                    </TitledPane>
-                   <TitledPane animated="false" text="Execution (Memory)">
+                   <TitledPane fx:id="executionPane" animated="false" text="Execution (Memory)">
                        <content>
-                           <MemoryView />
+                           <MemoryView fx:id="memoryView"/>
                        </content>
                    </TitledPane>
                  </panes>
@@ -64,7 +64,7 @@
                <Button fx:id="compileButton" mnemonicParsing="false" onMouseClicked="#onCompileButtonClicked" text="Compile" />
                <Button fx:id="toggleExecutionButton" mnemonicParsing="false" onAction="#onToggleExecutionButtonClicked" text="Toggle" />
                <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-               <Button fx:id="stepButton" mnemonicParsing="false" text="Step" />
+               <Button fx:id="stepButton" mnemonicParsing="false" onAction="#onStepButtonClicked" text="Step" />
                <CheckBox fx:id="autoEnabledCheckbox" mnemonicParsing="false" text="Auto" />
                <Slider fx:id="autoSpeedSlider" />
             </children>

@@ -1,14 +1,16 @@
 package dev.zemco.codegame.presentation.errors;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger;
+
 public class ImmutableProgramErrorModel implements IProgramErrorModel {
 
     private final String description;
     private final int linePosition;
 
     public ImmutableProgramErrorModel(String description, int linePosition) {
-        // TODO: validate
-        this.description = description;
-        this.linePosition = linePosition;
+        this.description = checkArgumentNotNull(description, "Description");
+        this.linePosition = checkArgumentPositiveInteger(linePosition, "Line position");
     }
 
     @Override

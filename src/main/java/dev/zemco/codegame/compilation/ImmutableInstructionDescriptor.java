@@ -3,6 +3,7 @@ package dev.zemco.codegame.compilation;
 import dev.zemco.codegame.execution.instructions.IInstruction;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger;
 
 public class ImmutableInstructionDescriptor implements IInstructionDescriptor {
 
@@ -11,8 +12,7 @@ public class ImmutableInstructionDescriptor implements IInstructionDescriptor {
 
     public ImmutableInstructionDescriptor(IInstruction instruction, int linePosition) {
         this.instruction = checkArgumentNotNull(instruction, "Instruction");
-        // TODO: check line position
-        this.linePosition = linePosition;
+        this.linePosition = checkArgumentPositiveInteger(linePosition, "Line position");
     }
 
     @Override

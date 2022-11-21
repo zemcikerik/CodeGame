@@ -1,15 +1,18 @@
 package dev.zemco.codegame.presentation.solution;
 
 import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
+import dev.zemco.codegame.presentation.memory.MemoryView;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.util.BindingUtils;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TitledPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.Paragraph;
@@ -32,6 +35,18 @@ public class SolutionController implements Initializable {
 
     @FXML
     private CodeArea codeArea;
+
+    @FXML
+    private Accordion infoAccordion;
+
+    @FXML
+    private TitledPane descriptionPane;
+
+    @FXML
+    private TitledPane executionPane;
+
+    @FXML
+    private MemoryView memoryView;
 
     @FXML
     private Button compileButton;
@@ -65,7 +80,10 @@ public class SolutionController implements Initializable {
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
         this.codeArea.getParagraphs().addModificationObserver(this::onCodeAreaParagraphChanged);
         this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
-        this.codeArea.setMouseOverTextDelay(Duration.ofSeconds(1));
+        this.codeArea.setMouseOverTextDelay(Duration.ofSeconds(1)); // TODO: popover
+
+        this.executionPane.disableProperty().bind(Bindings.not(this.model.executionRunningProperty()));
+        this.memoryView.itemsProperty().bind(this.model.memoryCellsProperty());
 
         this.compileButton.disableProperty().bind(Bindings.not(this.model.canCompileProperty()));
 
@@ -96,9 +114,16 @@ public class SolutionController implements Initializable {
     private void onToggleExecutionButtonClicked() {
         if (this.model.executionRunningProperty().get()) {
             this.model.stopExecution();
+            this.infoAccordion.setExpandedPane(this.descriptionPane);
         } else {
             this.model.startExecution();
+            this.infoAccordion.setExpandedPane(this.executionPane);
         }
+    }
+
+    @FXML
+    private void onStepButtonClicked() {
+        this.model.stepExecution();
     }
 
     // TODO: fix me

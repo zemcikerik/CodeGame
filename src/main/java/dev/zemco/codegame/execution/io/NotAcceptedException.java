@@ -1,6 +1,5 @@
 package dev.zemco.codegame.execution.io;
 
-// TODO: javadoc
 public class NotAcceptedException extends RuntimeException {
 
     public NotAcceptedException() {
