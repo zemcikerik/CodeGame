@@ -10,10 +10,7 @@ import dev.zemco.codegame.compilation.parsing.IInstructionParser;
 import dev.zemco.codegame.compilation.parsing.SupplierInstructionParser;
 import dev.zemco.codegame.execution.CodeExecutionService;
 import dev.zemco.codegame.execution.IExecutionService;
-import dev.zemco.codegame.execution.instructions.AdditionInstruction;
-import dev.zemco.codegame.execution.instructions.InputInstruction;
-import dev.zemco.codegame.execution.instructions.JumpInstruction;
-import dev.zemco.codegame.execution.instructions.OutputInstruction;
+import dev.zemco.codegame.execution.instructions.*;
 import dev.zemco.codegame.execution.io.IInputSourceFactory;
 import dev.zemco.codegame.execution.io.IOutputSinkFactory;
 import dev.zemco.codegame.execution.io.IterableInputSource;
@@ -39,6 +36,7 @@ import javafx.stage.Stage;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 // TODO: formatting - tabs
 // TODO: functional interfaces?
@@ -62,11 +60,13 @@ public class CodeGameApplication extends Application {
                 new SupplierInstructionParser("in", InputInstruction::new),
                 new SupplierInstructionParser("out", OutputInstruction::new),
                 new FactorySingleIntegerParameterInstructionParser("add", AdditionInstruction::new),
-                new FactorySingleParameterInstructionParser("jump", JumpInstruction::new)
+                new FactorySingleParameterInstructionParser("jump", JumpInstruction::new),
+                new FactorySingleIntegerParameterInstructionParser("save", CopyToInstruction::new),
+                new FactorySingleIntegerParameterInstructionParser("load", CopyFromInstruction::new)
         );
         IProgramCompiler compiler = new CodeProgramCompiler(parsers, ImmutableInstructionDescriptor::new);
         IProblemRepository problemRepository = new UrlObjectMapperProblemRepository(CodeGameApplication.class.getResource("/problems.json"), new ObjectMapper());
-        IHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(List.of("in", "out", "add", "jump"));
+        IHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(Set.of("in", "out", "add", "jump", "save", "load"));
 
         IFxmlViewSourceProvider viewSourceProvider = new ResourceFxmlViewSourceProvider(
                 CodeGameApplication.class,

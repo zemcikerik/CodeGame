@@ -6,7 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: param checks
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger;
+
 public class Problem {
 
     private final UUID id;
@@ -23,11 +26,11 @@ public class Problem {
             @JsonProperty("difficulty") int difficulty,
             @JsonProperty("cases") List<ProblemCase> cases
     ) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.difficulty = difficulty;
-        this.cases = cases;
+        this.id = checkArgumentNotNull(id, "Id");
+        this.name = checkArgumentNotNullAndNotEmpty(name, "Name");
+        this.description = checkArgumentNotNull(description, "Description");
+        this.difficulty = checkArgumentPositiveInteger(difficulty, "Difficulty");
+        this.cases = checkArgumentNotNullAndNotEmpty(cases, "Cases");
     }
 
     public UUID getId() {

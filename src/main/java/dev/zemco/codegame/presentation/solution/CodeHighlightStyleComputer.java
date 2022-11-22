@@ -5,12 +5,13 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 import static java.util.List.of;
 
 public class CodeHighlightStyleComputer implements IHighlightStyleComputer {
@@ -29,28 +30,37 @@ public class CodeHighlightStyleComputer implements IHighlightStyleComputer {
 
     private final Pattern codeHighlightPattern;
 
-    public CodeHighlightStyleComputer(List<String> instructionNames) {
-        checkArgumentNotNullAndNotEmpty(instructionNames, "Instruction names");
-        // TODO: escape sequences?
+    public CodeHighlightStyleComputer(Set<String> instructionNames) {
+        checkArgumentNotNull(instructionNames, "Instruction names");
 
-        String instructionNamesPattern = String.join("|", instructionNames);
+        String instructionNamesPattern = this.createPatternFromInstructionNames(instructionNames);
 
-        // TODO: word boundary
         this.codeHighlightPattern = Pattern.compile(
-                // captures comment = semicolon followed by any character until the end of string
-                // this group has to go first in order to avoid matching of other possible objects in the future
+                // captures comment = semicolon, followed by any character until the end of string
+                // NOTE: this group has to go first in order to avoid matching of other possible objects in the future
                 "(?<" + COMMENT_GROUP_NAME + ">;.*$)" + "|" +
 
-                // captures label = > followed by any non-whitespace character
-                "(?<" + LABEL_GROUP_NAME + ">>\\S+)" + "|" +
+                // captures label = positive lookahead matching start of the string or any whitespace character,
+                // followed by >, followed by any non-whitespace character
+                // NOTE: positive lookahead is used to prevent invalid characters before the label,
+                // as word boundary \b does not capture words starting with non-word character >
+                "(?<" + LABEL_GROUP_NAME + ">(?<=^|\\s)>\\S+)" + "|" +
 
-                // captures instruction = TODO word boundary
+                // captures instruction = word boundary, followed by any instruction name, ending with word boundary
                 "(?<" + INSTRUCTION_GROUP_NAME + ">\\b(" + instructionNamesPattern + "))\\b"
         );
     }
 
+    private String createPatternFromInstructionNames(Set<String> instructionNames) {
+        return instructionNames.stream()
+                .map(Pattern::quote) // escape characters that would break the pattern
+                .collect(Collectors.joining("|"));
+    }
+
     @Override
     public StyleSpans<Collection<String>> computeHighlightStyles(String text) {
+        checkArgumentNotNull(text, "Text");
+
         // NOTE: StyleSpansBuilder doesn't add zero-length spans, so we don't need to handle those edge cases
         StyleSpansBuilder<Collection<String>> builder = new StyleSpansBuilder<>();
 
@@ -77,7 +87,7 @@ public class CodeHighlightStyleComputer implements IHighlightStyleComputer {
                 .filter(entry -> matcher.group(entry.getKey()) != null)
                 .findAny()
                 .map(Map.Entry::getValue)
-                .orElseThrow(); // TODO: proper exception
+                .orElseThrow(() -> new IllegalStateException("Unknown group captured by highlight pattern!"));
     }
 
 }

@@ -4,6 +4,7 @@ import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
 import dev.zemco.codegame.presentation.memory.MemoryView;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.util.BindingUtils;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -78,9 +79,14 @@ public class SolutionController implements Initializable {
         );
 
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
-        this.codeArea.getParagraphs().addModificationObserver(this::onCodeAreaParagraphChanged);
         this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
         this.codeArea.setMouseOverTextDelay(Duration.ofSeconds(1)); // TODO: popover
+
+        this.codeArea.getParagraphs().addModificationObserver(modification -> {
+            // this observer is fired before the code area finishes its internal update process, so we queue up
+            // this event handler to be run by the JavaFX event loop after the internal update process finishes
+            Platform.runLater(() -> this.onCodeAreaParagraphChanged(modification));
+        });
 
         this.executionPane.disableProperty().bind(Bindings.not(this.model.executionRunningProperty()));
         this.memoryView.itemsProperty().bind(this.model.memoryCellsProperty());
@@ -126,23 +132,23 @@ public class SolutionController implements Initializable {
         this.model.stepExecution();
     }
 
-    // TODO: fix me
     private void onCodeAreaParagraphChanged(
             ListModification<? extends Paragraph<Collection<String>, String, Collection<String>>> modification
     ) {
-        // prevent triggering of this observer by changes done by this observer
+        // prevent triggering of this observer by changes done by this observer or by deletion of entire lines
         if (modification.getAddedSize() == 0) {
             return;
         }
 
-        int paragraph = modification.getFrom();
-        int paragraphLength = this.codeArea.getParagraphLength(paragraph);
-        String modified = this.codeArea.getText(paragraph, 0, paragraph, paragraphLength);
+        for (int paragraph = modification.getFrom(); paragraph < modification.getTo(); paragraph++) {
+            int paragraphLength = this.codeArea.getParagraphLength(paragraph);
+            String modifiedText = this.codeArea.getText(paragraph, 0, paragraph, paragraphLength);
 
-        StyleSpans<Collection<String>> styles = this.highlightStyleComputer.computeHighlightStyles(modified);
-        int paragraphStartIndex = this.codeArea.getAbsolutePosition(paragraph, 0);
+            StyleSpans<Collection<String>> styles = this.highlightStyleComputer.computeHighlightStyles(modifiedText);
+            int paragraphStartIndex = this.codeArea.getAbsolutePosition(paragraph, 0);
 
-        this.codeArea.setStyleSpans(paragraphStartIndex, styles);
+            this.codeArea.setStyleSpans(paragraphStartIndex, styles);
+        }
     }
 
     private void onSyntaxErrorModelChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {

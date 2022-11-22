@@ -3,6 +3,7 @@ package dev.zemco.codegame.problems;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import dev.zemco.codegame.presentation.ResourceLoadException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,11 +51,11 @@ public class UrlObjectMapperProblemRepositoryTest {
         assertThat(repository.getAllProblems(), equalTo(problems));
     }
 
-    // TODO: exception
     @Test
-    public void getAllProblemsShouldThrowTODOExceptionWhenObjectMapperFails() throws IOException {
+    public void getAllProblemsShouldThrowResourceLoadExceptionWhenObjectMapperFails() throws IOException {
         when(this.objectMapper.readValue(eq(this.url), any(CollectionType.class))).thenThrow(IOException.class);
-        new UrlObjectMapperProblemRepository(this.url, this.objectMapper).getAllProblems();
+        UrlObjectMapperProblemRepository repository = new UrlObjectMapperProblemRepository(this.url, this.objectMapper);
+        assertThrows(ResourceLoadException.class, repository::getAllProblems);
     }
 
 }
