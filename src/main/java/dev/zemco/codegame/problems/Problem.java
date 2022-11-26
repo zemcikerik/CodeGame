@@ -53,4 +53,9 @@ public class Problem {
         return this.cases;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s (%d ☆)", this.name, this.difficulty);
+    }
+
 }

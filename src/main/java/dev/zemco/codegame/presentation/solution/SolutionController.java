@@ -1,5 +1,6 @@
 package dev.zemco.codegame.presentation.solution;
 
+import dev.zemco.codegame.presentation.INavigator;
 import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
 import dev.zemco.codegame.presentation.memory.MemoryView;
 import dev.zemco.codegame.problems.Problem;
@@ -32,7 +33,13 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 public class SolutionController implements Initializable {
 
     @FXML
+    private Button backButton;
+
+    @FXML
     private Label problemNameLabel;
+
+    @FXML
+    private Label problemDescriptionLabel;
 
     @FXML
     private CodeArea codeArea;
@@ -65,10 +72,16 @@ public class SolutionController implements Initializable {
     private Slider autoSpeedSlider;
 
     private final ISolutionModel model;
+    private final INavigator navigator;
     private final IHighlightStyleComputer highlightStyleComputer;
 
-    public SolutionController(ISolutionModel model, IHighlightStyleComputer highlightStyleComputer) {
+    public SolutionController(
+            ISolutionModel model,
+            INavigator navigator,
+            IHighlightStyleComputer highlightStyleComputer
+    ) {
         this.model = checkArgumentNotNull(model, "Model");
+        this.navigator = checkArgumentNotNull(navigator, "Navigator");
         this.highlightStyleComputer = checkArgumentNotNull(highlightStyleComputer, "Highlight style computer");
     }
 
@@ -76,6 +89,10 @@ public class SolutionController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.problemNameLabel.textProperty().bind(
                 BindingUtils.mapOrNull(this.model.problemProperty(), Problem::getName)
+        );
+
+        this.problemDescriptionLabel.textProperty().bind(
+                BindingUtils.mapOrNull(this.model.problemProperty(), Problem::getDescription)
         );
 
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
@@ -104,6 +121,11 @@ public class SolutionController implements Initializable {
 
         // TODO: weak
         this.model.syntaxErrorProperty().addListener(this::onSyntaxErrorModelChanged);
+    }
+
+    @FXML
+    private void onBackButtonClicked() {
+        this.navigator.navigateTo("problem-list");
     }
 
     @FXML

@@ -44,9 +44,11 @@ public class CodeExecutionEngine implements IExecutionEngine {
         int jumpLinePosition = jumpLabelToLinePositionMap.get(label);
         List<IInstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
 
-        // TODO: binary search
+        // find first defined instruction after target label
+        // NOTE: in future performance of this search could be improved
+        // by using modified binary search if the additional performance will be needed
         for (int i = 0; i < instructionDescriptors.size(); i++) {
-            if (instructionDescriptors.get(i).getLinePosition() >= jumpLinePosition) {
+            if (instructionDescriptors.get(i).getLinePosition() > jumpLinePosition) {
                 this.position = i;
                 return;
             }

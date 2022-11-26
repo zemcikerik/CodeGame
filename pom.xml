@@ -7,21 +7,29 @@
     <groupId>dev.zemco</groupId>
     <artifactId>CodeGame</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <!-- Presentation -->
         <javafx.version>11.0.2</javafx.version>
-        <richtextfx.version>0.10.9</richtextfx.version>
-        <jackson.version>2.13.4.2</jackson.version>
+        <richtextfx.version>0.11.0</richtextfx.version>
 
+        <!-- Deserialization -->
+        <jackson.version>2.14.0</jackson.version>
+
+        <!-- Testing -->
         <junit.version>5.9.1</junit.version>
         <mockito.version>4.8.1</mockito.version>
         <hamcrest.version>2.2</hamcrest.version>
+        <maven.plugin.surefire.version>2.22.2</maven.plugin.surefire.version>
 
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Building -->
+        <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+        <maven.plugin.compiler.version>3.10.1</maven.plugin.compiler.version>
+        <maven.plugin.shade.version>3.2.4</maven.plugin.shade.version>
     </properties>
 
     <dependencies>
@@ -29,6 +37,27 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+            <classifier>win</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+            <classifier>linux</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+            <classifier>mac</classifier>
         </dependency>
 
         <dependency>
@@ -48,8 +77,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-
-        <!-- Hamcrest must be listed before JUnit, in order to overwrite JUnit included version -->
 
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -86,5 +113,56 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.plugin.compiler.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.plugin.surefire.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>${javafx.maven.plugin.version}</version>
+                <configuration>
+                    <mainClass>dev.zemco.codegame.CodeGameApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven.plugin.shade.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>target/${project.artifactId}-${project.version}-fat.jar</outputFile>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>dev.zemco.codegame.Launcher</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

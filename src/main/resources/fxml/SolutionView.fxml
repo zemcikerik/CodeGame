@@ -18,22 +18,17 @@
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <?import org.fxmisc.richtext.CodeArea?>
 
+<?import javafx.scene.control.ScrollPane?>
 <Scene xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.zemco.codegame.presentation.solution.SolutionController">
    <VBox prefHeight="360.0" prefWidth="640.0">
       <children>
-         <HBox alignment="CENTER_LEFT" minWidth="40.0" prefHeight="40.0">
-            <VBox.margin>
-               <Insets />
-            </VBox.margin>
+         <HBox alignment="CENTER_LEFT" minWidth="40.0" prefHeight="40.0" spacing="8.0">
             <padding>
                <Insets left="16.0" right="16.0" />
             </padding>
             <children>
-               <Label fx:id="problemNameLabel" text="Level Name">
-                  <font>
-                     <Font size="18.0" />
-                  </font>
-               </Label>
+               <Button fx:id="backButton" onAction="#onBackButtonClicked" text="Back" />
+               <Label fx:id="problemNameLabel" text="Level Name" styleClass="title-label" />
             </children>
          </HBox>
          <SplitPane dividerPositions="0.65" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
@@ -47,7 +42,14 @@
                  <panes>
                    <TitledPane fx:id="descriptionPane" animated="false" text="Description">
                      <content>
-                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                         <ScrollPane>
+                             <content>
+                                 <Label fx:id="problemDescriptionLabel" />
+                             </content>
+                             <padding>
+                                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                             </padding>
+                         </ScrollPane>
                      </content>
                    </TitledPane>
                    <TitledPane fx:id="executionPane" animated="false" text="Execution (Memory)">

@@ -1,5 +1,6 @@
 package dev.zemco.codegame.presentation;
 
+// TODO: move me
 public class ResourceLoadException extends RuntimeException {
 
     public ResourceLoadException() {

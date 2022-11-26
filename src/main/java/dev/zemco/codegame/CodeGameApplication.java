@@ -23,17 +23,12 @@ import dev.zemco.codegame.presentation.errors.ImmutableProgramErrorModelFactory;
 import dev.zemco.codegame.presentation.problems.IProblemListModel;
 import dev.zemco.codegame.presentation.problems.ProblemListController;
 import dev.zemco.codegame.presentation.problems.ProblemListModel;
-import dev.zemco.codegame.presentation.solution.CodeHighlightStyleComputer;
-import dev.zemco.codegame.presentation.solution.IHighlightStyleComputer;
-import dev.zemco.codegame.presentation.solution.ISolutionModel;
-import dev.zemco.codegame.presentation.solution.SolutionController;
-import dev.zemco.codegame.presentation.solution.SolutionModel;
+import dev.zemco.codegame.presentation.solution.*;
 import dev.zemco.codegame.problems.IProblemRepository;
 import dev.zemco.codegame.problems.UrlObjectMapperProblemRepository;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +39,7 @@ import java.util.Set;
 // TODO: maps and lists as parameters
 // TODO: line length?
 // TODO: static before
+// TODO: weak listeners
 public class CodeGameApplication extends Application {
 
     private INavigator navigator;
@@ -76,8 +72,8 @@ public class CodeGameApplication extends Application {
                 )
         );
         IViewStylesheetProvider viewStylesheetProvider = new ImmutableDefaultViewStylesheetProvider(
-                Map.of("solution", List.of("/css/SolutionView.css")),
-                Collections.emptyList()
+                Map.of("solution", List.of("/css/SolutionView.css", "/css/styles.css")),
+                List.of("/css/styles.css")
         );
         IStageProvider stageProvider = new ImmutableStageProvider(primaryStage);
 
@@ -86,7 +82,7 @@ public class CodeGameApplication extends Application {
 
         IControllerFactory controllerFactory = (controllerClass) -> {
             if (SolutionController.class.equals(controllerClass)) {
-                return new SolutionController(solutionModel, highlightStyleComputer);
+                return new SolutionController(solutionModel, this.navigator, highlightStyleComputer);
             }
             return new ProblemListController(problemListModel, this.navigator);
         };
