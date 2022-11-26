@@ -5,7 +5,7 @@ import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 
 /**
- * Instruction that adds constant to value held in working cell.
+ * {@link IInstruction Instruction} that adds constant to value held in working cell.
  * @author Erik Zemčík
  */
 public class AdditionInstruction implements IInstruction {

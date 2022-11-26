@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 /**
- * Input source that uses an {@link Iterable<Integer>} as source of inputs.
+ * {@link IInputSource Input source} that uses an {@link Iterable<Integer>} as source of inputs.
  * @author Erik Zemčík
  */
 public class IterableInputSource implements IInputSource {
@@ -22,15 +22,25 @@ public class IterableInputSource implements IInputSource {
         this.iterator = checkArgumentNotNull(iterable, "Iterable").iterator();
     }
 
+    /**
+     * Returns if the underlying {@link Iterator iterator} has next value.
+     * @return true if iterator has next value, else false
+     */
     @Override
     public boolean hasNextValue() {
         return this.iterator.hasNext();
     }
 
+    /**
+     * Returns next value from the underlying {@link Iterator iterator}.
+     *
+     * @return next value from iterator
+     * @throws NoSuchElementException if iterator has no next value
+     */
     @Override
     public int getNextValue() {
         if (!this.hasNextValue()) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("Iterator has no next value!");
         }
         return this.iterator.next();
     }

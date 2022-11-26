@@ -1,10 +1,11 @@
 package dev.zemco.codegame.execution.io;
 
-// TODO: explain satisfied
-
 /**
- * Destination of output values during execution that expects values until satisfied.
+ * Destination of output values during execution that expects values until
+ * it becomes {@link #isSatisfied() satisfied}.
+ *
  * @author Erik Zemčík
+ * @see IInputSource
  */
 public interface IOutputSink {
 

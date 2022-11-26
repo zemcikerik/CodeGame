@@ -2,7 +2,9 @@ package dev.zemco.codegame.execution.io;
 
 /**
  * Source of input values during execution.
+ *
  * @author Erik Zemčík
+ * @see IOutputSink
  */
 public interface IInputSource {
 

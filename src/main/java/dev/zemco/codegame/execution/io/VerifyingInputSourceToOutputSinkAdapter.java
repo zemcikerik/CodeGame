@@ -15,7 +15,9 @@ public class VerifyingInputSourceToOutputSinkAdapter implements IOutputSink {
         if (this.isSatisfied()) {
             throw new NotAcceptedException("Output sink is already satisfied!");
         }
+
         int expected = this.inputSource.getNextValue();
+
         if (expected != value) {
             String message = String.format("Output sink rejected value %d as it expected value %d!", value, expected);
             throw new NotAcceptedException(message);

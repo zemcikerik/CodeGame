@@ -1,7 +1,7 @@
 package dev.zemco.codegame.execution.memory;
 
 /**
- * Cell in memory that can hold a single integer value.
+ * Cell in a memory that can hold a single integer value.
  * Cells may hold no value at any point during their lifetime.
  * @author Erik Zemčík
  */
