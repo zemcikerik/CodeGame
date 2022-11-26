@@ -88,11 +88,11 @@ public class SolutionController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.problemNameLabel.textProperty().bind(
-                BindingUtils.mapOrNull(this.model.problemProperty(), Problem::getName)
+                BindingUtils.map(this.model.problemProperty(), Problem::getName)
         );
 
         this.problemDescriptionLabel.textProperty().bind(
-                BindingUtils.mapOrNull(this.model.problemProperty(), Problem::getDescription)
+                BindingUtils.map(this.model.problemProperty(), Problem::getDescription)
         );
 
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());

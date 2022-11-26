@@ -2,8 +2,18 @@ package dev.zemco.codegame.util;
 
 import java.util.Collection;
 
+// TODO: remove redundant checks, rename
 public final class Preconditions {
 
+    /**
+     * Throws formatted {@link IllegalArgumentException} if {@code argument} is {@code null}.
+     *
+     * @param <T> argument type
+     * @param argument argument to check
+     * @param argumentName name of the checked argument
+     * @return non-null instance passed to {@code argument}
+     * @throws IllegalArgumentException if {@code argument} is {@code null}
+     */
     public static <T> T checkArgumentNotNull(T argument, String argumentName) {
         if (argument == null) {
             throwFormattedIllegalArgumentException("%s cannot be null!", argumentName);

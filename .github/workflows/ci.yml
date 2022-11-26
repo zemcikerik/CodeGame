@@ -26,9 +26,9 @@ jobs:
         run: mvn --batch-mode --update-snapshots test
 
       - name: Package
-        run: mvn package
+        run: mvn --batch-mode package
 
-      - name: Upload package artifact
+      - name: Upload package
         uses: actions/upload-artifact@v3
         with:
           path: target/CodeGame-*-fat.jar

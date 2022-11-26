@@ -1,7 +1,6 @@
 package dev.zemco.codegame.presentation.memory;
 
 import dev.zemco.codegame.util.BindingUtils;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableStringValue;
@@ -64,10 +63,7 @@ public class MemoryView extends TableView<IMemoryCellObserver> implements Initia
     private ObservableStringValue getValueTableCellValue(CellDataFeatures<IMemoryCellObserver, String> features) {
         IMemoryCellObserver cellObserver = features.getValue();
         ObservableObjectValue<Integer> value = cellObserver.getValue();
-
-        return Bindings.when(Bindings.isNotNull(value))
-                .then(BindingUtils.mapOrNull(value, String::valueOf))
-                .otherwise(NO_VALUE_TEXT);
+        return BindingUtils.mapOrDefault(value, String::valueOf, NO_VALUE_TEXT);
     }
 
 }
