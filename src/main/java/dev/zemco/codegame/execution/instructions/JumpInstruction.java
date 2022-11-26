@@ -4,14 +4,14 @@ import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.IExecutionEngine;
 import dev.zemco.codegame.execution.UnknownJumpLabelException;
 
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 
 public class JumpInstruction implements IInstruction {
 
     private final String label;
 
     public JumpInstruction(String label) {
-        this.label = checkArgumentNotNullAndNotEmpty(label, "Label");
+        this.label = checkArgumentNotEmpty(label, "Label");
     }
 
     @Override

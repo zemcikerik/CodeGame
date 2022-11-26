@@ -4,8 +4,8 @@ import dev.zemco.codegame.execution.instructions.IInstruction;
 
 import java.util.function.Supplier;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
 public class SupplierInstructionParser implements IInstructionParser {
 
@@ -13,7 +13,7 @@ public class SupplierInstructionParser implements IInstructionParser {
     private final Supplier<IInstruction> instructionSupplier;
 
     public SupplierInstructionParser(String instructionName, Supplier<IInstruction> instructionSupplier) {
-        this.instructionName = checkArgumentNotNullAndNotEmpty(instructionName, "Instruction name");
+        this.instructionName = checkArgumentNotEmpty(instructionName, "Instruction name");
         this.instructionSupplier = checkArgumentNotNull(instructionSupplier, "Instruction supplier");
     }
 

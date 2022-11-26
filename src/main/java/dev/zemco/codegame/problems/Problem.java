@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger;
 
 public class Problem {
@@ -27,10 +27,10 @@ public class Problem {
             @JsonProperty("cases") List<ProblemCase> cases
     ) {
         this.id = checkArgumentNotNull(id, "Id");
-        this.name = checkArgumentNotNullAndNotEmpty(name, "Name");
+        this.name = checkArgumentNotEmpty(name, "Name");
         this.description = checkArgumentNotNull(description, "Description");
         this.difficulty = checkArgumentPositiveInteger(difficulty, "Difficulty");
-        this.cases = checkArgumentNotNullAndNotEmpty(cases, "Cases");
+        this.cases = checkArgumentNotEmpty(cases, "Cases");
     }
 
     public UUID getId() {

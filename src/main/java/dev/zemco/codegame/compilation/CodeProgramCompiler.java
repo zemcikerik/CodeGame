@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
 public class CodeProgramCompiler implements IProgramCompiler {
 
@@ -20,7 +20,7 @@ public class CodeProgramCompiler implements IProgramCompiler {
     private final IInstructionDescriptorFactory instructionDescriptorFactory;
 
     public CodeProgramCompiler(List<IInstructionParser> instructionParsers, IInstructionDescriptorFactory instructionDescriptorFactory) {
-        this.instructionParsers = checkArgumentNotNullAndNotEmpty(instructionParsers, "Instruction parsers");
+        this.instructionParsers = checkArgumentNotEmpty(instructionParsers, "Instruction parsers");
         this.instructionDescriptorFactory = checkArgumentNotNull(instructionDescriptorFactory, "Instruction descriptor factory");
     }
 

@@ -2,14 +2,14 @@ package dev.zemco.codegame.compilation.parsing;
 
 import dev.zemco.codegame.execution.instructions.IInstruction;
 
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 
 public abstract class AbstractParametrizedInstructionParser implements IInstructionParser {
 
     private final String instructionPrefix;
 
     protected AbstractParametrizedInstructionParser(String instructionPrefix) {
-        this.instructionPrefix = checkArgumentNotNullAndNotEmpty(instructionPrefix, "Instruction prefix");
+        this.instructionPrefix = checkArgumentNotEmpty(instructionPrefix, "Instruction prefix");
     }
 
     protected abstract IInstruction parseInstructionWithParameters(String[] parameters);

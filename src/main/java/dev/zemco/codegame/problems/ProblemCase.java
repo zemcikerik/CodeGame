@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 
 public class ProblemCase {
 
@@ -23,7 +23,7 @@ public class ProblemCase {
     ) {
         this.inputs = inputs != null ? Collections.unmodifiableList(inputs) : Collections.emptyList();
         this.expectedOutputs = Collections.unmodifiableList(
-            checkArgumentNotNullAndNotEmpty(expectedOutputs, "Expected outputs")
+            checkArgumentNotEmpty(expectedOutputs, "Expected outputs")
         );
         this.memorySettings = checkArgumentNotNull(memorySettings, "Memory settings");
     }

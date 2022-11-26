@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -37,17 +36,19 @@ public class PreconditionsTest {
     }
 
     @Test
-    @SuppressWarnings("ConstantConditions") // for checking method output
-    public void checkArgumentNotEmptyStringShouldReturnNullIfArgumentIsNull() {
-        Object result = Preconditions.checkArgumentNotEmpty((String)null, "Argument name");
-        assertThat(result, nullValue());
-    }
-
-    @Test
     public void checkArgumentNotEmptyStringShouldReturnArgumentIfNotEmpty() {
         String argument = "Hello, World!";
         String result = Preconditions.checkArgumentNotEmpty(argument, "Argument name");
         assertThat(result, is(argument));
+    }
+
+    @Test
+    public void checkArgumentNotEmptyStringShouldThrowIllegalArgumentExceptionIfArgumentIsNull() {
+        IllegalArgumentException e = assertThrows(
+            IllegalArgumentException.class,
+            () -> Preconditions.checkArgumentNotEmpty((String)null, "Test")
+        );
+        assertThat(e.getMessage(), containsString("Test"));
     }
 
     @Test

@@ -11,8 +11,8 @@ import dev.zemco.codegame.execution.memory.IMemory;
 import java.util.List;
 import java.util.Map;
 
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNullAndNotEmpty;
 
 // position differs from line position!
 public class CodeExecutionEngine implements IExecutionEngine {
@@ -31,7 +31,7 @@ public class CodeExecutionEngine implements IExecutionEngine {
 
     @Override
     public void jumpTo(String label) {
-        checkArgumentNotNullAndNotEmpty(label, "Label");
+        checkArgumentNotEmpty(label, "Label");
 
         Map<String, Integer> jumpLabelToLinePositionMap = this.program.getJumpLabelToLinePositionMap();
 
