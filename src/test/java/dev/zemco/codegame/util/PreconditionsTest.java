@@ -69,6 +69,4 @@ public class PreconditionsTest {
         assertThat(e.getMessage(), containsString("Argument"));
     }
 
-    // TODO: cover this with tests or remove string from identifiers
-
 }

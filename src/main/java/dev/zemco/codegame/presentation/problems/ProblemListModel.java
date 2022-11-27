@@ -22,6 +22,7 @@ public class ProblemListModel implements IProblemListModel {
         this.solutionModel = checkArgumentNotNull(solutionModel, "Solution model");
         checkArgumentNotNull(problemRepository, "Problem repository");
 
+        // TODO: loading problem once in a constructor? - maybe move this
         List<Problem> problems = problemRepository.getAllProblems();
         ObservableList<Problem> observableProblems = FXCollections.observableList(problems);
         this.problemsProperty = new ReadOnlyObjectWrapper<>(observableProblems);

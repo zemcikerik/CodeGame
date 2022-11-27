@@ -13,7 +13,6 @@ package dev.zemco.codegame;
  * where JavaFX checks if the {@code javafx.graphics} module is present when used main method is defined
  * in a class that extends {@link javafx.application.Application}. To circumvent this issue, this class was created
  * to launch the application when launching from a fat jar.
- * TODO: <a href="https://mail.openjdk.org/pipermail/openjfx-dev/2018-June/021977.html"></a>
  *
  * @author Erik Zemčík
  * @see CodeGameApplication

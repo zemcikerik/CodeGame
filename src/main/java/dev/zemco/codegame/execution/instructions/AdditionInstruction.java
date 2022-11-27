@@ -4,6 +4,8 @@ import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 
+// TODO: abstract away binary operation
+
 /**
  * {@link IInstruction Instruction} that adds constant to value held in working cell.
  * @author Erik Zemčík

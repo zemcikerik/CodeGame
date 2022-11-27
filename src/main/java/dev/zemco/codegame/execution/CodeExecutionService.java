@@ -9,6 +9,8 @@ import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryService;
 import dev.zemco.codegame.problems.ProblemCase;
 
+import java.util.List;
+
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 public class CodeExecutionService implements IExecutionService {
@@ -18,9 +20,9 @@ public class CodeExecutionService implements IExecutionService {
     private final IOutputSinkFactory outputSinkFactory;
 
     public CodeExecutionService(
-            IMemoryService memoryService,
-            IInputSourceFactory inputSourceFactory,
-            IOutputSinkFactory outputSinkFactory
+        IMemoryService memoryService,
+        IInputSourceFactory inputSourceFactory,
+        IOutputSinkFactory outputSinkFactory
     ) {
         this.memoryService = checkArgumentNotNull(memoryService, "Memory service");
         this.inputSourceFactory = checkArgumentNotNull(inputSourceFactory, "Input source factory");
@@ -32,12 +34,26 @@ public class CodeExecutionService implements IExecutionService {
         checkArgumentNotNull(problemCase, "Problem case");
         checkArgumentNotNull(solution, "Solution");
 
-        IMemory memory = this.memoryService.getConfiguredMemory(problemCase.getMemorySettings());
-        IInputSource inputSource = this.inputSourceFactory.createInputSourceFromIterable(problemCase.getInputs());
-        IOutputSink outputSink = this.outputSinkFactory.createVerifyingOutputSinkFromIterable(problemCase.getExpectedOutputs());
+        IMemory memory = this.createMemoryForProblemCase(problemCase);
+        IInputSource inputSource = this.createInputSourceForProblemCase(problemCase);
+        IOutputSink outputSink = this.createOutputSinkForProblemCase(problemCase);
 
         CodeExecutionEngine engine = new CodeExecutionEngine(solution, memory, inputSource, outputSink);
         return engine.getExecutionContext();
+    }
+
+    private IMemory createMemoryForProblemCase(ProblemCase problemCase) {
+        return this.memoryService.getConfiguredMemory(problemCase.getMemorySettings());
+    }
+
+    private IInputSource createInputSourceForProblemCase(ProblemCase problemCase) {
+        List<Integer> inputs = problemCase.getInputs();
+        return this.inputSourceFactory.createInputSourceFromIterable(inputs);
+    }
+
+    private IOutputSink createOutputSinkForProblemCase(ProblemCase problemCase) {
+        List<Integer> expectedOutputs = problemCase.getExpectedOutputs();
+        return this.outputSinkFactory.createVerifyingOutputSinkFromIterable(expectedOutputs);
     }
 
 }

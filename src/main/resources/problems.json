@@ -15,8 +15,8 @@
     ]
   },
   {
-    "id": "12716f15-dd3a-47f9-89d7-1dac6bbfd772",
-    "name": "Test Problem 2",
+    "id": "ac69ab77-c798-4b3e-9d65-fb2921a664b2",
+    "name": "Test Problem with initial values",
     "description": "Hello, World 2!",
     "difficulty": 2,
     "cases": [
@@ -26,7 +26,8 @@
         "memorySettings": {
           "size": 5,
           "initialValues": {
-            "3": 42
+            "3": 42,
+            "4": -100
           }
         }
       }

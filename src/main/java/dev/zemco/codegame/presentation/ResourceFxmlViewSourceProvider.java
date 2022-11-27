@@ -12,7 +12,9 @@ public class ResourceFxmlViewSourceProvider implements IFxmlViewSourceProvider {
 
     public ResourceFxmlViewSourceProvider(Class<?> resourceClass, Map<String, String> viewIdToResourcePath) {
         this.resourceClass = checkArgumentNotNull(resourceClass, "Resource class");
-        this.viewIdToResourcePath = checkArgumentNotNull(viewIdToResourcePath, "View id to resource path");
+        this.viewIdToResourcePath = Map.copyOf(
+            checkArgumentNotNull(viewIdToResourcePath, "View id to resource path")
+        );
     }
 
     @Override
@@ -28,8 +30,10 @@ public class ResourceFxmlViewSourceProvider implements IFxmlViewSourceProvider {
         InputStream viewSource = this.resourceClass.getResourceAsStream(resourcePath);
 
         if (viewSource == null) {
-            String message = String.format("FXML resource for view '%s' at path '%s' was not found!", viewId, resourcePath);
-            throw new IllegalStateException(message);
+            throw new IllegalStateException(String.format(
+                "FXML resource for view '%s' at path '%s' was not found!",
+                viewId, resourcePath
+            ));
         }
 
         return viewSource;

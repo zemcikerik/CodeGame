@@ -1,6 +1,5 @@
 package dev.zemco.codegame.compilation;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +10,15 @@ public class Program {
     private final List<IInstructionDescriptor> instructionDescriptors;
     private final Map<String, Integer> jumpLabelToLinePositionMap;
 
-    public Program(List<IInstructionDescriptor> instructionDescriptors, Map<String, Integer> jumpLabelToLinePositionMap) {
+    public Program(
+        List<IInstructionDescriptor> instructionDescriptors,
+        Map<String, Integer> jumpLabelToLinePositionMap
+    ) {
         checkArgumentNotNull(instructionDescriptors, "Instruction descriptors");
         checkArgumentNotNull(jumpLabelToLinePositionMap, "Jump label to line position map");
 
-        this.instructionDescriptors = Collections.unmodifiableList(instructionDescriptors);
-        this.jumpLabelToLinePositionMap = Collections.unmodifiableMap(jumpLabelToLinePositionMap);
+        this.instructionDescriptors = List.copyOf(instructionDescriptors);
+        this.jumpLabelToLinePositionMap = Map.copyOf(jumpLabelToLinePositionMap);
     }
 
     public List<IInstructionDescriptor> getInstructionDescriptors() {

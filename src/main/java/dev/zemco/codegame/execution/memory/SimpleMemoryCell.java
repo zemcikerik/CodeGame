@@ -2,6 +2,7 @@ package dev.zemco.codegame.execution.memory;
 
 public class SimpleMemoryCell implements IMemoryCell {
 
+    // TODO: maybe don't use boxed value?
     private Integer value;
 
     public SimpleMemoryCell() {

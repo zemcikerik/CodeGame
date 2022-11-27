@@ -76,23 +76,28 @@ public class SolutionController implements Initializable {
     private final IHighlightStyleComputer highlightStyleComputer;
 
     public SolutionController(
-            ISolutionModel model,
-            INavigator navigator,
-            IHighlightStyleComputer highlightStyleComputer
+        ISolutionModel model,
+        INavigator navigator,
+        IHighlightStyleComputer highlightStyleComputer
     ) {
         this.model = checkArgumentNotNull(model, "Model");
         this.navigator = checkArgumentNotNull(navigator, "Navigator");
-        this.highlightStyleComputer = checkArgumentNotNull(highlightStyleComputer, "Highlight style computer");
+        this.highlightStyleComputer = checkArgumentNotNull(
+            highlightStyleComputer, "Highlight style computer"
+        );
     }
 
+    // TODO: split this up into smaller parts
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.backButton.disableProperty().bind(this.model.executionRunningProperty());
+
         this.problemNameLabel.textProperty().bind(
-                BindingUtils.map(this.model.problemProperty(), Problem::getName)
+            BindingUtils.map(this.model.problemProperty(), Problem::getName)
         );
 
         this.problemDescriptionLabel.textProperty().bind(
-                BindingUtils.map(this.model.problemProperty(), Problem::getDescription)
+            BindingUtils.map(this.model.problemProperty(), Problem::getDescription)
         );
 
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
@@ -112,9 +117,9 @@ public class SolutionController implements Initializable {
 
         this.toggleExecutionButton.disableProperty().bind(Bindings.not(this.model.canExecuteProperty()));
         this.toggleExecutionButton.textProperty().bind(
-                Bindings.when(this.model.executionRunningProperty())
-                        .then("Stop")
-                        .otherwise("Start")
+            Bindings.when(this.model.executionRunningProperty())
+                .then("Stop")
+                .otherwise("Start")
         );
 
         this.stepButton.disableProperty().bind(Bindings.not(this.model.canStepProperty()));
@@ -125,6 +130,7 @@ public class SolutionController implements Initializable {
 
     @FXML
     private void onBackButtonClicked() {
+        // TODO: remove magic constant
         this.navigator.navigateTo("problem-list");
     }
 
@@ -154,14 +160,17 @@ public class SolutionController implements Initializable {
         this.model.stepExecution();
     }
 
+    // TODO: find out why only label formatting is grayed out during execution
+    //       (this will be intentional in future but is most likely currently caused by a bug)
     private void onCodeAreaParagraphChanged(
-            ListModification<? extends Paragraph<Collection<String>, String, Collection<String>>> modification
+        ListModification<? extends Paragraph<Collection<String>, String, Collection<String>>> modification
     ) {
         // prevent triggering of this observer by changes done by this observer or by deletion of entire lines
         if (modification.getAddedSize() == 0) {
             return;
         }
 
+        // for each modified paragraph
         for (int paragraph = modification.getFrom(); paragraph < modification.getTo(); paragraph++) {
             int paragraphLength = this.codeArea.getParagraphLength(paragraph);
             String modifiedText = this.codeArea.getText(paragraph, 0, paragraph, paragraphLength);
@@ -179,6 +188,7 @@ public class SolutionController implements Initializable {
         }
 
         if (newError != null) {
+            // TODO: remove magic constant
             this.codeArea.setParagraphStyle(newError.getLinePosition(), List.of("syntax-error"));
         }
     }

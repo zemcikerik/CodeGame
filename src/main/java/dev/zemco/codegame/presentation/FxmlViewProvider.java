@@ -16,13 +16,15 @@ public class FxmlViewProvider implements IViewProvider {
     private final IViewStylesheetProvider viewStylesheetProvider;
 
     public FxmlViewProvider(
-            IFxmlViewSourceProvider viewSourceProvider,
-            IControllerFactory controllerFactory,
-            IViewStylesheetProvider viewStylesheetProvider
+        IFxmlViewSourceProvider viewSourceProvider,
+        IControllerFactory controllerFactory,
+        IViewStylesheetProvider viewStylesheetProvider
     ) {
         this.viewSourceProvider = checkArgumentNotNull(viewSourceProvider, "View source provider");
         this.controllerFactory = checkArgumentNotNull(controllerFactory, "Controller factory");
-        this.viewStylesheetProvider = checkArgumentNotNull(viewStylesheetProvider, "View stylesheet provider");
+        this.viewStylesheetProvider = checkArgumentNotNull(
+            viewStylesheetProvider, "View stylesheet provider"
+        );
     }
 
     @Override
@@ -41,7 +43,7 @@ public class FxmlViewProvider implements IViewProvider {
         try {
             return fxmlLoader.load(fxmlSource);
         } catch (IOException e) {
-            // TODO: handle properly
+            // TODO: handle properly!
             throw new RuntimeException(e);
         }
     }

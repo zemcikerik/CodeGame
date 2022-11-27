@@ -11,11 +11,16 @@ public class ImmutableDefaultViewStylesheetProvider implements IViewStylesheetPr
     private final List<String> defaultStylesheets;
 
     public ImmutableDefaultViewStylesheetProvider(
-            Map<String, List<String>> viewIdToStylesheetList,
+            Map<String, List<String>> viewIdToStylesheetListMap,
             List<String> defaultStylesheets
     ) {
-        this.viewIdToStylesheetList = checkArgumentNotNull(viewIdToStylesheetList, "View id to stylesheet list");
-        this.defaultStylesheets = checkArgumentNotNull(defaultStylesheets, "Default stylesheets");
+        // TODO: copy of inner lists?
+        this.viewIdToStylesheetList = Map.copyOf(
+            checkArgumentNotNull(viewIdToStylesheetListMap, "View id to stylesheet list")
+        );
+        this.defaultStylesheets = List.copyOf(
+            checkArgumentNotNull(defaultStylesheets, "Default stylesheets")
+        );
     }
 
     @Override

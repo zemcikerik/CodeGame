@@ -19,7 +19,10 @@ public class CodeProgramCompiler implements IProgramCompiler {
     private final List<IInstructionParser> instructionParsers;
     private final IInstructionDescriptorFactory instructionDescriptorFactory;
 
-    public CodeProgramCompiler(List<IInstructionParser> instructionParsers, IInstructionDescriptorFactory instructionDescriptorFactory) {
+    public CodeProgramCompiler(
+        List<IInstructionParser> instructionParsers,
+        IInstructionDescriptorFactory instructionDescriptorFactory
+    ) {
         this.instructionParsers = checkArgumentNotEmpty(instructionParsers, "Instruction parsers");
         this.instructionDescriptorFactory = checkArgumentNotNull(instructionDescriptorFactory, "Instruction descriptor factory");
     }

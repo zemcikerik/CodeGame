@@ -13,6 +13,7 @@ public class ConstantSizeMemory implements IMemory {
         this.cells = new IMemoryCell[size];
 
         for (int i = 0; i < size; i++) {
+            // TODO: maybe use factory?
             this.cells[i] = new SimpleMemoryCell();
         }
     }

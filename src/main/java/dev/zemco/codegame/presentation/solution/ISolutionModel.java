@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.collections.ObservableList;
 
+// TODO: this has grown to be pretty big, refactor this into smaller parts if possible
 public interface ISolutionModel {
     void setProblem(Problem problem);
     void submitAttemptForCompilation(String program);

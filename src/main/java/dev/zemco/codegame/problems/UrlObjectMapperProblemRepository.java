@@ -2,7 +2,6 @@ package dev.zemco.codegame.problems;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import dev.zemco.codegame.presentation.ResourceLoadException;
 
 import java.io.IOException;
 import java.net.URL;

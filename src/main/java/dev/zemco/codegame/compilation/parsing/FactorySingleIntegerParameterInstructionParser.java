@@ -8,7 +8,10 @@ public class FactorySingleIntegerParameterInstructionParser extends AbstractSing
 
     private final IIntegerInstructionFactory instructionFactory;
 
-    public FactorySingleIntegerParameterInstructionParser(String instructionPrefix, IIntegerInstructionFactory instructionFactory) {
+    public FactorySingleIntegerParameterInstructionParser(
+        String instructionPrefix,
+        IIntegerInstructionFactory instructionFactory
+    ) {
         super(instructionPrefix);
         this.instructionFactory = checkArgumentNotNull(instructionFactory, "Instruction factory");
     }

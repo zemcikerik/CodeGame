@@ -6,6 +6,7 @@ import dev.zemco.codegame.execution.memory.IMemory;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
+// TODO: maybe add builder
 public class ImmutableExecutionContext implements IExecutionContext {
 
     private final IExecutionEngine engine;
@@ -13,7 +14,12 @@ public class ImmutableExecutionContext implements IExecutionContext {
     private final IInputSource inputSource;
     private final IOutputSink outputSink;
 
-    public ImmutableExecutionContext(IExecutionEngine engine, IMemory memory, IInputSource inputSource, IOutputSink outputSink) {
+    public ImmutableExecutionContext(
+        IExecutionEngine engine,
+        IMemory memory,
+        IInputSource inputSource,
+        IOutputSink outputSink
+    ) {
         this.engine = checkArgumentNotNull(engine, "Engine");
         this.memory = checkArgumentNotNull(memory, "Memory");
         this.inputSource = checkArgumentNotNull(inputSource, "Input source");

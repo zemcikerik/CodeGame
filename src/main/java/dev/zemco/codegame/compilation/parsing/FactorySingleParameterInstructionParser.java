@@ -8,7 +8,10 @@ public class FactorySingleParameterInstructionParser extends AbstractSingleParam
 
     private final IStringInstructionFactory instructionFactory;
 
-    public FactorySingleParameterInstructionParser(String instructionPrefix, IStringInstructionFactory instructionFactory) {
+    public FactorySingleParameterInstructionParser(
+        String instructionPrefix,
+        IStringInstructionFactory instructionFactory
+    ) {
         super(instructionPrefix);
         this.instructionFactory = checkArgumentNotNull(instructionFactory, "Instruction factory");
     }

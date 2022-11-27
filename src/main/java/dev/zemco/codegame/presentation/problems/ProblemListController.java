@@ -42,18 +42,19 @@ public class ProblemListController implements Initializable {
         this.problemListView.itemsProperty().bind(this.model.problemsProperty());
 
         // TODO: weak
-        this.problemListView.getSelectionModel().selectedItemProperty().addListener(this::onProblemListViewItemSelected);
+        this.problemListView.getSelectionModel().selectedItemProperty()
+            .addListener(this::onProblemListViewItemSelected);
 
         this.detailBox.visibleProperty().bind(
-                Bindings.isNotNull(this.model.selectedProblemProperty())
+            Bindings.isNotNull(this.model.selectedProblemProperty())
         );
 
         this.problemNameLabel.textProperty().bind(
-                BindingUtils.mapOrNull(this.model.selectedProblemProperty(), Problem::getName)
+            BindingUtils.mapOrNull(this.model.selectedProblemProperty(), Problem::getName)
         );
 
         this.problemDescriptionLabel.textProperty().bind(
-                BindingUtils.mapOrNull(this.model.selectedProblemProperty(), Problem::getDescription)
+            BindingUtils.mapOrNull(this.model.selectedProblemProperty(), Problem::getDescription)
         );
     }
 

@@ -1,6 +1,7 @@
 package dev.zemco.codegame.presentation.memory;
 
 import dev.zemco.codegame.util.BindingUtils;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableStringValue;
@@ -28,6 +29,7 @@ public class MemoryView extends TableView<IMemoryCellObserver> implements Initia
     private TableColumn<IMemoryCellObserver, String> valueColumn;
 
     public MemoryView() throws IOException {
+        // TODO: don't use fxml for this view
         FXMLLoader loader = new FXMLLoader(MemoryView.class.getResource("/fxml/MemoryControl.fxml"));
         loader.setController(this);
         loader.setRoot(this);
@@ -36,13 +38,9 @@ public class MemoryView extends TableView<IMemoryCellObserver> implements Initia
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.addressColumn.minWidthProperty().bind(
-                this.widthProperty().divide(2)
-        );
-
-        this.valueColumn.minWidthProperty().bind(
-                this.widthProperty().divide(2)
-        );
+        DoubleBinding columnWidth = this.widthProperty().divide(2);
+        this.addressColumn.minWidthProperty().bind(columnWidth);
+        this.valueColumn.minWidthProperty().bind(columnWidth);
 
         this.addressColumn.setCellValueFactory(this::getAddressTableCellValue);
         this.valueColumn.setCellValueFactory(this::getValueTableCellValue);
@@ -53,13 +51,13 @@ public class MemoryView extends TableView<IMemoryCellObserver> implements Initia
         int address = cellObserver.getAddress();
 
         String addressText = address == WORKING_CELL_ADDRESS
-                ? WORKING_CELL_ADDRESS_ALIAS
-                : String.valueOf(address);
+            ? WORKING_CELL_ADDRESS_ALIAS
+            : String.valueOf(address);
 
         return new ReadOnlyStringWrapper(addressText).getReadOnlyProperty();
     }
 
-    // TODO: maybe rename?
+    // TODO: this name is a bit clunky - maybe rename?
     private ObservableStringValue getValueTableCellValue(CellDataFeatures<IMemoryCellObserver, String> features) {
         IMemoryCellObserver cellObserver = features.getValue();
         ObservableObjectValue<Integer> value = cellObserver.getValue();

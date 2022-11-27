@@ -40,10 +40,8 @@ public class ProblemCase {
         @JsonProperty("expectedOutputs") List<Integer> expectedOutputs,
         @JsonProperty("memorySettings") ProblemCaseMemorySettings memorySettings
     ) {
-        this.inputs = inputs != null ? Collections.unmodifiableList(inputs) : Collections.emptyList();
-        this.expectedOutputs = Collections.unmodifiableList(
-            checkArgumentNotEmpty(expectedOutputs, "Expected outputs")
-        );
+        this.inputs = inputs != null ? List.copyOf(inputs) : Collections.emptyList();
+        this.expectedOutputs = List.copyOf(checkArgumentNotEmpty(expectedOutputs, "Expected outputs"));
         this.memorySettings = checkArgumentNotNull(memorySettings, "Memory settings");
     }
 

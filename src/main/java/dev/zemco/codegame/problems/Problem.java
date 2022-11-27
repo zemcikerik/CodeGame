@@ -3,7 +3,6 @@ package dev.zemco.codegame.problems;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,7 +51,7 @@ public class Problem {
         this.name = checkArgumentNotEmpty(name, "Name");
         this.description = checkArgumentNotNull(description, "Description");
         this.difficulty = checkArgumentPositiveInteger(difficulty, "Difficulty");
-        this.cases = Collections.unmodifiableList(checkArgumentNotEmpty(cases, "Cases"));
+        this.cases = List.copyOf(checkArgumentNotEmpty(cases, "Cases"));
     }
 
     /**

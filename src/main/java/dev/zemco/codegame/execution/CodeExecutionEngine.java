@@ -14,17 +14,19 @@ import java.util.Map;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-// position differs from line position!
 public class CodeExecutionEngine implements IExecutionEngine {
 
     private final Program program;
     private final IExecutionContext context;
+
+    // NOTE: position within instruction list, not line position!
     private int position;
     private boolean moveToNextPosition;
 
     public CodeExecutionEngine(Program program, IMemory memory, IInputSource inputSource, IOutputSink outputSink) {
         this.program = checkArgumentNotNull(program, "Program");
         this.context = new ImmutableExecutionContext(this, memory, inputSource, outputSink);
+
         this.position = 0;
         this.moveToNextPosition = false;
     }
@@ -46,7 +48,7 @@ public class CodeExecutionEngine implements IExecutionEngine {
 
         // find first defined instruction after target label
         // NOTE: in future performance of this search could be improved
-        // by using modified binary search if the additional performance will be needed
+        //       by using modified binary search if the additional performance will be needed
         for (int i = 0; i < instructionDescriptors.size(); i++) {
             if (instructionDescriptors.get(i).getLinePosition() > jumpLinePosition) {
                 this.position = i;
@@ -60,6 +62,7 @@ public class CodeExecutionEngine implements IExecutionEngine {
 
     @Override
     public void step() {
+        // TODO: check if has next instruction
         this.moveToNextPosition = true;
         IInstructionDescriptor descriptor = this.program.getInstructionDescriptors().get(this.position);
         IInstruction instruction = descriptor.getInstruction();

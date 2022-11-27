@@ -45,11 +45,13 @@ public class SolutionModel implements ISolutionModel {
     private List<UpdatableMemoryCellObserverAdapter> cellObservers;
 
     public SolutionModel(
-            IProgramErrorModelFactory programErrorModelFactory,
-            IProgramCompiler programCompiler,
-            IExecutionService executionService
+        IProgramErrorModelFactory programErrorModelFactory,
+        IProgramCompiler programCompiler,
+        IExecutionService executionService
     ) {
-        this.programErrorModelFactory = checkArgumentNotNull(programErrorModelFactory, "Program error model factory");
+        this.programErrorModelFactory = checkArgumentNotNull(
+            programErrorModelFactory, "Program error model factory"
+        );
         this.programCompiler = checkArgumentNotNull(programCompiler, "Program compiler");
         this.executionService = checkArgumentNotNull(executionService, "Execution service");
         this.program = null;
