@@ -6,13 +6,13 @@ import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 
 /**
- * Instruction that takes next value from input source and copies it to working memory cell.
+ * Instruction that takes next value from {@link IInputSource input source} and copies it to working memory cell.
  * @author Erik Zemčík
  */
 public class InputInstruction implements IInstruction {
 
     /**
-     * Takes next value from input source and copies it to working memory cell.
+     * Takes next value from {@link IInputSource input source} and copies it to working memory cell.
      * @param executionContext context on which the instruction is executed
      * @throws InstructionExecutionException if input source has no next value
      */

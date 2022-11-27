@@ -1,11 +1,12 @@
 package dev.zemco.codegame.execution.io;
 
 /**
- * Destination of output values during execution that expects values until
- * it becomes {@link #isSatisfied() satisfied}.
+ * Destination of output values during execution that expects values until it becomes {@link #isSatisfied() satisfied}.
+ * Output sink may reject the output value, throwing {@link NotAcceptedException}.
  *
  * @author Erik Zemčík
  * @see IInputSource
+ * @see NotAcceptedException
  */
 public interface IOutputSink {
 

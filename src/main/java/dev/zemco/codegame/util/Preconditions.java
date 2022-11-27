@@ -49,6 +49,7 @@ public final class Preconditions {
      * Throws formatted {@link IllegalArgumentException} if {@link Collection} {@code argument}
      * is {@code null} or contains no elements.
      *
+     * @param <T> collection argument type
      * @param argument argument to check
      * @param argumentName name of the checked argument
      * @return instance passed to {@code argument}

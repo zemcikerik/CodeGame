@@ -7,13 +7,13 @@ import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 
 /**
- * Instruction that emits current value in working cell to output sink.
+ * Instruction that emits current value in working cell to {@link IOutputSink output sink}.
  * @author Erik Zemčík
  */
 public class OutputInstruction implements IInstruction {
 
     /**
-     * Emits current value in working cell to output sink.
+     * Emits current value in working cell to {@link IOutputSink output sink}.
      * @param executionContext context on which the instruction is executed
      * @throws InstructionExecutionException if working cell has no value or output sink rejects the value
      */
