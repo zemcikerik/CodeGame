@@ -5,45 +5,45 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableStringValue;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.util.Callback;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
-public class MemoryView extends TableView<IMemoryCellObserver> implements Initializable {
+public class MemoryView extends TableView<IMemoryCellObserver> {
 
     private static final int WORKING_CELL_ADDRESS = 0;
     private static final String WORKING_CELL_ADDRESS_ALIAS = "Working Cell";
     private static final String NO_VALUE_TEXT = "-";
 
-    @FXML
-    private TableColumn<IMemoryCellObserver, String> addressColumn;
+    public MemoryView() {
+        super();
 
-    @FXML
-    private TableColumn<IMemoryCellObserver, String> valueColumn;
-
-    public MemoryView() throws IOException {
-        // TODO: don't use fxml for this view
-        FXMLLoader loader = new FXMLLoader(MemoryView.class.getResource("/fxml/MemoryControl.fxml"));
-        loader.setController(this);
-        loader.setRoot(this);
-        loader.load();
+        this.addNamedColumn("Address", this::getAddressTableCellValue);
+        this.addNamedColumn("Value", this::getValueTableCellValue);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    private void addNamedColumn(
+        String columnTitle,
+        // TODO: document this
+        Callback<CellDataFeatures<IMemoryCellObserver, String>, ObservableValue<String>> cellValueFactory
+    ) {
+        var column = new TableColumn<IMemoryCellObserver, String>(columnTitle);
+        
         DoubleBinding columnWidth = this.widthProperty().divide(2);
-        this.addressColumn.minWidthProperty().bind(columnWidth);
-        this.valueColumn.minWidthProperty().bind(columnWidth);
+        column.minWidthProperty().bind(columnWidth);
+        column.prefWidthProperty().bind(columnWidth);
+        column.setMaxWidth(USE_COMPUTED_SIZE);
 
-        this.addressColumn.setCellValueFactory(this::getAddressTableCellValue);
-        this.valueColumn.setCellValueFactory(this::getValueTableCellValue);
+        column.setEditable(false);
+        column.setResizable(false);
+        column.setSortable(false);
+        column.setCellValueFactory(cellValueFactory);
+
+        this.getColumns().add(column);
     }
 
     private ObservableStringValue getAddressTableCellValue(CellDataFeatures<IMemoryCellObserver, String> features) {

@@ -60,9 +60,9 @@ public final class BindingUtils {
      * @see #mapOrNull(ObservableValue, Function)
      */
     public static <F> StringBinding mapOrDefault(
-            ObservableValue<F> property,
-            Function<F, String> mapper,
-            String defaultValue
+        ObservableValue<F> property,
+        Function<F, String> mapper,
+        String defaultValue
     ) {
         checkArgumentNotNull(mapper, "Mapper");
         return BindingUtils.map(property, from -> from != null ? mapper.apply(from) : defaultValue);
