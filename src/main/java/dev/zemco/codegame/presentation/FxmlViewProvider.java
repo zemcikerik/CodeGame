@@ -1,5 +1,6 @@
 package dev.zemco.codegame.presentation;
 
+import dev.zemco.codegame.problems.ResourceLoadException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
@@ -43,8 +44,7 @@ public class FxmlViewProvider implements IViewProvider {
         try {
             return fxmlLoader.load(fxmlSource);
         } catch (IOException e) {
-            // TODO: handle properly!
-            throw new RuntimeException(e);
+            throw new ResourceLoadException("Failed to load view from FXML!", e);
         }
     }
 

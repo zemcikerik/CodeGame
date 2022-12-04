@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 // TODO: this has grown to be pretty big, refactor this into smaller parts if possible
 public interface ISolutionModel {
     void setProblem(Problem problem);
-    void submitAttemptForCompilation(String program);
+    void submitSolution(String program);
     void startExecution();
     void stepExecution();
     void stopExecution();
@@ -22,7 +22,6 @@ public interface ISolutionModel {
     ObservableBooleanValue canStepProperty();
     ObservableBooleanValue executionRunningProperty();
 
-    // TODO: reduce coupling here
     ObservableObjectValue<ObservableList<IMemoryCellObserver>> memoryCellsProperty();
     ObservableObjectValue<IProgramErrorModel> syntaxErrorProperty();
 }

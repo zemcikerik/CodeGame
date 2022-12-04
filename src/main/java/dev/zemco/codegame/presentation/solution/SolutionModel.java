@@ -25,6 +25,7 @@ import java.util.List;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
+// TODO: either split this up into smaller classes or use state pattern
 public class SolutionModel implements ISolutionModel {
 
     private final ReadOnlyObjectWrapper<Problem> problemProperty;
@@ -72,7 +73,7 @@ public class SolutionModel implements ISolutionModel {
     }
 
     @Override
-    public void submitAttemptForCompilation(String program) {
+    public void submitSolution(String program) {
         if (!this.canCompileProperty.get()) {
             throw new IllegalStateException("Cannot compile program!");
         }
@@ -136,11 +137,11 @@ public class SolutionModel implements ISolutionModel {
 
     @Override
     public void resetAttempt() {
+        // TODO: implement this properly
         this.canCompileProperty.set(true);
         this.canExecuteProperty.set(false);
         this.memoryCellsProperty.set(null);
         this.syntaxErrorProperty.set(null);
-        // TODO: this.executionRunningProperty.set(false);
     }
 
     @Override

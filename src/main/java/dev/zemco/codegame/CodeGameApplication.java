@@ -57,6 +57,7 @@ import java.util.Set;
 // TODO: check correct usage of terms program and solution in source code
 // TODO: fix issues with UI scaling - min/pref/max sizes
 // TODO: fix formatting in tests
+// TODO: display currently executed instruction line
 public class CodeGameApplication extends Application {
 
     private INavigator navigator;

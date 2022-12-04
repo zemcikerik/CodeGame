@@ -102,7 +102,7 @@ public class SolutionController implements Initializable {
 
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
         this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
-        this.codeArea.setMouseOverTextDelay(Duration.ofSeconds(1)); // TODO: popover
+        this.codeArea.setMouseOverTextDelay(Duration.ofSeconds(1)); // TODO: popover for syntax error
 
         this.codeArea.getParagraphs().addModificationObserver(modification -> {
             // this observer is fired before the code area finishes its internal update process, so we queue up
@@ -141,7 +141,7 @@ public class SolutionController implements Initializable {
 
     @FXML
     private void onCompileButtonClicked() {
-        this.model.submitAttemptForCompilation(this.codeArea.getText());
+        this.model.submitSolution(this.codeArea.getText());
     }
 
     @FXML

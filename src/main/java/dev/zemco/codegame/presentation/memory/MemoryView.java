@@ -11,8 +11,6 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
 
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
-
 public class MemoryView extends TableView<IMemoryCellObserver> {
 
     private static final int WORKING_CELL_ADDRESS = 0;
