@@ -30,9 +30,9 @@ public class CodeExecutionService implements IExecutionService {
     }
 
     @Override
-    public IExecutionContext getExecutionContextForSolutionAttempt(ProblemCase problemCase, Program solution) {
-        checkArgumentNotNull(problemCase, "Problem case");
+    public IExecutionContext getExecutionContextForSolutionAttempt(Program solution, ProblemCase problemCase) {
         checkArgumentNotNull(solution, "Solution");
+        checkArgumentNotNull(problemCase, "Problem case");
 
         IMemory memory = this.createMemoryForProblemCase(problemCase);
         IInputSource inputSource = this.createInputSourceForProblemCase(problemCase);

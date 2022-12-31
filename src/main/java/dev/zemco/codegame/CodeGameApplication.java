@@ -8,6 +8,10 @@ import dev.zemco.codegame.compilation.parsing.FactorySingleIntegerParameterInstr
 import dev.zemco.codegame.compilation.parsing.FactorySingleParameterInstructionParser;
 import dev.zemco.codegame.compilation.parsing.IInstructionParser;
 import dev.zemco.codegame.compilation.parsing.SupplierInstructionParser;
+import dev.zemco.codegame.evaluation.CodeEvaluationStrategy;
+import dev.zemco.codegame.evaluation.EvaluationService;
+import dev.zemco.codegame.evaluation.IEvaluationService;
+import dev.zemco.codegame.evaluation.IEvaluationStrategy;
 import dev.zemco.codegame.execution.CodeExecutionService;
 import dev.zemco.codegame.execution.IExecutionService;
 import dev.zemco.codegame.execution.instructions.AdditionInstruction;
@@ -54,7 +58,7 @@ import java.util.Set;
 
 // global todos (some people have global variables, others have global todos)
 // TODO: remove functional interface annotations where applicable
-// TODO: check correct usage of terms program and solution in source code
+// TODO: check correct usage of terms program and solution in source code / get...ForSolutionAttempt
 // TODO: fix issues with UI scaling - min/pref/max sizes
 // TODO: fix formatting in tests
 // TODO: display currently executed instruction line
@@ -74,6 +78,9 @@ public class CodeGameApplication extends Application {
         IExecutionService executionService = new CodeExecutionService(
             memoryService, inputSourceFactory, outputSinkFactory
         );
+
+        IEvaluationStrategy evaluationStrategy = new CodeEvaluationStrategy();
+        IEvaluationService evaluationService = new EvaluationService(executionService, evaluationStrategy);
 
         List<IInstructionParser> parsers = List.of(
             new SupplierInstructionParser("in", InputInstruction::new),
@@ -105,7 +112,7 @@ public class CodeGameApplication extends Application {
         IStageProvider stageProvider = new ImmutableStageProvider(primaryStage);
 
         ISolutionModel solutionModel = new SolutionModel(
-            new ImmutableProgramErrorModelFactory(), compiler, executionService
+            new ImmutableProgramErrorModelFactory(), compiler, evaluationService
         );
         IProblemListModel problemListModel = new ProblemListModel(solutionModel, problemRepository);
 

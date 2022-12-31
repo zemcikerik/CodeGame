@@ -11,6 +11,10 @@
     -fx-fill: darkblue;
 }
 
+.next-instruction-line {
+    -fx-background-color: rgba(255, 234, 0, 0.35);
+}
+
 .syntax-error {
     -fx-background-color: rgba(255, 0, 0, 0.2);
 }

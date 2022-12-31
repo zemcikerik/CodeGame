@@ -32,6 +32,10 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 public class SolutionController implements Initializable {
 
+    private static final Collection<String> DEFAULT_LINE_STYLES = Collections.emptyList();
+    private static final Collection<String> NEXT_INSTRUCTION_LINE_STYLES = List.of("next-instruction-line");
+    private static final Collection<String> SYNTAX_ERROR_LINE_STYLES = List.of("syntax-error");
+
     @FXML
     private Button backButton;
 
@@ -126,6 +130,7 @@ public class SolutionController implements Initializable {
 
         // TODO: weak
         this.model.syntaxErrorProperty().addListener(this::onSyntaxErrorModelChanged);
+        this.model.nextInstructionLinePositionProperty().addListener(this::onNextInstructionLineChanged);
     }
 
     @FXML
@@ -184,12 +189,21 @@ public class SolutionController implements Initializable {
 
     private void onSyntaxErrorModelChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {
         if (oldError != null) {
-            this.codeArea.setParagraphStyle(oldError.getLinePosition(), Collections.emptyList());
+            this.codeArea.setParagraphStyle(oldError.getLinePosition(), DEFAULT_LINE_STYLES);
         }
 
         if (newError != null) {
-            // TODO: remove magic constant
-            this.codeArea.setParagraphStyle(newError.getLinePosition(), List.of("syntax-error"));
+            this.codeArea.setParagraphStyle(newError.getLinePosition(), SYNTAX_ERROR_LINE_STYLES);
+        }
+    }
+
+    private void onNextInstructionLineChanged(Object ignored, Integer oldPosition, Integer newPosition) {
+        if (oldPosition != null) {
+            this.codeArea.setParagraphStyle(oldPosition, DEFAULT_LINE_STYLES);
+        }
+
+        if (newPosition != null) {
+            this.codeArea.setParagraphStyle(newPosition, NEXT_INSTRUCTION_LINE_STYLES);
         }
     }
 

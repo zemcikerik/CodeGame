@@ -1,11 +1,13 @@
 package dev.zemco.codegame.presentation.solution;
 
+import dev.zemco.codegame.compilation.IInstructionDescriptor;
 import dev.zemco.codegame.compilation.IProgramCompiler;
 import dev.zemco.codegame.compilation.InvalidSyntaxException;
 import dev.zemco.codegame.compilation.Program;
-import dev.zemco.codegame.execution.IExecutionContext;
-import dev.zemco.codegame.execution.IExecutionService;
+import dev.zemco.codegame.evaluation.IEvaluationService;
+import dev.zemco.codegame.evaluation.ISolutionEvaluator;
 import dev.zemco.codegame.execution.memory.IMemory;
+import dev.zemco.codegame.execution.memory.IMemoryCell;
 import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
 import dev.zemco.codegame.presentation.errors.IProgramErrorModelFactory;
 import dev.zemco.codegame.presentation.memory.IMemoryCellObserver;
@@ -34,28 +36,32 @@ public class SolutionModel implements ISolutionModel {
     private final ReadOnlyBooleanWrapper executionRunningProperty;
     private final ReadOnlyBooleanWrapper executionAutoEnabledProperty;
 
+    private final ReadOnlyObjectWrapper<Integer> nextInstructionLinePositionProperty;
     private final ReadOnlyObjectWrapper<ObservableList<IMemoryCellObserver>> memoryCellsProperty;
     private final ReadOnlyObjectWrapper<IProgramErrorModel> syntaxErrorProperty;
 
     private final IProgramErrorModelFactory programErrorModelFactory;
     private final IProgramCompiler programCompiler;
-    private final IExecutionService executionService;
+    private final IEvaluationService evaluationService;
 
     private Program program;
-    private IExecutionContext executionContext;
+    private ISolutionEvaluator solutionEvaluator;
     private List<UpdatableMemoryCellObserverAdapter> cellObservers;
 
     public SolutionModel(
         IProgramErrorModelFactory programErrorModelFactory,
         IProgramCompiler programCompiler,
-        IExecutionService executionService
+        IEvaluationService evaluationService
     ) {
         this.programErrorModelFactory = checkArgumentNotNull(
             programErrorModelFactory, "Program error model factory"
         );
         this.programCompiler = checkArgumentNotNull(programCompiler, "Program compiler");
-        this.executionService = checkArgumentNotNull(executionService, "Execution service");
+        this.evaluationService = checkArgumentNotNull(evaluationService, "Evaluation service");
+
         this.program = null;
+        this.solutionEvaluator = null;
+        this.cellObservers = null;
 
         this.problemProperty = new ReadOnlyObjectWrapper<>(null);
         this.canCompileProperty = new ReadOnlyBooleanWrapper(true);
@@ -63,6 +69,7 @@ public class SolutionModel implements ISolutionModel {
         this.executionRunningProperty = new ReadOnlyBooleanWrapper(false);
         this.executionAutoEnabledProperty = new ReadOnlyBooleanWrapper(false);
 
+        this.nextInstructionLinePositionProperty = new ReadOnlyObjectWrapper<>(null);
         this.memoryCellsProperty = new ReadOnlyObjectWrapper<>(null);
         this.syntaxErrorProperty = new ReadOnlyObjectWrapper<>(null);
     }
@@ -100,19 +107,21 @@ public class SolutionModel implements ISolutionModel {
 
         // grab first problem case
         ProblemCase problemCase = this.problemProperty.get().getCases().get(0);
-        this.executionContext = this.executionService.getExecutionContextForSolutionAttempt(problemCase, this.program);
+        this.solutionEvaluator = this.evaluationService.getEvaluatorForSolutionAttempt(this.program, problemCase);
 
-        IMemory memory = this.executionContext.getMemory();
+        IMemory memory = this.solutionEvaluator.getExecutionContext().getMemory();
         int memorySize = problemCase.getMemorySettings().getSize();
 
         // observe all memory cells
         this.cellObservers = new ArrayList<>();
 
         for (int address = 0; address < memorySize; address++) {
-            this.cellObservers.add(new UpdatableMemoryCellObserverAdapter(address, memory.getCellByAddress(address)));
+            IMemoryCell memoryCell = memory.getCellByAddress(address);
+            this.cellObservers.add(new UpdatableMemoryCellObserverAdapter(address, memoryCell));
         }
 
         this.memoryCellsProperty.set(FXCollections.observableList(new ArrayList<>(this.cellObservers)));
+        this.nextInstructionLinePositionProperty.set(this.getNextInstructionLinePositionFromEvaluator());
         this.executionRunningProperty.set(true);
     }
 
@@ -122,8 +131,18 @@ public class SolutionModel implements ISolutionModel {
             throw new IllegalStateException("Cannot step execution while it is not running!");
         }
 
-        this.executionContext.getExecutionEngine().step();
+        this.solutionEvaluator.step();
+
+        this.nextInstructionLinePositionProperty.set(this.getNextInstructionLinePositionFromEvaluator());
         this.cellObservers.forEach(UpdatableMemoryCellObserverAdapter::updateValue);
+    }
+
+    private Integer getNextInstructionLinePositionFromEvaluator() {
+        return this.solutionEvaluator.getExecutionContext()
+            .getExecutionEngine()
+            .getNextInstructionDescriptor()
+            .map(IInstructionDescriptor::getLinePosition)
+            .orElse(null);
     }
 
     @Override
@@ -133,6 +152,7 @@ public class SolutionModel implements ISolutionModel {
         }
 
         this.executionRunningProperty.set(false);
+        this.nextInstructionLinePositionProperty.set(null);
     }
 
     @Override
@@ -167,6 +187,11 @@ public class SolutionModel implements ISolutionModel {
     @Override
     public ObservableBooleanValue executionRunningProperty() {
         return this.executionRunningProperty.getReadOnlyProperty();
+    }
+
+    @Override
+    public ObservableObjectValue<Integer> nextInstructionLinePositionProperty() {
+        return this.nextInstructionLinePositionProperty.getReadOnlyProperty();
     }
 
     @Override

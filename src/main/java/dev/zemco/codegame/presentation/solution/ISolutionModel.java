@@ -22,6 +22,7 @@ public interface ISolutionModel {
     ObservableBooleanValue canStepProperty();
     ObservableBooleanValue executionRunningProperty();
 
+    ObservableObjectValue<Integer> nextInstructionLinePositionProperty();
     ObservableObjectValue<ObservableList<IMemoryCellObserver>> memoryCellsProperty();
     ObservableObjectValue<IProgramErrorModel> syntaxErrorProperty();
 }

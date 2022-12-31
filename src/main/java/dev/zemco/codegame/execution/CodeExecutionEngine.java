@@ -10,6 +10,7 @@ import dev.zemco.codegame.execution.memory.IMemory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
@@ -56,16 +57,29 @@ public class CodeExecutionEngine implements IExecutionEngine {
             }
         }
 
-        // label was defined after all instructions (for example at the end of the file), which is valid
+        // label was defined after all instructions (for example at the end of the program), which is valid
         this.position = instructionDescriptors.size();
     }
 
     @Override
+    public Optional<IInstructionDescriptor> getNextInstructionDescriptor() {
+        List<IInstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
+
+        return this.position < instructionDescriptors.size()
+            ? Optional.of(instructionDescriptors.get(this.position))
+            : Optional.empty();
+    }
+
+    @Override
     public void step() {
-        // TODO: check if has next instruction
+        Optional<IInstructionDescriptor> nextDescriptor = this.getNextInstructionDescriptor();
+
+        if (nextDescriptor.isEmpty()) {
+            throw new IllegalStateException("No next instruction!");
+        }
+
         this.moveToNextPosition = true;
-        IInstructionDescriptor descriptor = this.program.getInstructionDescriptors().get(this.position);
-        IInstruction instruction = descriptor.getInstruction();
+        IInstruction instruction = nextDescriptor.get().getInstruction();
 
         try {
             instruction.execute(this.context);
