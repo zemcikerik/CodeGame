@@ -22,7 +22,7 @@
 
         <!-- Testing -->
         <junit.version>5.9.1</junit.version>
-        <mockito.version>4.8.1</mockito.version>
+        <mockito.version>4.10.0</mockito.version>
         <hamcrest.version>2.2</hamcrest.version>
         <maven.plugin.surefire.version>2.22.2</maven.plugin.surefire.version>
 
