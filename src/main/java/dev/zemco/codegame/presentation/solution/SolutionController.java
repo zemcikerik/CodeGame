@@ -165,8 +165,6 @@ public class SolutionController implements Initializable {
         this.model.stepExecution();
     }
 
-    // TODO: find out why only label formatting is grayed out during execution
-    //       (this will be intentional in future but is most likely currently caused by a bug)
     private void onCodeAreaParagraphChanged(
         ListModification<? extends Paragraph<Collection<String>, String, Collection<String>>> modification
     ) {

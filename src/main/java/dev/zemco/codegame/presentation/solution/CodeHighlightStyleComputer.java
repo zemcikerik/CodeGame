@@ -22,7 +22,7 @@ public class CodeHighlightStyleComputer implements IHighlightStyleComputer {
 
     private static final Map<String, Collection<String>> GROUP_NAME_TO_STYLES_MAP = Map.of(
         COMMENT_GROUP_NAME, of("comment"),
-        LABEL_GROUP_NAME, of("label"),
+        LABEL_GROUP_NAME, of("jump-label"),
         INSTRUCTION_GROUP_NAME, of("instruction")
     );
 
