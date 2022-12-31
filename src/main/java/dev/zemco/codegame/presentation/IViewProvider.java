@@ -1,8 +1,7 @@
 package dev.zemco.codegame.presentation;
 
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 
 public interface IViewProvider {
-    // TODO: don't use entire scenes as roots for views
-    Scene getViewById(String viewId);
+    Parent getViewById(String viewId);
 }

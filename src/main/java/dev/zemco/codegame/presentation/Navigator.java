@@ -1,6 +1,6 @@
 package dev.zemco.codegame.presentation;
 
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
@@ -18,8 +18,8 @@ public class Navigator implements INavigator {
     @Override
     public void navigateTo(String viewId) {
         Stage primaryStage = this.stageProvider.getPrimaryStage();
-        Scene scene = this.viewProvider.getViewById(viewId);
-        primaryStage.setScene(scene);
+        Parent view = this.viewProvider.getViewById(viewId);
+        primaryStage.getScene().setRoot(view);
     }
 
 }

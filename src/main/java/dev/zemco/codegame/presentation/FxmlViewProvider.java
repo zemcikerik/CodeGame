@@ -2,7 +2,7 @@ package dev.zemco.codegame.presentation;
 
 import dev.zemco.codegame.problems.ResourceLoadException;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,15 +29,15 @@ public class FxmlViewProvider implements IViewProvider {
     }
 
     @Override
-    public Scene getViewById(String viewId) {
+    public Parent getViewById(String viewId) {
         InputStream fxmlSource = this.viewSourceProvider.getFxmlViewSourceById(viewId);
         List<String> stylesheets = this.viewStylesheetProvider.getStylesheetsByViewId(viewId);
-        Scene view = this.loadViewFromSource(fxmlSource);
+        Parent view = this.loadViewFromSource(fxmlSource);
         view.getStylesheets().addAll(stylesheets);
         return view;
     }
 
-    private Scene loadViewFromSource(InputStream fxmlSource) {
+    private Parent loadViewFromSource(InputStream fxmlSource) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setControllerFactory(this.controllerFactory::createController);
 

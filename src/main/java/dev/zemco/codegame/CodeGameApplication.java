@@ -50,6 +50,7 @@ import dev.zemco.codegame.presentation.solution.SolutionModel;
 import dev.zemco.codegame.problems.IProblemRepository;
 import dev.zemco.codegame.problems.UrlObjectMapperProblemRepository;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -61,7 +62,6 @@ import java.util.Set;
 // TODO: check correct usage of terms program and solution in source code / get...ForSolutionAttempt
 // TODO: fix issues with UI scaling - min/pref/max sizes
 // TODO: fix formatting in tests
-// TODO: display currently executed instruction line
 public class CodeGameApplication extends Application {
 
     private INavigator navigator;
@@ -128,7 +128,7 @@ public class CodeGameApplication extends Application {
         );
         this.navigator = new Navigator(stageProvider, viewProvider);
 
-        primaryStage.setScene(viewProvider.getViewById("problem-list"));
+        primaryStage.setScene(new Scene(viewProvider.getViewById("problem-list"), 640, 360));
         primaryStage.show();
     }
 
