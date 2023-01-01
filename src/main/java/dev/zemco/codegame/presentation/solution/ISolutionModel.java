@@ -7,13 +7,15 @@ import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.collections.ObservableList;
 
+// TODO: maybe remove usages of null?
 // TODO: this has grown to be pretty big, refactor this into smaller parts if possible
 public interface ISolutionModel {
     void setProblem(Problem problem);
-    void submitSolution(String program);
+    void compileSolution(String program);
     void startExecution();
     void stepExecution();
     void stopExecution();
+    void submitSolution();
     void resetAttempt();
 
     ObservableObjectValue<Problem> problemProperty();
@@ -21,6 +23,7 @@ public interface ISolutionModel {
     ObservableBooleanValue canExecuteProperty();
     ObservableBooleanValue canStepProperty();
     ObservableBooleanValue executionRunningProperty();
+    ObservableBooleanValue canSubmitProperty();
 
     ObservableObjectValue<Integer> nextInstructionLinePositionProperty();
     ObservableObjectValue<ObservableList<IMemoryCellObserver>> memoryCellsProperty();

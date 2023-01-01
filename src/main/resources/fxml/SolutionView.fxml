@@ -57,6 +57,7 @@
         <Button fx:id="compileButton" mnemonicParsing="false" onMouseClicked="#onCompileButtonClicked" text="Compile"/>
         <Button fx:id="toggleExecutionButton" mnemonicParsing="false" onAction="#onToggleExecutionButtonClicked"
                 text="Toggle"/>
+        <Button fx:id="submitButton" mnemonicParsing="false" onMouseClicked="#onSubmitButtonClicked" text="Submit"/>
         <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
         <Button fx:id="stepButton" mnemonicParsing="false" onAction="#onStepButtonClicked" text="Step"/>
         <CheckBox fx:id="autoEnabledCheckbox" mnemonicParsing="false" text="Auto"/>

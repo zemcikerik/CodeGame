@@ -75,19 +75,19 @@ public class CodeExecutionEngine implements IExecutionEngine {
         Optional<IInstructionDescriptor> nextDescriptor = this.getNextInstructionDescriptor();
 
         if (nextDescriptor.isEmpty()) {
-            throw new IllegalStateException("No next instruction!");
+            throw new NoNextInstructionException("No next instruction to execute!");
         }
 
         this.moveToNextPosition = true;
         IInstruction instruction = nextDescriptor.get().getInstruction();
 
         // capture current position before executing the instruction as it could be changed by the instruction
-        int position = this.position;
+        int capturedPosition = this.position;
 
         try {
             instruction.execute(this.context);
         } catch (InstructionExecutionException e) {
-            throw new StepExecutionException("Failed to execute instruction!", e, position);
+            throw new StepExecutionException("Failed to execute instruction!", e, capturedPosition);
         }
 
         if (this.moveToNextPosition) {

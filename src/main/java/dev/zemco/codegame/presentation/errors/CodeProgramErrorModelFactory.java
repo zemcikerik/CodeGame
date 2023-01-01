@@ -1,6 +1,7 @@
 package dev.zemco.codegame.presentation.errors;
 
 import dev.zemco.codegame.compilation.InvalidSyntaxException;
+import dev.zemco.codegame.execution.NoNextInstructionException;
 import dev.zemco.codegame.execution.StepExecutionException;
 
 public class CodeProgramErrorModelFactory implements IProgramErrorModelFactory {
@@ -13,6 +14,11 @@ public class CodeProgramErrorModelFactory implements IProgramErrorModelFactory {
     @Override
     public IProgramErrorModel createProgramErrorModel(StepExecutionException exception) {
         return new ImmutableProgramErrorModel(this.createDescription(exception), exception.getLinePosition());
+    }
+
+    @Override
+    public IProgramErrorModel createProgramErrorModel(NoNextInstructionException exception) {
+        return new ImmutableProgramErrorModel(this.createDescription(exception), null);
     }
 
     private String createDescription(Exception exception) {

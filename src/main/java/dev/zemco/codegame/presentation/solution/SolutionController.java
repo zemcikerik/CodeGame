@@ -68,6 +68,9 @@ public class SolutionController implements Initializable {
     private Button toggleExecutionButton;
 
     @FXML
+    private Button submitButton;
+
+    @FXML
     private Button stepButton;
 
     @FXML
@@ -129,9 +132,9 @@ public class SolutionController implements Initializable {
                 .otherwise("Start")
         );
 
+        this.submitButton.disableProperty().bind(Bindings.not(this.model.canSubmitProperty()));
         this.stepButton.disableProperty().bind(Bindings.not(this.model.canStepProperty()));
 
-        // TODO: weak
         this.model.syntaxErrorProperty().addListener(this::onSyntaxErrorChanged);
         this.model.executionErrorProperty().addListener(this::onExecutionErrorChanged);
         this.model.nextInstructionLinePositionProperty().addListener(this::onNextInstructionLineChanged);
@@ -139,7 +142,6 @@ public class SolutionController implements Initializable {
 
     @FXML
     private void onBackButtonClicked() {
-        // TODO: remove magic constant
         this.navigator.navigateTo("problem-list");
     }
 
@@ -150,7 +152,7 @@ public class SolutionController implements Initializable {
 
     @FXML
     private void onCompileButtonClicked() {
-        this.model.submitSolution(this.codeArea.getText());
+        this.model.compileSolution(this.codeArea.getText());
     }
 
     @FXML
@@ -162,6 +164,11 @@ public class SolutionController implements Initializable {
             this.model.startExecution();
             this.infoAccordion.setExpandedPane(this.executionPane);
         }
+    }
+
+    @FXML
+    private void onSubmitButtonClicked() {
+        this.model.submitSolution();
     }
 
     @FXML
@@ -189,14 +196,11 @@ public class SolutionController implements Initializable {
         }
     }
 
-    // TODO: remove duplicate code
     private void onSyntaxErrorChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {
         this.updateErrorLineStyles(oldError, newError, SYNTAX_ERROR_LINE_STYLES);
 
         if (newError != null) {
-            String header = String.format("There was a syntax error on line %d!", newError.getLinePosition() + 1);
-            String message = String.format("%s%n%n%s", header, newError.getDescription());
-            this.dialogService.showErrorDialog("Syntax Error", message);
+            this.showFormattedErrorDialog("Syntax Error", "a syntax error", newError);
         }
     }
 
@@ -204,14 +208,20 @@ public class SolutionController implements Initializable {
         this.updateErrorLineStyles(oldError, newError, EXECUTION_ERROR_LINE_STYLES);
 
         if (newError != null) {
-            String header = String.format("There was an error during execution on line %d!", newError.getLinePosition() + 1);
-            String message = String.format("%s%n%n%s", header, newError.getDescription());
-            this.dialogService.showErrorDialog("Execution Error", message);
+            this.showFormattedErrorDialog("Execution Error", "an error during execution", newError);
         }
     }
 
     private void onNextInstructionLineChanged(Object ignored, Integer oldPosition, Integer newPosition) {
         this.updateLineStyles(oldPosition, newPosition, NEXT_INSTRUCTION_LINE_STYLES);
+    }
+
+    private void showFormattedErrorDialog(String title, String errorTag, IProgramErrorModel errorModel) {
+        Integer linePosition = errorModel.getLinePosition();
+        String lineIndicator = linePosition != null ? String.format(" on line %d", linePosition + 1) : "";
+
+        String message = String.format("There was %s%s!%n%n%s", errorTag, lineIndicator, errorModel.getDescription());
+        this.dialogService.showErrorDialog(title, message);
     }
 
     private void updateErrorLineStyles(

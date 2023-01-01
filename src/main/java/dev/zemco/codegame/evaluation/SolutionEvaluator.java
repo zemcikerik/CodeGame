@@ -1,7 +1,7 @@
 package dev.zemco.codegame.evaluation;
 
 import dev.zemco.codegame.execution.IExecutionContext;
-import dev.zemco.codegame.execution.IExecutionEngine;
+import dev.zemco.codegame.execution.NoNextInstructionException;
 import dev.zemco.codegame.execution.StepExecutionException;
 import dev.zemco.codegame.problems.ProblemCase;
 
@@ -31,7 +31,7 @@ public class SolutionEvaluator implements ISolutionEvaluator {
 
     @Override
     public boolean canContinue() {
-        return !this.hasErrored && !this.successful && this.hasNextInstruction();
+        return !this.hasErrored && !this.successful;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class SolutionEvaluator implements ISolutionEvaluator {
 
         try {
             this.executionContext.getExecutionEngine().step();
-        } catch (StepExecutionException e) {
+        } catch (NoNextInstructionException | StepExecutionException e) {
             this.hasErrored = true;
             throw e;
         }
@@ -60,11 +60,6 @@ public class SolutionEvaluator implements ISolutionEvaluator {
         if (this.evaluationStrategy.evaluateSolutionForProblemCase(this.executionContext, this.problemCase)) {
             this.successful = true;
         }
-    }
-
-    private boolean hasNextInstruction() {
-        IExecutionEngine engine = this.executionContext.getExecutionEngine();
-        return engine.getNextInstructionDescriptor().isPresent();
     }
 
 }

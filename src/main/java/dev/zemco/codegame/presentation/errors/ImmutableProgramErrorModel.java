@@ -6,11 +6,16 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger
 public class ImmutableProgramErrorModel implements IProgramErrorModel {
 
     private final String description;
-    private final int linePosition;
+    private final Integer linePosition;
 
-    public ImmutableProgramErrorModel(String description, int linePosition) {
+    public ImmutableProgramErrorModel(String description, Integer linePosition) {
         this.description = checkArgumentNotNull(description, "Description");
-        this.linePosition = checkArgumentPositiveInteger(linePosition, "Line position");
+
+        if (linePosition != null) {
+            checkArgumentPositiveInteger(linePosition, "Line position");
+        }
+
+        this.linePosition = linePosition;
     }
 
     @Override
@@ -19,7 +24,7 @@ public class ImmutableProgramErrorModel implements IProgramErrorModel {
     }
 
     @Override
-    public int getLinePosition() {
+    public Integer getLinePosition() {
         return this.linePosition;
     }
 
