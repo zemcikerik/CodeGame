@@ -18,3 +18,7 @@
 .syntax-error {
     -fx-background-color: rgba(255, 0, 0, 0.2);
 }
+
+.execution-error {
+    -fx-background-color: rgba(200, 0, 0, 0.5);
+}

@@ -6,6 +6,7 @@ import dev.zemco.codegame.compilation.InvalidSyntaxException;
 import dev.zemco.codegame.compilation.Program;
 import dev.zemco.codegame.evaluation.IEvaluationService;
 import dev.zemco.codegame.evaluation.ISolutionEvaluator;
+import dev.zemco.codegame.execution.StepExecutionException;
 import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
@@ -38,7 +39,9 @@ public class SolutionModel implements ISolutionModel {
 
     private final ReadOnlyObjectWrapper<Integer> nextInstructionLinePositionProperty;
     private final ReadOnlyObjectWrapper<ObservableList<IMemoryCellObserver>> memoryCellsProperty;
+
     private final ReadOnlyObjectWrapper<IProgramErrorModel> syntaxErrorProperty;
+    private final ReadOnlyObjectWrapper<IProgramErrorModel> executionErrorProperty;
 
     private final IProgramErrorModelFactory programErrorModelFactory;
     private final IProgramCompiler programCompiler;
@@ -71,7 +74,9 @@ public class SolutionModel implements ISolutionModel {
 
         this.nextInstructionLinePositionProperty = new ReadOnlyObjectWrapper<>(null);
         this.memoryCellsProperty = new ReadOnlyObjectWrapper<>(null);
+
         this.syntaxErrorProperty = new ReadOnlyObjectWrapper<>(null);
+        this.executionErrorProperty = new ReadOnlyObjectWrapper<>(null);
     }
 
     @Override
@@ -90,8 +95,8 @@ public class SolutionModel implements ISolutionModel {
         try {
             this.program = this.programCompiler.compileProgram(program);
         } catch (InvalidSyntaxException e) {
-            IProgramErrorModel programErrorModel = this.programErrorModelFactory.createProgramErrorModel(e);
-            this.syntaxErrorProperty.set(programErrorModel);
+            IProgramErrorModel errorModel = this.programErrorModelFactory.createProgramErrorModel(e);
+            this.syntaxErrorProperty.set(errorModel);
             return;
         }
 
@@ -131,7 +136,15 @@ public class SolutionModel implements ISolutionModel {
             throw new IllegalStateException("Cannot step execution while it is not running!");
         }
 
-        this.solutionEvaluator.step();
+        try {
+            this.solutionEvaluator.step();
+        } catch (StepExecutionException e) {
+            IProgramErrorModel errorModel = this.programErrorModelFactory.createProgramErrorModel(e);
+            this.executionErrorProperty.set(errorModel);
+
+            this.stopExecution(); // TODO: this could cause race condition
+            return;
+        }
 
         this.nextInstructionLinePositionProperty.set(this.getNextInstructionLinePositionFromEvaluator());
         this.cellObservers.forEach(UpdatableMemoryCellObserverAdapter::updateValue);
@@ -202,6 +215,11 @@ public class SolutionModel implements ISolutionModel {
     @Override
     public ObservableObjectValue<IProgramErrorModel> syntaxErrorProperty() {
         return this.syntaxErrorProperty.getReadOnlyProperty();
+    }
+
+    @Override
+    public ObservableObjectValue<IProgramErrorModel> executionErrorProperty() {
+        return this.executionErrorProperty.getReadOnlyProperty();
     }
 
 }

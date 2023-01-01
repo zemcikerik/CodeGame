@@ -1,6 +1,7 @@
 package dev.zemco.codegame.presentation.solution;
 
 import dev.zemco.codegame.presentation.INavigator;
+import dev.zemco.codegame.presentation.dialog.IDialogService;
 import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
 import dev.zemco.codegame.presentation.memory.MemoryView;
 import dev.zemco.codegame.problems.Problem;
@@ -22,7 +23,6 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.collection.ListModification;
 
 import java.net.URL;
-import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +35,7 @@ public class SolutionController implements Initializable {
     private static final Collection<String> DEFAULT_LINE_STYLES = Collections.emptyList();
     private static final Collection<String> NEXT_INSTRUCTION_LINE_STYLES = List.of("next-instruction-line");
     private static final Collection<String> SYNTAX_ERROR_LINE_STYLES = List.of("syntax-error");
+    private static final Collection<String> EXECUTION_ERROR_LINE_STYLES = List.of("execution-error");
 
     @FXML
     private Button backButton;
@@ -77,15 +78,18 @@ public class SolutionController implements Initializable {
 
     private final ISolutionModel model;
     private final INavigator navigator;
+    private final IDialogService dialogService;
     private final IHighlightStyleComputer highlightStyleComputer;
 
     public SolutionController(
         ISolutionModel model,
         INavigator navigator,
+        IDialogService dialogService,
         IHighlightStyleComputer highlightStyleComputer
     ) {
         this.model = checkArgumentNotNull(model, "Model");
         this.navigator = checkArgumentNotNull(navigator, "Navigator");
+        this.dialogService = checkArgumentNotNull(dialogService, "Dialog service");
         this.highlightStyleComputer = checkArgumentNotNull(
             highlightStyleComputer, "Highlight style computer"
         );
@@ -106,7 +110,6 @@ public class SolutionController implements Initializable {
 
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
         this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
-        this.codeArea.setMouseOverTextDelay(Duration.ofSeconds(1)); // TODO: popover for syntax error
 
         this.codeArea.getParagraphs().addModificationObserver(modification -> {
             // this observer is fired before the code area finishes its internal update process, so we queue up
@@ -129,7 +132,8 @@ public class SolutionController implements Initializable {
         this.stepButton.disableProperty().bind(Bindings.not(this.model.canStepProperty()));
 
         // TODO: weak
-        this.model.syntaxErrorProperty().addListener(this::onSyntaxErrorModelChanged);
+        this.model.syntaxErrorProperty().addListener(this::onSyntaxErrorChanged);
+        this.model.executionErrorProperty().addListener(this::onExecutionErrorChanged);
         this.model.nextInstructionLinePositionProperty().addListener(this::onNextInstructionLineChanged);
     }
 
@@ -185,23 +189,48 @@ public class SolutionController implements Initializable {
         }
     }
 
-    private void onSyntaxErrorModelChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {
-        if (oldError != null) {
-            this.codeArea.setParagraphStyle(oldError.getLinePosition(), DEFAULT_LINE_STYLES);
-        }
+    // TODO: remove duplicate code
+    private void onSyntaxErrorChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {
+        this.updateErrorLineStyles(oldError, newError, SYNTAX_ERROR_LINE_STYLES);
 
         if (newError != null) {
-            this.codeArea.setParagraphStyle(newError.getLinePosition(), SYNTAX_ERROR_LINE_STYLES);
+            String header = String.format("There was a syntax error on line %d!", newError.getLinePosition() + 1);
+            String message = String.format("%s%n%n%s", header, newError.getDescription());
+            this.dialogService.showErrorDialog("Syntax Error", message);
+        }
+    }
+
+    private void onExecutionErrorChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {
+        this.updateErrorLineStyles(oldError, newError, EXECUTION_ERROR_LINE_STYLES);
+
+        if (newError != null) {
+            String header = String.format("There was an error during execution on line %d!", newError.getLinePosition() + 1);
+            String message = String.format("%s%n%n%s", header, newError.getDescription());
+            this.dialogService.showErrorDialog("Execution Error", message);
         }
     }
 
     private void onNextInstructionLineChanged(Object ignored, Integer oldPosition, Integer newPosition) {
+        this.updateLineStyles(oldPosition, newPosition, NEXT_INSTRUCTION_LINE_STYLES);
+    }
+
+    private void updateErrorLineStyles(
+        IProgramErrorModel oldError,
+        IProgramErrorModel newError,
+        Collection<String> newPositionStyles
+    ) {
+        Integer oldPosition = oldError != null ? oldError.getLinePosition() : null;
+        Integer newPosition = newError != null ? newError.getLinePosition() : null;
+        this.updateLineStyles(oldPosition, newPosition, newPositionStyles);
+    }
+
+    private void updateLineStyles(Integer oldPosition, Integer newPosition, Collection<String> newPositionStyles) {
         if (oldPosition != null) {
             this.codeArea.setParagraphStyle(oldPosition, DEFAULT_LINE_STYLES);
         }
 
         if (newPosition != null) {
-            this.codeArea.setParagraphStyle(newPosition, NEXT_INSTRUCTION_LINE_STYLES);
+            this.codeArea.setParagraphStyle(newPosition, newPositionStyles);
         }
     }
 

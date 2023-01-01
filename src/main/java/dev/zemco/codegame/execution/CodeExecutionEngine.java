@@ -81,10 +81,13 @@ public class CodeExecutionEngine implements IExecutionEngine {
         this.moveToNextPosition = true;
         IInstruction instruction = nextDescriptor.get().getInstruction();
 
+        // capture current position before executing the instruction as it could be changed by the instruction
+        int position = this.position;
+
         try {
             instruction.execute(this.context);
         } catch (InstructionExecutionException e) {
-            throw new StepExecutionException("Failed to execute instruction!", e);
+            throw new StepExecutionException("Failed to execute instruction!", e, position);
         }
 
         if (this.moveToNextPosition) {

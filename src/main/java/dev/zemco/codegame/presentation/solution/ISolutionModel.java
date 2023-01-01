@@ -24,5 +24,7 @@ public interface ISolutionModel {
 
     ObservableObjectValue<Integer> nextInstructionLinePositionProperty();
     ObservableObjectValue<ObservableList<IMemoryCellObserver>> memoryCellsProperty();
+
     ObservableObjectValue<IProgramErrorModel> syntaxErrorProperty();
+    ObservableObjectValue<IProgramErrorModel> executionErrorProperty();
 }

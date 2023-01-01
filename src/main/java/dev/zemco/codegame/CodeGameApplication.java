@@ -38,7 +38,9 @@ import dev.zemco.codegame.presentation.ImmutableDefaultViewStylesheetProvider;
 import dev.zemco.codegame.presentation.ImmutableStageProvider;
 import dev.zemco.codegame.presentation.Navigator;
 import dev.zemco.codegame.presentation.ResourceFxmlViewSourceProvider;
-import dev.zemco.codegame.presentation.errors.ImmutableProgramErrorModelFactory;
+import dev.zemco.codegame.presentation.dialog.IDialogService;
+import dev.zemco.codegame.presentation.dialog.JavaFxDialogService;
+import dev.zemco.codegame.presentation.errors.CodeProgramErrorModelFactory;
 import dev.zemco.codegame.presentation.problems.IProblemListModel;
 import dev.zemco.codegame.presentation.problems.ProblemListController;
 import dev.zemco.codegame.presentation.problems.ProblemListModel;
@@ -98,6 +100,8 @@ public class CodeGameApplication extends Application {
             Set.of("in", "out", "add", "jump", "save", "load")
         );
 
+        IDialogService dialogService = new JavaFxDialogService();
+
         IFxmlViewSourceProvider viewSourceProvider = new ResourceFxmlViewSourceProvider(
             CodeGameApplication.class,
             Map.of(
@@ -112,13 +116,13 @@ public class CodeGameApplication extends Application {
         IStageProvider stageProvider = new ImmutableStageProvider(primaryStage);
 
         ISolutionModel solutionModel = new SolutionModel(
-            new ImmutableProgramErrorModelFactory(), compiler, evaluationService
+            new CodeProgramErrorModelFactory(), compiler, evaluationService
         );
         IProblemListModel problemListModel = new ProblemListModel(solutionModel, problemRepository);
 
         IControllerFactory controllerFactory = (controllerClass) -> {
             if (SolutionController.class.equals(controllerClass)) {
-                return new SolutionController(solutionModel, this.navigator, highlightStyleComputer);
+                return new SolutionController(solutionModel, this.navigator, dialogService, highlightStyleComputer);
             }
             return new ProblemListController(problemListModel, this.navigator);
         };

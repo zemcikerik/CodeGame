@@ -25,6 +25,11 @@ public abstract class AbstractParametrizedInstructionParser implements IInstruct
         String parameterPartWithWhitespace = instructionLine.substring(this.instructionPrefix.length());
         String parameterPart = parameterPartWithWhitespace.trim();
 
+        if (parameterPart.isEmpty()) {
+            // instruction line does not contain any parameters
+            return this.parseInstructionWithParameters(new String[0]);
+        }
+
         // split into parameters separated by whitespace of 1 to n length
         String[] parameters = parameterPart.split("\\s+");
         return this.parseInstructionWithParameters(parameters);
