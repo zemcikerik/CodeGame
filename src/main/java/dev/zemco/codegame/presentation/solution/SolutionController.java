@@ -168,7 +168,14 @@ public class SolutionController implements Initializable {
 
     @FXML
     private void onSubmitButtonClicked() {
-        this.model.submitSolution();
+        if (this.model.submitSolution()) {
+            String message = "Congratulations! You solved this problem!";
+            this.dialogService.showInformationDialog("Submission Success", message);
+            this.navigator.navigateTo("problem-list");
+        } else {
+            String message = "Evaluation failed for some hidden problem cases!";
+            this.dialogService.showErrorDialog("Evaluation Failure", message);
+        }
     }
 
     @FXML

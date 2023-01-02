@@ -9,16 +9,20 @@ public class Program {
 
     private final List<IInstructionDescriptor> instructionDescriptors;
     private final Map<String, Integer> jumpLabelToLinePositionMap;
+    private final String sourceCode;
 
     public Program(
         List<IInstructionDescriptor> instructionDescriptors,
-        Map<String, Integer> jumpLabelToLinePositionMap
+        Map<String, Integer> jumpLabelToLinePositionMap,
+        String sourceCode
     ) {
         checkArgumentNotNull(instructionDescriptors, "Instruction descriptors");
         checkArgumentNotNull(jumpLabelToLinePositionMap, "Jump label to line position map");
+        checkArgumentNotNull(sourceCode, "Source code");
 
         this.instructionDescriptors = List.copyOf(instructionDescriptors);
         this.jumpLabelToLinePositionMap = Map.copyOf(jumpLabelToLinePositionMap);
+        this.sourceCode = sourceCode;
     }
 
     public List<IInstructionDescriptor> getInstructionDescriptors() {
@@ -27,6 +31,10 @@ public class Program {
 
     public Map<String, Integer> getJumpLabelToLinePositionMap() {
         return this.jumpLabelToLinePositionMap;
+    }
+
+    public String getSourceCode() {
+        return this.sourceCode;
     }
 
 }

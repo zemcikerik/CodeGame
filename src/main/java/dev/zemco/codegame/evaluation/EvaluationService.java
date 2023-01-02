@@ -3,6 +3,9 @@ package dev.zemco.codegame.evaluation;
 import dev.zemco.codegame.compilation.Program;
 import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.IExecutionService;
+import dev.zemco.codegame.execution.NoNextInstructionException;
+import dev.zemco.codegame.execution.StepExecutionException;
+import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.problems.ProblemCase;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
@@ -15,6 +18,26 @@ public class EvaluationService implements IEvaluationService {
     public EvaluationService(IExecutionService executionService, IEvaluationStrategy evaluationStrategy) {
         this.executionService = checkArgumentNotNull(executionService, "Execution service");
         this.evaluationStrategy = checkArgumentNotNull(evaluationStrategy, "Evaluation strategy");
+    }
+
+    @Override
+    public boolean evaluateSolutionOnAllCases(Program solution, Problem problem) {
+        return problem.getCases().stream()
+            .allMatch(problemCase -> this.evaluateSolution(solution, problemCase));
+    }
+
+    private boolean evaluateSolution(Program solution, ProblemCase problemCase) {
+        ISolutionEvaluator evaluator = this.getEvaluatorForSolutionAttempt(solution, problemCase);
+
+        while (evaluator.canContinue()) {
+            try {
+                evaluator.step();
+            } catch (StepExecutionException | NoNextInstructionException e) {
+                return false;
+            }
+        }
+
+        return evaluator.isSuccessful();
     }
 
     @Override

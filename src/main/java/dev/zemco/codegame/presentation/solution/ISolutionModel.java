@@ -15,7 +15,7 @@ public interface ISolutionModel {
     void startExecution();
     void stepExecution();
     void stopExecution();
-    void submitSolution();
+    boolean submitSolution();
     void resetAttempt();
 
     ObservableObjectValue<Problem> problemProperty();

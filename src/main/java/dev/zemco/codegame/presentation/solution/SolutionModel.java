@@ -49,7 +49,6 @@ public class SolutionModel implements ISolutionModel {
     private final IProgramCompiler programCompiler;
     private final IEvaluationService evaluationService;
 
-    private String solutionCode;
     private Program program;
     private ISolutionEvaluator solutionEvaluator;
     private List<UpdatableMemoryCellObserverAdapter> cellObservers;
@@ -107,7 +106,6 @@ public class SolutionModel implements ISolutionModel {
             return;
         }
 
-        this.solutionCode = program;
         this.canExecuteProperty.set(true);
     }
 
@@ -191,21 +189,21 @@ public class SolutionModel implements ISolutionModel {
     }
 
     @Override
-    public void submitSolution() {
+    public boolean submitSolution() {
         if (!this.canSubmitProperty.get()) {
             // TODO: message
             throw new IllegalStateException("Cannot submit attempt without validation!");
         }
 
-        // TODO: implement me :)
-        System.out.println("Attempting to submit a solution!");
-        System.out.println(this.solutionCode);
+        this.canSubmitProperty.set(false);
+
+        Problem problem = this.problemProperty.get();
+        return this.evaluationService.evaluateSolutionOnAllCases(this.program, problem);
     }
 
     @Override
     public void resetAttempt() {
         // TODO: implement this properly
-        this.solutionCode = null;
         this.canCompileProperty.set(true);
         this.canExecuteProperty.set(false);
         this.canSubmitProperty.set(false);

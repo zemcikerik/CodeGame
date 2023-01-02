@@ -28,12 +28,12 @@ public class CodeProgramCompiler implements IProgramCompiler {
     }
 
     @Override
-    public Program compileProgram(String rawProgram) throws InvalidSyntaxException {
-        checkArgumentNotNull(rawProgram, "Raw program");
+    public Program compileProgram(String sourceCode) throws InvalidSyntaxException {
+        checkArgumentNotNull(sourceCode, "Source code");
 
         // first we split the program into individual lines
         // \R since Java 8 matches any unicode line break sequence
-        String[] lines = rawProgram.split("\\R");
+        String[] lines = sourceCode.split("\\R");
 
         List<IInstructionDescriptor> instructionDescriptors = new ArrayList<>();
         Map<String, Integer> jumpLabelToLinePositionMap = new HashMap<>();
@@ -69,7 +69,7 @@ public class CodeProgramCompiler implements IProgramCompiler {
             instructionDescriptors.add(descriptor);
         }
 
-        return new Program(instructionDescriptors, jumpLabelToLinePositionMap);
+        return new Program(instructionDescriptors, jumpLabelToLinePositionMap, sourceCode);
     }
 
     // removes all characters after comment prefix (including the comment prefix)
