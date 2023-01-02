@@ -6,7 +6,11 @@ import dev.zemco.codegame.execution.memory.IMemory;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-// TODO: maybe add builder
+/**
+ * Implementation of the {@link IExecutionContext execution context}, where individual components cannot be
+ * changed during the execution.
+ * @author Erik Zemčík
+ */
 public class ImmutableExecutionContext implements IExecutionContext {
 
     private final IExecutionEngine engine;
@@ -14,6 +18,15 @@ public class ImmutableExecutionContext implements IExecutionContext {
     private final IInputSource inputSource;
     private final IOutputSink outputSink;
 
+    /**
+     * Creates an instance of {@link ImmutableExecutionContext}, which holds the provided components.
+     *
+     * @param engine engine of the execution
+     * @param memory memory of the execution
+     * @param inputSource input source of the execution
+     * @param outputSink output sink of the execution
+     * @throws IllegalArgumentException if any parameter is {@code null}
+     */
     public ImmutableExecutionContext(
         IExecutionEngine engine,
         IMemory memory,

@@ -66,6 +66,7 @@ import java.util.Set;
 // TODO: fix issues with UI scaling - min/pref/max sizes
 // TODO: fix formatting in tests
 // TODO: duplicate javadoc comments?
+// TODO: moveToNextPosition
 public class CodeGameApplication extends Application {
 
     private INavigator navigator;

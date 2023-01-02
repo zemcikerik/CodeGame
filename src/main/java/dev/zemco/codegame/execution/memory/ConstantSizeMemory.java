@@ -12,7 +12,7 @@ public class ConstantSizeMemory implements IMemory {
     private final IMemoryCell[] cells;
 
     /**
-     * Creates a new instance of {@link ConstantSizeMemory} that holds a specified number
+     * Creates an instance of {@link ConstantSizeMemory} that holds a specified number
      * of {@link IMemoryCell memory cells} created using the provided {@code memoryCellFactory}.
      *
      * @param size number of cells which memory should hold

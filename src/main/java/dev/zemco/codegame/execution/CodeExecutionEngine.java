@@ -15,6 +15,15 @@ import java.util.Optional;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
+/**
+ * Implementation of the {@link IExecutionEngine execution engine} that executes a {@link Program program}.
+ * The {@link Program program} is executed sequentially from the first instruction.
+ * <p>
+ * This implementation manages its own {@link IExecutionContext execution context} that is retrievable
+ * using the {@link #getExecutionContext()} method.
+ *
+ * @author Erik Zemčík
+ */
 public class CodeExecutionEngine implements IExecutionEngine {
 
     private final Program program;
@@ -24,6 +33,17 @@ public class CodeExecutionEngine implements IExecutionEngine {
     private int position;
     private boolean moveToNextPosition;
 
+    /**
+     * Creates an instance of {@link CodeExecutionEngine} that executes a given {@link Program program}.
+     * This new instance uses the provided components ({@code memory}, {@code inputSource} and {@code outputSink})
+     * as a {@link IExecutionContext execution context}.
+     *
+     * @param program program to execute
+     * @param memory memory to use during execution
+     * @param inputSource input source to use during execution
+     * @param outputSink output sink to use during execution
+     * @throws IllegalArgumentException if any parameter is {@code null}
+     */
     public CodeExecutionEngine(Program program, IMemory memory, IInputSource inputSource, IOutputSink outputSink) {
         this.program = checkArgumentNotNull(program, "Program");
         this.context = new ImmutableExecutionContext(this, memory, inputSource, outputSink);
@@ -32,8 +52,17 @@ public class CodeExecutionEngine implements IExecutionEngine {
         this.moveToNextPosition = false;
     }
 
+    /**
+     * Performs a jump to an instruction that is followed by the specified {@code label}.
+     * This label must be known by the {@link Program program}, which is executed by the engine,
+     * and must be included in the {@link Map map} accessible using {@link Program#getJumpLabelToLinePositionMap()}.
+     *
+     * @param label label to jump to
+     * @throws IllegalArgumentException if {@code label} is {@code null} or empty
+     * @throws UnknownJumpLabelException if {@code label} is not known by the {@link Program program}
+     */
     @Override
-    public void jumpTo(String label) {
+    public void jumpToLabel(String label) {
         checkArgumentNotEmpty(label, "Label");
 
         Map<String, Integer> jumpLabelToLinePositionMap = this.program.getJumpLabelToLinePositionMap();
@@ -61,6 +90,12 @@ public class CodeExecutionEngine implements IExecutionEngine {
         this.position = instructionDescriptors.size();
     }
 
+    /**
+     * Returns a descriptor of the instruction that will be executed next by the engine.
+     * This method returns an empty {@link Optional} if the engine has reached the end of the execution.
+     *
+     * @return instruction descriptor of the next instruction or an empty {@link Optional}
+     */
     @Override
     public Optional<IInstructionDescriptor> getNextInstructionDescriptor() {
         List<IInstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
@@ -95,6 +130,10 @@ public class CodeExecutionEngine implements IExecutionEngine {
         }
     }
 
+    /**
+     * Returns the {@link IExecutionContext execution context} managed by this engine.
+     * @return execution context managed by this engine
+     */
     public IExecutionContext getExecutionContext() {
         return this.context;
     }

@@ -16,7 +16,7 @@ public class VerifyingInputSourceToOutputSinkAdapter implements IOutputSink {
     private final IInputSource inputSource;
 
     /**
-     * Creates a new instance of {@link VerifyingInputSourceToOutputSinkAdapter}
+     * Creates an instance of {@link VerifyingInputSourceToOutputSinkAdapter}
      * by adapting existing {@link IInputSource input source}.
      *
      * @param inputSource {@link IInputSource input source} to adapt

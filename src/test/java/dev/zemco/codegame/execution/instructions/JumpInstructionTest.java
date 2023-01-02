@@ -43,14 +43,14 @@ public class JumpInstructionTest {
 
     @Test
     public void executeShouldRequestExecutionEngineToJumpToLabel() throws InstructionExecutionException {
-        doNothing().when(this.engine).jumpTo(anyString());
+        doNothing().when(this.engine).jumpToLabel(anyString());
         new JumpInstruction("test").execute(this.executionContext);
-        verify(this.engine, times(1)).jumpTo("test");
+        verify(this.engine, times(1)).jumpToLabel("test");
     }
 
     @Test
     public void executeShouldThrowInstructionExecutionExceptionIfEngineFailsToJumpToLabel() {
-        doThrow(UnknownJumpLabelException.class).when(this.engine).jumpTo(anyString());
+        doThrow(UnknownJumpLabelException.class).when(this.engine).jumpToLabel(anyString());
         JumpInstruction instruction = new JumpInstruction("label");
         assertThrows(InstructionExecutionException.class, () -> instruction.execute(this.executionContext));
     }

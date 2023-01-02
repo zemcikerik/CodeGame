@@ -52,7 +52,7 @@ public class ProblemCaseMemorySettings {
 
     /**
      * Returns initial values of the memory used during the evaluation of player's solution.
-     * @return initial values of the memory
+     * @return unmodifiable {@link Map map} of the initial values of the memory
      */
     public Map<Integer, Integer> getInitialValues() {
         return this.initialValues;

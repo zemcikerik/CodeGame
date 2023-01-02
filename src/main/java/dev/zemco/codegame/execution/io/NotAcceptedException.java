@@ -9,7 +9,7 @@ package dev.zemco.codegame.execution.io;
 public class NotAcceptedException extends RuntimeException {
 
     /**
-     * Creates a new instance of {@link NotAcceptedException}.
+     * Creates an instance of {@link NotAcceptedException}.
      * @param message detail message containing information about the rejection
      */
     public NotAcceptedException(String message) {

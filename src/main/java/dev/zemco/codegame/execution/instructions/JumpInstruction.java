@@ -19,7 +19,7 @@ public class JumpInstruction implements IInstruction {
         IExecutionEngine engine = executionContext.getExecutionEngine();
 
         try {
-            engine.jumpTo(this.label);
+            engine.jumpToLabel(this.label);
         } catch (UnknownJumpLabelException e) {
             throw new InstructionExecutionException("Failed to perform a jump to label!", e);
         }
