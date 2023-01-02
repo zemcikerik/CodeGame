@@ -1,7 +1,7 @@
 package dev.zemco.codegame.execution.io;
 
 /**
- * Produces {@link IInputSource input source} implementations.
+ * Produces {@link IInputSource input sources}.
  *
  * @author Erik Zemčík
  * @see IInputSource
@@ -9,10 +9,11 @@ package dev.zemco.codegame.execution.io;
 public interface IInputSourceFactory {
 
     /**
-     * Creates a new {@link IInputSource input source} that provides its values from an {@link Iterable iterable}.
+     * Creates an {@link IInputSource input source} that provides its values from an {@link Iterable iterable}.
      *
      * @param iterable iterable to use as source of input values
      * @return input source
+     * @throws IllegalArgumentException if {@code iterable} is {@code null}
      */
     IInputSource createInputSourceFromIterable(Iterable<Integer> iterable);
 

@@ -12,7 +12,7 @@ public class SimpleMemoryCellTest {
     private SimpleMemoryCell memoryCell;
 
     @BeforeEach
-    public void setup() {
+    public void setUp() {
         this.memoryCell = new SimpleMemoryCell();
     }
 

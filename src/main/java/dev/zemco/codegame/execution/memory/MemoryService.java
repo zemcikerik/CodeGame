@@ -6,10 +6,19 @@ import java.util.Map.Entry;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
+/**
+ * Implementation of business logic related to {@link IMemory memory}.
+ * @author Erik Zemčík
+ */
 public class MemoryService implements IMemoryService {
 
     private final IMemoryFactory memoryFactory;
 
+    /**
+     * Creates an instance of {@link MemoryService}.
+     * @param memoryFactory factory used to create {@link IMemory memory} for configuration
+     * @throws IllegalArgumentException if {@code memoryFactory} is {@code null}
+     */
     public MemoryService(IMemoryFactory memoryFactory) {
         this.memoryFactory = checkArgumentNotNull(memoryFactory, "Memory factory");
     }

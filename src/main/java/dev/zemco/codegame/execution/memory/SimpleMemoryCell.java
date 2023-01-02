@@ -1,10 +1,16 @@
 package dev.zemco.codegame.execution.memory;
 
+/**
+ * Simple {@link IMemoryCell memory cell} that does not hold any value from the start.
+ * @author Erik Zemčík
+ */
 public class SimpleMemoryCell implements IMemoryCell {
 
-    // TODO: maybe don't use boxed value?
     private Integer value;
 
+    /**
+     * Creates an instance of {@link SimpleMemoryCell} that holds no value.
+     */
     public SimpleMemoryCell() {
         this.value = null;
     }

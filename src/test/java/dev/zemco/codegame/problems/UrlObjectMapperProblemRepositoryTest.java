@@ -3,6 +3,7 @@ package dev.zemco.codegame.problems;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import dev.zemco.codegame.resources.ResourceLoadException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ public class UrlObjectMapperProblemRepositoryTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setup() throws MalformedURLException {
+    public void setUp() throws MalformedURLException {
         this.url = new URL("file://test");
         this.objectMapper = mock(ObjectMapper.class);
         when(this.objectMapper.getTypeFactory()).thenReturn(TypeFactory.defaultInstance());

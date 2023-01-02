@@ -1,6 +1,6 @@
 package dev.zemco.codegame.presentation;
 
-import dev.zemco.codegame.problems.ResourceLoadException;
+import dev.zemco.codegame.resources.ResourceLoadException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 

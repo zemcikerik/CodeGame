@@ -27,6 +27,7 @@ import dev.zemco.codegame.execution.io.VerifyingInputSourceToOutputSinkAdapter;
 import dev.zemco.codegame.execution.memory.ConstantSizeMemory;
 import dev.zemco.codegame.execution.memory.IMemoryService;
 import dev.zemco.codegame.execution.memory.MemoryService;
+import dev.zemco.codegame.execution.memory.SimpleMemoryCell;
 import dev.zemco.codegame.presentation.FxmlViewProvider;
 import dev.zemco.codegame.presentation.IControllerFactory;
 import dev.zemco.codegame.presentation.IFxmlViewSourceProvider;
@@ -64,6 +65,7 @@ import java.util.Set;
 // TODO: check correct usage of terms program and solution in source code / get...ForSolutionAttempt
 // TODO: fix issues with UI scaling - min/pref/max sizes
 // TODO: fix formatting in tests
+// TODO: duplicate javadoc comments?
 public class CodeGameApplication extends Application {
 
     private INavigator navigator;
@@ -72,7 +74,7 @@ public class CodeGameApplication extends Application {
     //       this will be later replaced with proper solution - either IoC container or some other alternative
     @Override
     public void start(Stage primaryStage) {
-        IMemoryService memoryService = new MemoryService(ConstantSizeMemory::new);
+        IMemoryService memoryService = new MemoryService(memorySize -> new ConstantSizeMemory(memorySize, SimpleMemoryCell::new));
         IInputSourceFactory inputSourceFactory = IterableInputSource::new;
         IOutputSinkFactory outputSinkFactory = (iterable) ->
             new VerifyingInputSourceToOutputSinkAdapter(inputSourceFactory.createInputSourceFromIterable(iterable));
