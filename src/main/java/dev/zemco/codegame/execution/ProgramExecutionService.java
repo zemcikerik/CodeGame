@@ -14,13 +14,26 @@ import java.util.List;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-public class CodeExecutionService implements IExecutionService {
+/**
+ * Implementation of business logic related to execution.
+ * This implementation uses {@link ProgramExecutionEngine} for solution program execution.
+ *
+ * @author Erik Zemčík
+ */
+public class ProgramExecutionService implements IExecutionService {
 
     private final IMemoryService memoryService;
     private final IInputSourceFactory inputSourceFactory;
     private final IOutputSinkFactory outputSinkFactory;
 
-    public CodeExecutionService(
+    /**
+     * Creates an instance of {@link ProgramExecutionEngine}.
+     * @param memoryService service used for configuring {@link IMemory memory}
+     * @param inputSourceFactory factory used for creating {@link IInputSource input sources}
+     * @param outputSinkFactory factory used for creating {@link IOutputSink output sinks}
+     * @throws IllegalArgumentException if any argument is {@code null}
+     */
+    public ProgramExecutionService(
         IMemoryService memoryService,
         IInputSourceFactory inputSourceFactory,
         IOutputSinkFactory outputSinkFactory
@@ -31,7 +44,7 @@ public class CodeExecutionService implements IExecutionService {
     }
 
     @Override
-    public IExecutionContext getExecutionContextForSolutionAttempt(Program solution, ProblemCase problemCase) {
+    public IExecutionContext getExecutionContextForProblemCaseSolution(Program solution, ProblemCase problemCase) {
         checkArgumentNotNull(solution, "Solution");
         checkArgumentNotNull(problemCase, "Problem case");
 

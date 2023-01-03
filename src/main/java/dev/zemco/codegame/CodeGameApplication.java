@@ -12,7 +12,7 @@ import dev.zemco.codegame.evaluation.CodeEvaluationStrategy;
 import dev.zemco.codegame.evaluation.EvaluationService;
 import dev.zemco.codegame.evaluation.IEvaluationService;
 import dev.zemco.codegame.evaluation.IEvaluationStrategy;
-import dev.zemco.codegame.execution.CodeExecutionService;
+import dev.zemco.codegame.execution.ProgramExecutionService;
 import dev.zemco.codegame.execution.IExecutionService;
 import dev.zemco.codegame.execution.instructions.AdditionInstruction;
 import dev.zemco.codegame.execution.instructions.CopyFromInstruction;
@@ -79,7 +79,7 @@ public class CodeGameApplication extends Application {
         IOutputSinkFactory outputSinkFactory = (iterable) ->
             new VerifyingInputSourceToOutputSinkAdapter(inputSourceFactory.createInputSourceFromIterable(iterable));
 
-        IExecutionService executionService = new CodeExecutionService(
+        IExecutionService executionService = new ProgramExecutionService(
             memoryService, inputSourceFactory, outputSinkFactory
         );
 

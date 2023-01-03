@@ -15,7 +15,7 @@ public interface IMemoryService {
      * the {@link dev.zemco.codegame.problems.ProblemCase problem case} that owns the provided memory settings.
      *
      * @param memorySettings settings to use to configure the memory
-     * @return memory
+     * @return configured memory
      *
      * @throws IllegalArgumentException if {@code memorySettings} is {@code null}
      */

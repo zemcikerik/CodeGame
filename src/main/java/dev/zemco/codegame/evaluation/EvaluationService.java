@@ -45,7 +45,7 @@ public class EvaluationService implements IEvaluationService {
         checkArgumentNotNull(solution, "Solution");
         checkArgumentNotNull(problemCase, "Problem case");
 
-        IExecutionContext executionContext = this.executionService.getExecutionContextForSolutionAttempt(solution, problemCase);
+        IExecutionContext executionContext = this.executionService.getExecutionContextForProblemCaseSolution(solution, problemCase);
         return new SolutionEvaluator(executionContext, this.evaluationStrategy, problemCase);
     }
 
