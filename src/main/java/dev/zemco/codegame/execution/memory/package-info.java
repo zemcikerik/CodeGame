@@ -1,5 +1,5 @@
 /**
- * Provides memory capabilities to program execution.
+ * Provides memory capabilities to execution.
  *
  * @author Erik Zemčík
  * @see dev.zemco.codegame.execution.memory.IMemory

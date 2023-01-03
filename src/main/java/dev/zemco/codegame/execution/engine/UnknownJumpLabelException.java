@@ -1,4 +1,4 @@
-package dev.zemco.codegame.execution;
+package dev.zemco.codegame.execution.engine;
 
 /**
  * Thrown when a jump is attempted, but the jump label is unknown to the engine.

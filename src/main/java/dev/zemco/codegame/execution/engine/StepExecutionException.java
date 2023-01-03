@@ -1,4 +1,4 @@
-package dev.zemco.codegame.execution;
+package dev.zemco.codegame.execution.engine;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger;
 
@@ -23,9 +23,8 @@ public class StepExecutionException extends RuntimeException {
     }
 
     /**
-     * Returns the zero-indexed line position related to the executed instruction.
-     * TODO: zero-indexed?
-     * @return zero-indexed line position
+     * Returns the zero-based line position related to the executed instruction.
+     * @return zero-based line position
      */
     public int getLinePosition() {
         return this.linePosition;

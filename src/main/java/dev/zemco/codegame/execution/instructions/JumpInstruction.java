@@ -1,8 +1,8 @@
 package dev.zemco.codegame.execution.instructions;
 
 import dev.zemco.codegame.execution.IExecutionContext;
-import dev.zemco.codegame.execution.IExecutionEngine;
-import dev.zemco.codegame.execution.UnknownJumpLabelException;
+import dev.zemco.codegame.execution.engine.IExecutionEngine;
+import dev.zemco.codegame.execution.engine.UnknownJumpLabelException;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 

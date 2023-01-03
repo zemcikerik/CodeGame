@@ -1,5 +1,5 @@
 /**
- * Provides input and output capabilities to program execution.
+ * Provides input and output capabilities to execution.
  *
  * @author Erik Zemčík
  * @see dev.zemco.codegame.execution.io.IInputSource

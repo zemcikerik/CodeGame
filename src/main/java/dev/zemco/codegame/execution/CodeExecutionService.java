@@ -1,6 +1,7 @@
 package dev.zemco.codegame.execution;
 
 import dev.zemco.codegame.compilation.Program;
+import dev.zemco.codegame.execution.engine.ProgramExecutionEngine;
 import dev.zemco.codegame.execution.io.IInputSource;
 import dev.zemco.codegame.execution.io.IInputSourceFactory;
 import dev.zemco.codegame.execution.io.IOutputSink;
@@ -38,7 +39,7 @@ public class CodeExecutionService implements IExecutionService {
         IInputSource inputSource = this.createInputSourceForProblemCase(problemCase);
         IOutputSink outputSink = this.createOutputSinkForProblemCase(problemCase);
 
-        CodeExecutionEngine engine = new CodeExecutionEngine(solution, memory, inputSource, outputSink);
+        ProgramExecutionEngine engine = new ProgramExecutionEngine(solution, memory, inputSource, outputSink);
         return engine.getExecutionContext();
     }
 

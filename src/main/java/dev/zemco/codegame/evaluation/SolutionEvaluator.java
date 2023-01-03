@@ -1,8 +1,8 @@
 package dev.zemco.codegame.evaluation;
 
 import dev.zemco.codegame.execution.IExecutionContext;
-import dev.zemco.codegame.execution.NoNextInstructionException;
-import dev.zemco.codegame.execution.StepExecutionException;
+import dev.zemco.codegame.execution.engine.NoNextInstructionException;
+import dev.zemco.codegame.execution.engine.StepExecutionException;
 import dev.zemco.codegame.problems.ProblemCase;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;

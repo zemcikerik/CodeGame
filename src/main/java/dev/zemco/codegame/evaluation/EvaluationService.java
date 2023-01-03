@@ -3,8 +3,8 @@ package dev.zemco.codegame.evaluation;
 import dev.zemco.codegame.compilation.Program;
 import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.IExecutionService;
-import dev.zemco.codegame.execution.NoNextInstructionException;
-import dev.zemco.codegame.execution.StepExecutionException;
+import dev.zemco.codegame.execution.engine.NoNextInstructionException;
+import dev.zemco.codegame.execution.engine.StepExecutionException;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.problems.ProblemCase;
 

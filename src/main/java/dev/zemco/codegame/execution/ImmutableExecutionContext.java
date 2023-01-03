@@ -1,5 +1,6 @@
 package dev.zemco.codegame.execution;
 
+import dev.zemco.codegame.execution.engine.IExecutionEngine;
 import dev.zemco.codegame.execution.io.IInputSource;
 import dev.zemco.codegame.execution.io.IOutputSink;
 import dev.zemco.codegame.execution.memory.IMemory;

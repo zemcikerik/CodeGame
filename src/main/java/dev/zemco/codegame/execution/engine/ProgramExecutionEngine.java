@@ -1,7 +1,9 @@
-package dev.zemco.codegame.execution;
+package dev.zemco.codegame.execution.engine;
 
 import dev.zemco.codegame.compilation.IInstructionDescriptor;
 import dev.zemco.codegame.compilation.Program;
+import dev.zemco.codegame.execution.IExecutionContext;
+import dev.zemco.codegame.execution.ImmutableExecutionContext;
 import dev.zemco.codegame.execution.instructions.IInstruction;
 import dev.zemco.codegame.execution.instructions.InstructionExecutionException;
 import dev.zemco.codegame.execution.io.IInputSource;
@@ -24,17 +26,17 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
  *
  * @author Erik Zemčík
  */
-public class CodeExecutionEngine implements IExecutionEngine {
+public class ProgramExecutionEngine implements IExecutionEngine {
 
     private final Program program;
     private final IExecutionContext context;
 
-    // NOTE: position within instruction list, not line position!
+    // NOTE: position within instruction list (index), not line position!
     private int position;
     private boolean moveToNextPosition;
 
     /**
-     * Creates an instance of {@link CodeExecutionEngine} that executes a given {@link Program program}.
+     * Creates an instance of {@link ProgramExecutionEngine} that executes a given {@link Program program}.
      * This new instance uses the provided components ({@code memory}, {@code inputSource} and {@code outputSink})
      * as a {@link IExecutionContext execution context}.
      *
@@ -44,7 +46,7 @@ public class CodeExecutionEngine implements IExecutionEngine {
      * @param outputSink output sink to use during execution
      * @throws IllegalArgumentException if any parameter is {@code null}
      */
-    public CodeExecutionEngine(Program program, IMemory memory, IInputSource inputSource, IOutputSink outputSink) {
+    public ProgramExecutionEngine(Program program, IMemory memory, IInputSource inputSource, IOutputSink outputSink) {
         this.program = checkArgumentNotNull(program, "Program");
         this.context = new ImmutableExecutionContext(this, memory, inputSource, outputSink);
 
@@ -125,6 +127,8 @@ public class CodeExecutionEngine implements IExecutionEngine {
             throw new StepExecutionException("Failed to execute instruction!", e, capturedPosition);
         }
 
+        // if this flag was changed, then an instruction must've performed a jump and engine
+        // is already moved to the next position
         if (this.moveToNextPosition) {
             this.position++;
         }

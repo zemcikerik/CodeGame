@@ -1,4 +1,4 @@
-package dev.zemco.codegame.execution;
+package dev.zemco.codegame.execution.engine;
 
 /**
  * Thrown when a step is attempted, but engine has no next instruction.

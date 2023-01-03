@@ -1,8 +1,8 @@
 package dev.zemco.codegame.presentation.errors;
 
 import dev.zemco.codegame.compilation.InvalidSyntaxException;
-import dev.zemco.codegame.execution.NoNextInstructionException;
-import dev.zemco.codegame.execution.StepExecutionException;
+import dev.zemco.codegame.execution.engine.NoNextInstructionException;
+import dev.zemco.codegame.execution.engine.StepExecutionException;
 
 public interface IProgramErrorModelFactory {
     IProgramErrorModel createProgramErrorModel(InvalidSyntaxException exception);
