@@ -26,6 +26,7 @@ public class ImmutableExecutionContext implements IExecutionContext {
      * @param memory memory of the execution
      * @param inputSource input source of the execution
      * @param outputSink output sink of the execution
+     *
      * @throws IllegalArgumentException if any parameter is {@code null}
      */
     public ImmutableExecutionContext(

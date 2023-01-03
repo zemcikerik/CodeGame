@@ -52,6 +52,7 @@ public final class BindingUtils {
      * @param <F> describes type of {@code property} which is passed to {@code mapper}
      * @param property source of values that are used for mapping
      * @param mapper {@link Function} that transforms non-null value from {@code property} to {@link String}
+     * @param defaultValue fallback value if property value is {@code null}
      * @return binding that computes {@link String} value using {@code mapper}
      *
      * @throws IllegalArgumentException if {@code property} or {@code mapper} is {@code null}

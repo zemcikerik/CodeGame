@@ -28,9 +28,11 @@ public class ProgramExecutionService implements IExecutionService {
 
     /**
      * Creates an instance of {@link ProgramExecutionEngine}.
+     *
      * @param memoryService service used for configuring {@link IMemory memory}
      * @param inputSourceFactory factory used for creating {@link IInputSource input sources}
      * @param outputSinkFactory factory used for creating {@link IOutputSink output sinks}
+     *
      * @throws IllegalArgumentException if any argument is {@code null}
      */
     public ProgramExecutionService(

@@ -23,10 +23,11 @@ public class ProblemCaseMemorySettings {
     private final Map<Integer, Integer> initialValues;
 
     /**
-     * Constructs new instance of {@link ProblemCaseMemorySettings}.
+     * Creates an instance of {@link ProblemCaseMemorySettings}.
      *
      * @param size size of the memory
      * @param initialValues initial values of the memory
+     *
      * @throws IllegalArgumentException if {@code size} is not a positive integer
      */
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)

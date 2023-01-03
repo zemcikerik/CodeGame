@@ -27,11 +27,12 @@ public class ProblemCase {
     private final ProblemCaseMemorySettings memorySettings;
 
     /**
-     * Constructs new instance of {@link ProblemCase}.
+     * Creates an instance of {@link ProblemCase}.
      *
      * @param inputs {@link List list} of inputs used during validation
      * @param expectedOutputs {@link List list} of outputs expected during validation
      * @param memorySettings memory settings used during validation
+     *
      * @throws IllegalArgumentException if {@code expectedOutputs} are null or empty, if {@code memorySettings} are null
      */
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)

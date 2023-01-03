@@ -29,14 +29,15 @@ public class Problem {
     private final List<ProblemCase> cases;
 
     /**
-     * Constructs new instance of {@link Problem}.
+     * Creates an instance of {@link Problem}.
      *
      * @param id unique identifier of the problem
      * @param name name of the problem
      * @param description description of the problem
      * @param difficulty difficulty of the problem
      * @param cases {@link List list} of {@link ProblemCase problem cases} for validating problem's solution
-     * @throws IllegalArgumentException if any parameter is null, if {@code name} or {@code cases} are null,
+     *
+     * @throws IllegalArgumentException if any parameter is null, if {@code name} or {@code cases} are empty,
      *                                  if {@code difficulty} is not positive
      */
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
