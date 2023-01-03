@@ -3,11 +3,11 @@ package dev.zemco.codegame.compilation;
 import dev.zemco.codegame.compilation.parsing.IInstructionParser;
 import dev.zemco.codegame.compilation.parsing.ParseException;
 import dev.zemco.codegame.execution.instructions.IInstruction;
+import dev.zemco.codegame.programs.IProgramBuilder;
+import dev.zemco.codegame.programs.IProgramBuilderFactory;
+import dev.zemco.codegame.programs.Program;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
@@ -17,26 +17,25 @@ public class CodeProgramCompiler implements IProgramCompiler {
     private static final String COMMENT_PREFIX = ";";
     private static final String JUMP_LABEL_PREFIX = ">";
     private final List<IInstructionParser> instructionParsers;
-    private final IInstructionDescriptorFactory instructionDescriptorFactory;
+    private final IProgramBuilderFactory programBuilderFactory;
 
     public CodeProgramCompiler(
         List<IInstructionParser> instructionParsers,
-        IInstructionDescriptorFactory instructionDescriptorFactory
+        IProgramBuilderFactory programBuilderFactory
     ) {
         this.instructionParsers = checkArgumentNotEmpty(instructionParsers, "Instruction parsers");
-        this.instructionDescriptorFactory = checkArgumentNotNull(instructionDescriptorFactory, "Instruction descriptor factory");
+        this.programBuilderFactory = checkArgumentNotNull(programBuilderFactory, "Program builder factory");
     }
 
     @Override
     public Program compileProgram(String sourceCode) throws InvalidSyntaxException {
         checkArgumentNotNull(sourceCode, "Source code");
 
+        IProgramBuilder programBuilder = this.programBuilderFactory.createProgramBuilder();
+
         // first we split the program into individual lines
         // \R since Java 8 matches any unicode line break sequence
         String[] lines = sourceCode.split("\\R");
-
-        List<IInstructionDescriptor> instructionDescriptors = new ArrayList<>();
-        Map<String, Integer> jumpLabelToLinePositionMap = new HashMap<>();
 
         for (int position = 0; position < lines.length; position++) {
             String lineWithoutComment = this.removeCommentFromLine(lines[position]);
@@ -60,16 +59,20 @@ public class CodeProgramCompiler implements IProgramCompiler {
                 }
 
                 String label = instructionLine.substring(JUMP_LABEL_PREFIX.length());
-                jumpLabelToLinePositionMap.put(label, position);
+
+                if (programBuilder.hasJumpLabelMapping(label)) {
+                    throw new InvalidSyntaxException("Duplicate jump label name is not allowed!", position);
+                }
+
+                programBuilder.addJumpLabelMapping(label, position);
                 continue;
             }
 
             IInstruction instruction = this.parseInstruction(instructionLine, position);
-            IInstructionDescriptor descriptor = this.instructionDescriptorFactory.createInstructionDescriptor(instruction, position);
-            instructionDescriptors.add(descriptor);
+            programBuilder.addInstruction(instruction, position);
         }
 
-        return new Program(instructionDescriptors, jumpLabelToLinePositionMap, sourceCode);
+        return programBuilder.build();
     }
 
     // removes all characters after comment prefix (including the comment prefix)

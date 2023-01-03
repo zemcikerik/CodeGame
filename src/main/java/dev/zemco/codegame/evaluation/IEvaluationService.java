@@ -1,6 +1,6 @@
 package dev.zemco.codegame.evaluation;
 
-import dev.zemco.codegame.compilation.Program;
+import dev.zemco.codegame.programs.Program;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.problems.ProblemCase;
 

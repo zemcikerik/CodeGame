@@ -1,6 +1,6 @@
 package dev.zemco.codegame.execution.engine;
 
-import dev.zemco.codegame.compilation.IInstructionDescriptor;
+import dev.zemco.codegame.programs.InstructionDescriptor;
 import dev.zemco.codegame.execution.IExecutionContext;
 
 import java.util.Optional;
@@ -32,7 +32,7 @@ public interface IExecutionEngine {
      *
      * @return instruction descriptor of the next instruction or an empty {@link Optional}
      */
-    Optional<IInstructionDescriptor> getNextInstructionDescriptor();
+    Optional<InstructionDescriptor> getNextInstructionDescriptor();
 
     /**
      * Executes a single instruction on the engine's {@link IExecutionContext execution context} and moves to the next.

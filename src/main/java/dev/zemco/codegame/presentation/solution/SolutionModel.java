@@ -1,9 +1,9 @@
 package dev.zemco.codegame.presentation.solution;
 
-import dev.zemco.codegame.compilation.IInstructionDescriptor;
+import dev.zemco.codegame.programs.InstructionDescriptor;
 import dev.zemco.codegame.compilation.IProgramCompiler;
 import dev.zemco.codegame.compilation.InvalidSyntaxException;
-import dev.zemco.codegame.compilation.Program;
+import dev.zemco.codegame.programs.Program;
 import dev.zemco.codegame.evaluation.IEvaluationService;
 import dev.zemco.codegame.evaluation.ISolutionEvaluator;
 import dev.zemco.codegame.execution.engine.NoNextInstructionException;
@@ -172,7 +172,7 @@ public class SolutionModel implements ISolutionModel {
         Integer linePosition = this.solutionEvaluator.getExecutionContext()
             .getExecutionEngine()
             .getNextInstructionDescriptor()
-            .map(IInstructionDescriptor::getLinePosition)
+            .map(InstructionDescriptor::getLinePosition)
             .orElse(null);
 
         this.nextInstructionLinePositionProperty.set(linePosition);

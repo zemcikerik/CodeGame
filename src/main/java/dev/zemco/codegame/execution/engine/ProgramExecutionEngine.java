@@ -1,7 +1,7 @@
 package dev.zemco.codegame.execution.engine;
 
-import dev.zemco.codegame.compilation.IInstructionDescriptor;
-import dev.zemco.codegame.compilation.Program;
+import dev.zemco.codegame.programs.InstructionDescriptor;
+import dev.zemco.codegame.programs.Program;
 import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.ImmutableExecutionContext;
 import dev.zemco.codegame.execution.instructions.IInstruction;
@@ -44,6 +44,7 @@ public class ProgramExecutionEngine implements IExecutionEngine {
      * @param memory memory to use during execution
      * @param inputSource input source to use during execution
      * @param outputSink output sink to use during execution
+     *
      * @throws IllegalArgumentException if any parameter is {@code null}
      */
     public ProgramExecutionEngine(Program program, IMemory memory, IInputSource inputSource, IOutputSink outputSink) {
@@ -76,7 +77,7 @@ public class ProgramExecutionEngine implements IExecutionEngine {
 
         this.moveToNextPosition = false;
         int jumpLinePosition = jumpLabelToLinePositionMap.get(label);
-        List<IInstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
+        List<InstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
 
         // find first defined instruction after target label
         // NOTE: in future performance of this search could be improved
@@ -99,8 +100,8 @@ public class ProgramExecutionEngine implements IExecutionEngine {
      * @return instruction descriptor of the next instruction or an empty {@link Optional}
      */
     @Override
-    public Optional<IInstructionDescriptor> getNextInstructionDescriptor() {
-        List<IInstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
+    public Optional<InstructionDescriptor> getNextInstructionDescriptor() {
+        List<InstructionDescriptor> instructionDescriptors = this.program.getInstructionDescriptors();
 
         return this.position < instructionDescriptors.size()
             ? Optional.of(instructionDescriptors.get(this.position))
@@ -109,7 +110,7 @@ public class ProgramExecutionEngine implements IExecutionEngine {
 
     @Override
     public void step() {
-        Optional<IInstructionDescriptor> nextDescriptor = this.getNextInstructionDescriptor();
+        Optional<InstructionDescriptor> nextDescriptor = this.getNextInstructionDescriptor();
 
         if (nextDescriptor.isEmpty()) {
             throw new NoNextInstructionException("No next instruction to execute!");

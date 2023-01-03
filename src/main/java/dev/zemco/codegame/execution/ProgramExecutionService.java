@@ -1,6 +1,6 @@
 package dev.zemco.codegame.execution;
 
-import dev.zemco.codegame.compilation.Program;
+import dev.zemco.codegame.programs.Program;
 import dev.zemco.codegame.execution.engine.ProgramExecutionEngine;
 import dev.zemco.codegame.execution.io.IInputSource;
 import dev.zemco.codegame.execution.io.IInputSourceFactory;

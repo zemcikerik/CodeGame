@@ -3,7 +3,6 @@ package dev.zemco.codegame;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.zemco.codegame.compilation.CodeProgramCompiler;
 import dev.zemco.codegame.compilation.IProgramCompiler;
-import dev.zemco.codegame.compilation.ImmutableInstructionDescriptor;
 import dev.zemco.codegame.compilation.parsing.FactorySingleIntegerParameterInstructionParser;
 import dev.zemco.codegame.compilation.parsing.FactorySingleParameterInstructionParser;
 import dev.zemco.codegame.compilation.parsing.IInstructionParser;
@@ -52,6 +51,7 @@ import dev.zemco.codegame.presentation.solution.SolutionController;
 import dev.zemco.codegame.presentation.solution.SolutionModel;
 import dev.zemco.codegame.problems.IProblemRepository;
 import dev.zemco.codegame.problems.UrlObjectMapperProblemRepository;
+import dev.zemco.codegame.programs.ProgramBuilder;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -94,7 +94,7 @@ public class CodeGameApplication extends Application {
             new FactorySingleIntegerParameterInstructionParser("save", CopyToInstruction::new),
             new FactorySingleIntegerParameterInstructionParser("load", CopyFromInstruction::new)
         );
-        IProgramCompiler compiler = new CodeProgramCompiler(parsers, ImmutableInstructionDescriptor::new);
+        IProgramCompiler compiler = new CodeProgramCompiler(parsers, ProgramBuilder::new);
         IProblemRepository problemRepository = new UrlObjectMapperProblemRepository(
             CodeGameApplication.class.getResource("/problems.json"), new ObjectMapper()
         );

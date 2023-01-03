@@ -1,6 +1,6 @@
 package dev.zemco.codegame.evaluation;
 
-import dev.zemco.codegame.compilation.Program;
+import dev.zemco.codegame.programs.Program;
 import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.IExecutionService;
 import dev.zemco.codegame.execution.engine.NoNextInstructionException;
