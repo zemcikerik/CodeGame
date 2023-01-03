@@ -1,13 +1,12 @@
 package dev.zemco.codegame.presentation.solution;
 
+import dev.zemco.codegame.evaluation.StepEvaluationException;
 import dev.zemco.codegame.programs.InstructionDescriptor;
 import dev.zemco.codegame.compilation.IProgramCompiler;
 import dev.zemco.codegame.compilation.InvalidSyntaxException;
 import dev.zemco.codegame.programs.Program;
 import dev.zemco.codegame.evaluation.IEvaluationService;
 import dev.zemco.codegame.evaluation.ISolutionEvaluator;
-import dev.zemco.codegame.execution.engine.NoNextInstructionException;
-import dev.zemco.codegame.execution.engine.StepExecutionException;
 import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
@@ -117,7 +116,7 @@ public class SolutionModel implements ISolutionModel {
 
         // grab first problem case
         ProblemCase problemCase = this.problemProperty.get().getCases().get(0);
-        this.solutionEvaluator = this.evaluationService.getEvaluatorForSolutionAttempt(this.program, problemCase);
+        this.solutionEvaluator = this.evaluationService.getEvaluatorForProblemCaseSolution(this.program, problemCase);
 
         IMemory memory = this.solutionEvaluator.getExecutionContext().getMemory();
         this.observeMemoryCells(memory, problemCase);
@@ -146,25 +145,20 @@ public class SolutionModel implements ISolutionModel {
 
         try {
             this.solutionEvaluator.step();
-        } catch (StepExecutionException | NoNextInstructionException e) {
-            // this is required because of Javas static method overloading
-            IProgramErrorModel errorModel = e instanceof StepExecutionException
-                ? this.programErrorModelFactory.createProgramErrorModel((StepExecutionException)e)
-                : this.programErrorModelFactory.createProgramErrorModel((NoNextInstructionException)e);
-
-            this.executionErrorProperty.set(errorModel);
+        } catch (StepEvaluationException e) {
+            this.executionErrorProperty.set(this.programErrorModelFactory.createProgramErrorModel(e));
             this.stopExecution();
             return;
         }
 
         this.cellObservers.forEach(UpdatableMemoryCellObserverAdapter::updateValue);
 
-        if (this.solutionEvaluator.canContinue()) {
-            this.updateNextInstructionLinePositionFromEvaluator();
-        } else {
+        if (this.solutionEvaluator.hasFinished()) {
             this.canSubmitProperty.set(this.solutionEvaluator.isSuccessful());
             this.stopExecution();
             this.canExecuteProperty.set(false);
+        } else {
+            this.updateNextInstructionLinePositionFromEvaluator();
         }
     }
 
@@ -198,7 +192,7 @@ public class SolutionModel implements ISolutionModel {
         this.canSubmitProperty.set(false);
 
         Problem problem = this.problemProperty.get();
-        return this.evaluationService.evaluateSolutionOnAllCases(this.program, problem);
+        return this.evaluationService.evaluateSolutionOnAllProblemCases(this.program, problem);
     }
 
     @Override

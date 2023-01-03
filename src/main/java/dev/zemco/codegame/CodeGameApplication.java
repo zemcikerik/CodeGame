@@ -7,7 +7,7 @@ import dev.zemco.codegame.compilation.parsing.FactorySingleIntegerParameterInstr
 import dev.zemco.codegame.compilation.parsing.FactorySingleParameterInstructionParser;
 import dev.zemco.codegame.compilation.parsing.IInstructionParser;
 import dev.zemco.codegame.compilation.parsing.SupplierInstructionParser;
-import dev.zemco.codegame.evaluation.CodeEvaluationStrategy;
+import dev.zemco.codegame.evaluation.OutputSinkSatisfiedEvaluationStrategy;
 import dev.zemco.codegame.evaluation.EvaluationService;
 import dev.zemco.codegame.evaluation.IEvaluationService;
 import dev.zemco.codegame.evaluation.IEvaluationStrategy;
@@ -83,7 +83,7 @@ public class CodeGameApplication extends Application {
             memoryService, inputSourceFactory, outputSinkFactory
         );
 
-        IEvaluationStrategy evaluationStrategy = new CodeEvaluationStrategy();
+        IEvaluationStrategy evaluationStrategy = new OutputSinkSatisfiedEvaluationStrategy();
         IEvaluationService evaluationService = new EvaluationService(executionService, evaluationStrategy);
 
         List<IInstructionParser> parsers = List.of(
