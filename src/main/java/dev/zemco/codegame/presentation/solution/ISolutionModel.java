@@ -1,7 +1,7 @@
 package dev.zemco.codegame.presentation.solution;
 
 import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
-import dev.zemco.codegame.presentation.memory.IMemoryCellObserver;
+import dev.zemco.codegame.presentation.execution.IMemoryCellObserver;
 import dev.zemco.codegame.problems.Problem;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableObjectValue;

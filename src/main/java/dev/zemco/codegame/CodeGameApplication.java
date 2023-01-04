@@ -120,7 +120,7 @@ public class CodeGameApplication extends Application {
         ISolutionModel solutionModel = new SolutionModel(
             new CodeProgramErrorModelFactory(), compiler, evaluationService
         );
-        IProblemListModel problemListModel = new ProblemListModel(solutionModel, problemRepository);
+        IProblemListModel problemListModel = new ProblemListModel(problemRepository, solutionModel);
 
         // TODO: do this properly based on the contract
         IControllerFactory viewControllerProvider = (controllerClass) -> {

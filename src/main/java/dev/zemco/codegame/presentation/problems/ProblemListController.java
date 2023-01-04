@@ -35,6 +35,9 @@ public class ProblemListController implements Initializable {
     public ProblemListController(IProblemListModel model, INavigator navigator) {
         this.model = checkArgumentNotNull(model, "Model");
         this.navigator = checkArgumentNotNull(navigator, "Navigator");
+
+        // we don't want any problem selected by default
+        this.model.selectProblem(null);
     }
 
     @Override
@@ -64,7 +67,7 @@ public class ProblemListController implements Initializable {
 
     @FXML
     private void onPlayButtonClicked() {
-        this.model.play();
+        this.model.solveSelectedProblem();
         this.navigator.navigateTo("solution");
     }
 

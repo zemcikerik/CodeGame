@@ -3,7 +3,7 @@ package dev.zemco.codegame.presentation.solution;
 import dev.zemco.codegame.presentation.INavigator;
 import dev.zemco.codegame.presentation.dialog.IDialogService;
 import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
-import dev.zemco.codegame.presentation.memory.MemoryView;
+import dev.zemco.codegame.presentation.execution.MemoryView;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.util.BindingUtils;
 import javafx.application.Platform;

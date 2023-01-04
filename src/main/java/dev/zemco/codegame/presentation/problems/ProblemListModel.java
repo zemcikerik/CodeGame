@@ -18,11 +18,10 @@ public class ProblemListModel implements IProblemListModel {
     private final ReadOnlyObjectWrapper<ObservableList<Problem>> problemsProperty;
     private final ReadOnlyObjectWrapper<Problem> selectedProblemProperty;
 
-    public ProblemListModel(ISolutionModel solutionModel, IProblemRepository problemRepository) {
-        this.solutionModel = checkArgumentNotNull(solutionModel, "Solution model");
+    public ProblemListModel(IProblemRepository problemRepository, ISolutionModel solutionModel) {
         checkArgumentNotNull(problemRepository, "Problem repository");
+        this.solutionModel = checkArgumentNotNull(solutionModel, "Solution model");
 
-        // TODO: loading problem once in a constructor? - maybe move this
         List<Problem> problems = problemRepository.getAllProblems();
         ObservableList<Problem> observableProblems = FXCollections.observableList(problems);
         this.problemsProperty = new ReadOnlyObjectWrapper<>(observableProblems);
@@ -36,7 +35,7 @@ public class ProblemListModel implements IProblemListModel {
     }
 
     @Override
-    public void play() {
+    public void solveSelectedProblem() {
         Problem problem = this.selectedProblemProperty.get();
 
         if (problem == null) {

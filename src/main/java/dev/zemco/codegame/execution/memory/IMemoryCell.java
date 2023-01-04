@@ -16,12 +16,12 @@ public interface IMemoryCell {
     /**
      * Returns currently held integer value of this cell.
      * @return currently held value
-     * @throws IllegalStateException if holds no value
+     * @throws IllegalStateException if cell does not hold a value
      */
     int getValue();
 
     /**
-     * Sets cell held value.
+     * Sets value held by the cell.
      * @param value value to set
      */
     void setValue(int value);
