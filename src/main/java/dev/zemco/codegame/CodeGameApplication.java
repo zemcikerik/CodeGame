@@ -34,9 +34,9 @@ import dev.zemco.codegame.presentation.INavigator;
 import dev.zemco.codegame.presentation.IStageProvider;
 import dev.zemco.codegame.presentation.IViewProvider;
 import dev.zemco.codegame.presentation.IViewStylesheetProvider;
-import dev.zemco.codegame.presentation.ImmutableDefaultViewStylesheetProvider;
+import dev.zemco.codegame.presentation.ImmutableViewStylesheetProvider;
 import dev.zemco.codegame.presentation.ImmutableStageProvider;
-import dev.zemco.codegame.presentation.Navigator;
+import dev.zemco.codegame.presentation.SimpleViewIdNavigator;
 import dev.zemco.codegame.presentation.ResourceFxmlViewSourceProvider;
 import dev.zemco.codegame.presentation.dialog.IDialogService;
 import dev.zemco.codegame.presentation.dialog.JavaFxDialogService;
@@ -111,10 +111,10 @@ public class CodeGameApplication extends Application {
                 "solution", "/fxml/SolutionView.fxml"
             )
         );
-        IViewStylesheetProvider viewStylesheetProvider = new ImmutableDefaultViewStylesheetProvider(
-            Map.of("solution", List.of("/css/SolutionView.css", "/css/styles.css")),
-            List.of("/css/styles.css")
-        );
+        IViewStylesheetProvider viewStylesheetProvider = new ImmutableViewStylesheetProvider(Map.of(
+            "problem-list", List.of(),
+            "solution", List.of("/css/SolutionView.css")
+        ));
         IStageProvider stageProvider = new ImmutableStageProvider(primaryStage);
 
         ISolutionModel solutionModel = new SolutionModel(
@@ -122,19 +122,23 @@ public class CodeGameApplication extends Application {
         );
         IProblemListModel problemListModel = new ProblemListModel(solutionModel, problemRepository);
 
-        IControllerFactory controllerFactory = (controllerClass) -> {
+        // TODO: do this properly based on the contract
+        IControllerFactory viewControllerProvider = (controllerClass) -> {
             if (SolutionController.class.equals(controllerClass)) {
                 return new SolutionController(solutionModel, this.navigator, dialogService, highlightStyleComputer);
+            } else {
+                return new ProblemListController(problemListModel, this.navigator);
             }
-            return new ProblemListController(problemListModel, this.navigator);
         };
 
         IViewProvider viewProvider = new FxmlViewProvider(
-            viewSourceProvider, controllerFactory, viewStylesheetProvider
+            viewSourceProvider, viewControllerProvider, viewStylesheetProvider
         );
-        this.navigator = new Navigator(stageProvider, viewProvider);
+        this.navigator = new SimpleViewIdNavigator(stageProvider, viewProvider);
 
-        primaryStage.setScene(new Scene(viewProvider.getViewById("problem-list"), 640, 360));
+        Scene scene = new Scene(viewProvider.getViewById("problem-list"), 640, 360);
+        scene.getStylesheets().add("/css/styles.css");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

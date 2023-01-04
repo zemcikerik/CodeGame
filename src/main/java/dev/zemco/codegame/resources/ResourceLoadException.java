@@ -9,6 +9,14 @@ public class ResourceLoadException extends RuntimeException {
     /**
      * Creates an instance of {@link ResourceLoadException}.
      * @param message detail message containing information about the load failure
+     */
+    public ResourceLoadException(String message) {
+        super(message);
+    }
+
+    /**
+     * Creates an instance of {@link ResourceLoadException}.
+     * @param message detail message containing information about the load failure
      * @param cause cause of the resource load failure
      */
     public ResourceLoadException(String message, Throwable cause) {
