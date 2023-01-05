@@ -127,8 +127,8 @@ public class ProgramExecutionEngine implements IExecutionEngine {
             throw new StepExecutionException("Failed to execute instruction!", e, linePosition);
         }
 
-        // if this flag was changed, then an instruction must've performed a jump and engine
-        // is already moved to the next position
+        // if this flag was changed, then an instruction must've performed a jump
+        // and engine has already moved to the next position
         if (this.moveToNextPosition) {
             this.position++;
         }

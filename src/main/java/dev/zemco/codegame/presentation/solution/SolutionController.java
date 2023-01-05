@@ -2,7 +2,7 @@ package dev.zemco.codegame.presentation.solution;
 
 import dev.zemco.codegame.presentation.INavigator;
 import dev.zemco.codegame.presentation.dialog.IDialogService;
-import dev.zemco.codegame.presentation.errors.ISolutionErrorModel;
+import dev.zemco.codegame.presentation.solution.errors.ISolutionErrorModel;
 import dev.zemco.codegame.presentation.execution.MemoryView;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.util.BindingUtils;
@@ -221,8 +221,9 @@ public class SolutionController {
     }
 
     private void showFormattedErrorDialog(String title, String errorTag, ISolutionErrorModel errorModel) {
-        Integer linePosition = errorModel.getLinePosition();
-        String lineIndicator = linePosition != null ? String.format(" on line %d", linePosition + 1) : "";
+        String lineIndicator = errorModel.getLinePosition()
+            .map(linePosition -> String.format(" on line %d", linePosition + 1))
+            .orElse("");
 
         String message = String.format("There was %s%s!%n%n%s", errorTag, lineIndicator, errorModel.getDescription());
         this.dialogService.showErrorDialog(title, message);
@@ -233,9 +234,13 @@ public class SolutionController {
         ISolutionErrorModel newError,
         Collection<String> newPositionStyles
     ) {
-        Integer oldPosition = oldError != null ? oldError.getLinePosition() : null;
-        Integer newPosition = newError != null ? newError.getLinePosition() : null;
+        Integer oldPosition = this.getNullableLinePosition(oldError);
+        Integer newPosition = this.getNullableLinePosition(newError);
         this.updateLineStyles(oldPosition, newPosition, newPositionStyles);
+    }
+
+    private Integer getNullableLinePosition(ISolutionErrorModel errorModel) {
+        return errorModel != null ? errorModel.getLinePosition().orElse(null) : null;
     }
 
     private void updateLineStyles(Integer oldPosition, Integer newPosition, Collection<String> newPositionStyles) {

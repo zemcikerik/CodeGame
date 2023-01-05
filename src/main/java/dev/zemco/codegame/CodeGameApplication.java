@@ -40,7 +40,7 @@ import dev.zemco.codegame.presentation.SimpleViewIdNavigator;
 import dev.zemco.codegame.presentation.ResourceFxmlViewSourceProvider;
 import dev.zemco.codegame.presentation.dialog.IDialogService;
 import dev.zemco.codegame.presentation.dialog.JavaFxDialogService;
-import dev.zemco.codegame.presentation.errors.CodeSolutionErrorModelFactory;
+import dev.zemco.codegame.presentation.solution.errors.SimpleSolutionErrorModelFactory;
 import dev.zemco.codegame.presentation.problems.IProblemListModel;
 import dev.zemco.codegame.presentation.problems.ProblemListController;
 import dev.zemco.codegame.presentation.problems.ProblemListModel;
@@ -121,7 +121,7 @@ public class CodeGameApplication extends Application {
 
         ISolutionModel solutionModel = new SolutionModel(
             problemListModel,
-            new CodeSolutionErrorModelFactory(),
+            new SimpleSolutionErrorModelFactory(),
             compiler,
             evaluationService
         );
