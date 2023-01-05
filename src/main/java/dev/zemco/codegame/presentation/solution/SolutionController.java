@@ -2,14 +2,13 @@ package dev.zemco.codegame.presentation.solution;
 
 import dev.zemco.codegame.presentation.INavigator;
 import dev.zemco.codegame.presentation.dialog.IDialogService;
-import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
+import dev.zemco.codegame.presentation.errors.ISolutionErrorModel;
 import dev.zemco.codegame.presentation.execution.MemoryView;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.util.BindingUtils;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -22,15 +21,13 @@ import org.fxmisc.richtext.model.Paragraph;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.collection.ListModification;
 
-import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-public class SolutionController implements Initializable {
+public class SolutionController {
 
     private static final Collection<String> DEFAULT_LINE_STYLES = Collections.emptyList();
     private static final Collection<String> NEXT_INSTRUCTION_LINE_STYLES = List.of("next-instruction-line");
@@ -99,8 +96,8 @@ public class SolutionController implements Initializable {
     }
 
     // TODO: split this up into smaller parts
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    private void initialize() {
         this.backButton.disableProperty().bind(this.model.executionRunningProperty());
 
         this.problemNameLabel.textProperty().bind(
@@ -203,7 +200,7 @@ public class SolutionController implements Initializable {
         }
     }
 
-    private void onSyntaxErrorChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {
+    private void onSyntaxErrorChanged(Object ignored, ISolutionErrorModel oldError, ISolutionErrorModel newError) {
         this.updateErrorLineStyles(oldError, newError, SYNTAX_ERROR_LINE_STYLES);
 
         if (newError != null) {
@@ -211,7 +208,7 @@ public class SolutionController implements Initializable {
         }
     }
 
-    private void onExecutionErrorChanged(Object ignored, IProgramErrorModel oldError, IProgramErrorModel newError) {
+    private void onExecutionErrorChanged(Object ignored, ISolutionErrorModel oldError, ISolutionErrorModel newError) {
         this.updateErrorLineStyles(oldError, newError, EXECUTION_ERROR_LINE_STYLES);
 
         if (newError != null) {
@@ -223,7 +220,7 @@ public class SolutionController implements Initializable {
         this.updateLineStyles(oldPosition, newPosition, NEXT_INSTRUCTION_LINE_STYLES);
     }
 
-    private void showFormattedErrorDialog(String title, String errorTag, IProgramErrorModel errorModel) {
+    private void showFormattedErrorDialog(String title, String errorTag, ISolutionErrorModel errorModel) {
         Integer linePosition = errorModel.getLinePosition();
         String lineIndicator = linePosition != null ? String.format(" on line %d", linePosition + 1) : "";
 
@@ -232,8 +229,8 @@ public class SolutionController implements Initializable {
     }
 
     private void updateErrorLineStyles(
-        IProgramErrorModel oldError,
-        IProgramErrorModel newError,
+        ISolutionErrorModel oldError,
+        ISolutionErrorModel newError,
         Collection<String> newPositionStyles
     ) {
         Integer oldPosition = oldError != null ? oldError.getLinePosition() : null;

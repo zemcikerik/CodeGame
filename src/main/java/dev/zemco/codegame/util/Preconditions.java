@@ -4,7 +4,6 @@ import java.util.Collection;
 
 /**
  * Collection of utility methods for checking validity of arguments.
- *
  * @author Erik Zemčík
  */
 public final class Preconditions {
@@ -16,6 +15,7 @@ public final class Preconditions {
      * @param argument argument to check
      * @param argumentName name of the checked argument
      * @return non-null instance passed to {@code argument}
+     *
      * @throws IllegalArgumentException if {@code argument} is {@code null}
      */
     public static <T> T checkArgumentNotNull(T argument, String argumentName) {
@@ -33,6 +33,7 @@ public final class Preconditions {
      * @param argument argument to check
      * @param argumentName name of the checked argument
      * @return instance passed to {@code argument}
+     *
      * @throws IllegalArgumentException if {@code argument} is {@code null} or empty
      */
     public static String checkArgumentNotEmpty(String argument, String argumentName) {
@@ -53,6 +54,7 @@ public final class Preconditions {
      * @param argument argument to check
      * @param argumentName name of the checked argument
      * @return instance passed to {@code argument}
+     *
      * @throws IllegalArgumentException if {@code argument} is {@code null} or empty
      */
     public static <T extends Collection<?>> T checkArgumentNotEmpty(T argument, String argumentName) {
@@ -71,12 +73,14 @@ public final class Preconditions {
      * @param argument argument to check
      * @param argumentName name of the checked argument
      * @return {@code int} passed to {@code argument}
+     *
      * @throws IllegalArgumentException if {@code argument} is less than {@code 0}
      */
     public static int checkArgumentPositiveInteger(int argument, String argumentName) {
         if (argument < 0) {
             throwFormattedIllegalArgumentException("%s must be a positive integer!", argumentName);
         }
+
         return argument;
     }
 

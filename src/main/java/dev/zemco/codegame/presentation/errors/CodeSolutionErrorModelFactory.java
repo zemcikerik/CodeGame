@@ -4,28 +4,22 @@ import dev.zemco.codegame.compilation.InvalidSyntaxException;
 import dev.zemco.codegame.evaluation.StepEvaluationException;
 import dev.zemco.codegame.execution.engine.StepExecutionException;
 
-public class CodeProgramErrorModelFactory implements IProgramErrorModelFactory {
+public class CodeSolutionErrorModelFactory implements ISolutionErrorModelFactory {
 
     @Override
-    public IProgramErrorModel createProgramErrorModel(InvalidSyntaxException exception) {
-        return new ImmutableProgramErrorModel(this.createDescription(exception), exception.getLinePosition());
+    public ISolutionErrorModel createSolutionErrorModel(InvalidSyntaxException exception) {
+        return new ImmutableSolutionErrorModel(this.createDescription(exception), exception.getLinePosition());
     }
 
     @Override
-    public IProgramErrorModel createProgramErrorModel(StepEvaluationException exception) {
+    public ISolutionErrorModel createSolutionErrorModel(StepEvaluationException exception) {
         Throwable cause = exception.getCause();
 
-        return cause != null
-            ? this.createProgramErrorModelFromEvaluationCause(cause)
-            : new ImmutableProgramErrorModel(this.createDescription(exception), null);
-    }
-
-    private IProgramErrorModel createProgramErrorModelFromEvaluationCause(Throwable cause) {
         Integer linePosition = cause instanceof StepExecutionException
             ? ((StepExecutionException)cause).getLinePosition()
             : null;
 
-        return new ImmutableProgramErrorModel(this.createDescription(cause), linePosition);
+        return new ImmutableSolutionErrorModel(this.createDescription(cause), linePosition);
     }
 
     private String createDescription(Throwable exception) {

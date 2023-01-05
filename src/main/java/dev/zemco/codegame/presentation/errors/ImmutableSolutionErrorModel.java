@@ -3,12 +3,12 @@ package dev.zemco.codegame.presentation.errors;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger;
 
-public class ImmutableProgramErrorModel implements IProgramErrorModel {
+public class ImmutableSolutionErrorModel implements ISolutionErrorModel {
 
     private final String description;
     private final Integer linePosition;
 
-    public ImmutableProgramErrorModel(String description, Integer linePosition) {
+    public ImmutableSolutionErrorModel(String description, Integer linePosition) {
         this.description = checkArgumentNotNull(description, "Description");
 
         if (linePosition != null) {

@@ -40,7 +40,7 @@ import dev.zemco.codegame.presentation.SimpleViewIdNavigator;
 import dev.zemco.codegame.presentation.ResourceFxmlViewSourceProvider;
 import dev.zemco.codegame.presentation.dialog.IDialogService;
 import dev.zemco.codegame.presentation.dialog.JavaFxDialogService;
-import dev.zemco.codegame.presentation.errors.CodeProgramErrorModelFactory;
+import dev.zemco.codegame.presentation.errors.CodeSolutionErrorModelFactory;
 import dev.zemco.codegame.presentation.problems.IProblemListModel;
 import dev.zemco.codegame.presentation.problems.ProblemListController;
 import dev.zemco.codegame.presentation.problems.ProblemListModel;
@@ -117,13 +117,17 @@ public class CodeGameApplication extends Application {
         ));
         IStageProvider stageProvider = new ImmutableStageProvider(primaryStage);
 
+        IProblemListModel problemListModel = new ProblemListModel(problemRepository);
+
         ISolutionModel solutionModel = new SolutionModel(
-            new CodeProgramErrorModelFactory(), compiler, evaluationService
+            problemListModel,
+            new CodeSolutionErrorModelFactory(),
+            compiler,
+            evaluationService
         );
-        IProblemListModel problemListModel = new ProblemListModel(problemRepository, solutionModel);
 
         // TODO: do this properly based on the contract
-        IControllerFactory viewControllerProvider = (controllerClass) -> {
+        IControllerFactory controllerProvider = (controllerClass) -> {
             if (SolutionController.class.equals(controllerClass)) {
                 return new SolutionController(solutionModel, this.navigator, dialogService, highlightStyleComputer);
             } else {
@@ -132,7 +136,7 @@ public class CodeGameApplication extends Application {
         };
 
         IViewProvider viewProvider = new FxmlViewProvider(
-            viewSourceProvider, viewControllerProvider, viewStylesheetProvider
+            viewSourceProvider, controllerProvider, viewStylesheetProvider
         );
         this.navigator = new SimpleViewIdNavigator(stageProvider, viewProvider);
 

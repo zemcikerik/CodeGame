@@ -18,7 +18,7 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 public class OutputSinkSatisfiedEvaluationStrategy implements IEvaluationStrategy {
 
     /**
-     * Checks if the {@link IOutputSink output sink} of the execution is satisfied.
+     * Evaluates the solution by checking if the {@link IOutputSink output sink} of the execution is satisfied.
      *
      * @param executionContext execution context to evaluate
      * @param problemCase problem case to check against, in this implementation ignored

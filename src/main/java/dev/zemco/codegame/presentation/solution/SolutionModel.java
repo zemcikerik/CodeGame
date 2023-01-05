@@ -1,6 +1,7 @@
 package dev.zemco.codegame.presentation.solution;
 
 import dev.zemco.codegame.evaluation.StepEvaluationException;
+import dev.zemco.codegame.presentation.problems.IProblemListModel;
 import dev.zemco.codegame.programs.InstructionDescriptor;
 import dev.zemco.codegame.compilation.IProgramCompiler;
 import dev.zemco.codegame.compilation.InvalidSyntaxException;
@@ -9,8 +10,8 @@ import dev.zemco.codegame.evaluation.IEvaluationService;
 import dev.zemco.codegame.evaluation.ISolutionEvaluator;
 import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
-import dev.zemco.codegame.presentation.errors.IProgramErrorModel;
-import dev.zemco.codegame.presentation.errors.IProgramErrorModelFactory;
+import dev.zemco.codegame.presentation.errors.ISolutionErrorModel;
+import dev.zemco.codegame.presentation.errors.ISolutionErrorModelFactory;
 import dev.zemco.codegame.presentation.execution.IMemoryCellObserver;
 import dev.zemco.codegame.presentation.execution.UpdatableMemoryCellObserverAdapter;
 import dev.zemco.codegame.problems.Problem;
@@ -31,7 +32,7 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 // TODO: either split this up into smaller classes or use state pattern
 public class SolutionModel implements ISolutionModel {
 
-    private final ReadOnlyObjectWrapper<Problem> problemProperty;
+    private final ObservableObjectValue<Problem> problemProperty;
     private final ReadOnlyBooleanWrapper canCompileProperty;
     private final ReadOnlyBooleanWrapper canExecuteProperty;
     private final ReadOnlyBooleanWrapper executionRunningProperty;
@@ -41,10 +42,10 @@ public class SolutionModel implements ISolutionModel {
     private final ReadOnlyObjectWrapper<Integer> nextInstructionLinePositionProperty;
     private final ReadOnlyObjectWrapper<ObservableList<IMemoryCellObserver>> memoryCellsProperty;
 
-    private final ReadOnlyObjectWrapper<IProgramErrorModel> syntaxErrorProperty;
-    private final ReadOnlyObjectWrapper<IProgramErrorModel> executionErrorProperty;
+    private final ReadOnlyObjectWrapper<ISolutionErrorModel> syntaxErrorProperty;
+    private final ReadOnlyObjectWrapper<ISolutionErrorModel> executionErrorProperty;
 
-    private final IProgramErrorModelFactory programErrorModelFactory;
+    private final ISolutionErrorModelFactory programErrorModelFactory;
     private final IProgramCompiler programCompiler;
     private final IEvaluationService evaluationService;
 
@@ -53,10 +54,12 @@ public class SolutionModel implements ISolutionModel {
     private List<UpdatableMemoryCellObserverAdapter> cellObservers;
 
     public SolutionModel(
-        IProgramErrorModelFactory programErrorModelFactory,
+        IProblemListModel problemListModel,
+        ISolutionErrorModelFactory programErrorModelFactory,
         IProgramCompiler programCompiler,
         IEvaluationService evaluationService
     ) {
+        checkArgumentNotNull(problemListModel, "Problem list model");
         this.programErrorModelFactory = checkArgumentNotNull(
             programErrorModelFactory, "Program error model factory"
         );
@@ -67,7 +70,8 @@ public class SolutionModel implements ISolutionModel {
         this.solutionEvaluator = null;
         this.cellObservers = null;
 
-        this.problemProperty = new ReadOnlyObjectWrapper<>(null);
+        this.problemProperty = problemListModel.selectedProblemProperty();
+
         this.canCompileProperty = new ReadOnlyBooleanWrapper(true);
         this.canExecuteProperty = new ReadOnlyBooleanWrapper(false);
         this.executionRunningProperty = new ReadOnlyBooleanWrapper(false);
@@ -82,13 +86,6 @@ public class SolutionModel implements ISolutionModel {
     }
 
     @Override
-    public void setProblem(Problem problem) {
-        checkArgumentNotNull(problem, "Problem");
-        this.problemProperty.set(problem);
-        this.resetAttempt();
-    }
-
-    @Override
     public void compileSolution(String program) {
         if (!this.canCompileProperty.get()) {
             throw new IllegalStateException("Cannot compile program!");
@@ -100,7 +97,7 @@ public class SolutionModel implements ISolutionModel {
         try {
             this.program = this.programCompiler.compileProgram(program);
         } catch (InvalidSyntaxException e) {
-            IProgramErrorModel errorModel = this.programErrorModelFactory.createProgramErrorModel(e);
+            ISolutionErrorModel errorModel = this.programErrorModelFactory.createSolutionErrorModel(e);
             this.syntaxErrorProperty.set(errorModel);
             return;
         }
@@ -146,7 +143,7 @@ public class SolutionModel implements ISolutionModel {
         try {
             this.solutionEvaluator.step();
         } catch (StepEvaluationException e) {
-            this.executionErrorProperty.set(this.programErrorModelFactory.createProgramErrorModel(e));
+            this.executionErrorProperty.set(this.programErrorModelFactory.createSolutionErrorModel(e));
             this.stopExecution();
             return;
         }
@@ -207,7 +204,7 @@ public class SolutionModel implements ISolutionModel {
 
     @Override
     public ObservableObjectValue<Problem> problemProperty() {
-        return this.problemProperty.getReadOnlyProperty();
+        return this.problemProperty;
     }
 
     @Override
@@ -246,12 +243,12 @@ public class SolutionModel implements ISolutionModel {
     }
 
     @Override
-    public ObservableObjectValue<IProgramErrorModel> syntaxErrorProperty() {
+    public ObservableObjectValue<ISolutionErrorModel> syntaxErrorProperty() {
         return this.syntaxErrorProperty.getReadOnlyProperty();
     }
 
     @Override
-    public ObservableObjectValue<IProgramErrorModel> executionErrorProperty() {
+    public ObservableObjectValue<ISolutionErrorModel> executionErrorProperty() {
         return this.executionErrorProperty.getReadOnlyProperty();
     }
 
