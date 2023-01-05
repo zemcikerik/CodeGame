@@ -10,8 +10,7 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
  * Each program consists of {@link #getInstructionDescriptors() instruction descriptors} and
  * {@link #getJumpLabelToLinePositionMap() jump label mappings}.
  * <p>
- * Programs in the context of this application may be solutions to problems created by the player.
- * Programs are immutable.
+ * Programs may be solutions to problems created by the player. Programs are immutable.
  *
  * @author Erik Zemčík
  */

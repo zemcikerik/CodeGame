@@ -3,22 +3,14 @@ package dev.zemco.codegame;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.zemco.codegame.compilation.CodeProgramCompiler;
 import dev.zemco.codegame.compilation.IProgramCompiler;
-import dev.zemco.codegame.compilation.parsing.FactorySingleIntegerParameterInstructionParser;
-import dev.zemco.codegame.compilation.parsing.FactorySingleParameterInstructionParser;
-import dev.zemco.codegame.compilation.parsing.IInstructionParser;
-import dev.zemco.codegame.compilation.parsing.SupplierInstructionParser;
+import dev.zemco.codegame.compilation.parsing.*;
 import dev.zemco.codegame.evaluation.OutputSinkSatisfiedEvaluationStrategy;
 import dev.zemco.codegame.evaluation.EvaluationService;
 import dev.zemco.codegame.evaluation.IEvaluationService;
 import dev.zemco.codegame.evaluation.IEvaluationStrategy;
 import dev.zemco.codegame.execution.ProgramExecutionService;
 import dev.zemco.codegame.execution.IExecutionService;
-import dev.zemco.codegame.execution.instructions.AdditionInstruction;
-import dev.zemco.codegame.execution.instructions.CopyFromInstruction;
-import dev.zemco.codegame.execution.instructions.CopyToInstruction;
-import dev.zemco.codegame.execution.instructions.InputInstruction;
-import dev.zemco.codegame.execution.instructions.JumpInstruction;
-import dev.zemco.codegame.execution.instructions.OutputInstruction;
+import dev.zemco.codegame.execution.instructions.*;
 import dev.zemco.codegame.execution.io.IInputSourceFactory;
 import dev.zemco.codegame.execution.io.IOutputSinkFactory;
 import dev.zemco.codegame.execution.io.IterableInputSource;
@@ -61,11 +53,8 @@ import java.util.Map;
 import java.util.Set;
 
 // global todos (some people have global variables, others have global todos)
-// TODO: remove functional interface annotations where applicable
-// TODO: check correct usage of terms program and solution in source code / get...ForSolutionAttempt
 // TODO: fix issues with UI scaling - min/pref/max sizes
 // TODO: fix formatting in tests
-// TODO: duplicate javadoc comments?
 public class CodeGameApplication extends Application {
 
     private INavigator navigator;
@@ -86,20 +75,22 @@ public class CodeGameApplication extends Application {
         IEvaluationStrategy evaluationStrategy = new OutputSinkSatisfiedEvaluationStrategy();
         IEvaluationService evaluationService = new EvaluationService(executionService, evaluationStrategy);
 
-        List<IInstructionParser> parsers = List.of(
+        IInstructionParser parser = new DelegatingInstructionParser(List.of(
             new SupplierInstructionParser("in", InputInstruction::new),
             new SupplierInstructionParser("out", OutputInstruction::new),
             new FactorySingleIntegerParameterInstructionParser("add", AdditionInstruction::new),
             new FactorySingleParameterInstructionParser("jump", JumpInstruction::new),
+            new FactorySingleParameterInstructionParser("jumpzero", JumpIfZeroInstruction::new),
             new FactorySingleIntegerParameterInstructionParser("save", CopyToInstruction::new),
             new FactorySingleIntegerParameterInstructionParser("load", CopyFromInstruction::new)
-        );
-        IProgramCompiler compiler = new CodeProgramCompiler(parsers, ProgramBuilder::new);
+        ));
+        IProgramCompiler compiler = new CodeProgramCompiler(parser, ProgramBuilder::new);
+
         IProblemRepository problemRepository = new UrlObjectMapperProblemRepository(
             CodeGameApplication.class.getResource("/problems.json"), new ObjectMapper()
         );
         IHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(
-            Set.of("in", "out", "add", "jump", "save", "load")
+            Set.of("in", "out", "add", "jump", "jumpzero", "save", "load")
         );
 
         IDialogService dialogService = new JavaFxDialogService();

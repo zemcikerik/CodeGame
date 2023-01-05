@@ -43,7 +43,7 @@ public class SolutionEvaluator implements ISolutionEvaluator {
         this.problemCase = checkArgumentNotNull(problemCase, "Problem case");
 
         this.hasErrored = false;
-        this.successful = false;
+        this.successful = evaluationStrategy.evaluateSolutionForProblemCase(executionContext, problemCase);
     }
 
     @Override

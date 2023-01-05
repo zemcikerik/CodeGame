@@ -18,11 +18,19 @@ public class JumpInstruction implements IInstruction {
     public void execute(IExecutionContext executionContext) throws InstructionExecutionException {
         IExecutionEngine engine = executionContext.getExecutionEngine();
 
+        if (!this.shouldPerformJump(executionContext)) {
+            return;
+        }
+
         try {
             engine.jumpToLabel(this.label);
         } catch (UnknownJumpLabelException e) {
             throw new InstructionExecutionException("Failed to perform a jump to label!", e);
         }
+    }
+
+    protected boolean shouldPerformJump(IExecutionContext executionContext) throws InstructionExecutionException {
+        return true;
     }
 
 }

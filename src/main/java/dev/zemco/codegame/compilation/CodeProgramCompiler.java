@@ -1,29 +1,55 @@
 package dev.zemco.codegame.compilation;
 
 import dev.zemco.codegame.compilation.parsing.IInstructionParser;
-import dev.zemco.codegame.compilation.parsing.ParseException;
+import dev.zemco.codegame.compilation.parsing.InstructionParseException;
 import dev.zemco.codegame.execution.instructions.IInstruction;
 import dev.zemco.codegame.programs.IProgramBuilder;
 import dev.zemco.codegame.programs.IProgramBuilderFactory;
 import dev.zemco.codegame.programs.Program;
 
-import java.util.List;
+import java.util.Optional;
 
-import static dev.zemco.codegame.util.Preconditions.checkArgumentNotEmpty;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
+/**
+ * Implementation of a compiler, which compiles source code into an executable {@link Program program} using
+ * the CodeGame syntax. Instructions are parsed using provided {@link IInstructionParser instruction parser}
+ * and the final {@link Program program} is built using provided {@link IProgramBuilderFactory program builder factory}.
+ * <p>
+ * CodeGame syntax includes following features:
+ * <ul>
+ *     <li>every {@link IInstruction instruction} is exactly one line long</li>
+ *     <li>every jump label is exactly one line long</li>
+ *     <li>jump labels are prefixed using the {@link #JUMP_LABEL_PREFIX jump label prefix} and can contain
+ *         any non-whitespace character</li>
+ *     <li>comments are prefixed using the {@link #COMMENT_PREFIX comment prefix} and end at the end of the line</li>
+ *     <li>comments are completely ignored during compilation and may be placed
+ *         behind {@link IInstruction instructions} or jump labels</li>
+ *     <li>black lines / lines containing only whitespace/comments are completely ignored</li>
+ *     <li>duplicate jump labels are not allowed</li>
+ * </ul>
+ *
+ * @author Erik Zemčík
+ */
 public class CodeProgramCompiler implements IProgramCompiler {
 
-    private static final String COMMENT_PREFIX = ";";
-    private static final String JUMP_LABEL_PREFIX = ">";
-    private final List<IInstructionParser> instructionParsers;
+    public static final String COMMENT_PREFIX = ";";
+    public static final String JUMP_LABEL_PREFIX = ">";
+
+    private final IInstructionParser instructionParser;
     private final IProgramBuilderFactory programBuilderFactory;
 
-    public CodeProgramCompiler(
-        List<IInstructionParser> instructionParsers,
-        IProgramBuilderFactory programBuilderFactory
-    ) {
-        this.instructionParsers = checkArgumentNotEmpty(instructionParsers, "Instruction parsers");
+    /**
+     * Creates an instance of {@link CodeProgramCompiler}.
+     *
+     * @param instructionParser instruction parser for parsing instruction
+     * @param programBuilderFactory factory for building output {@link Program program}
+     *
+     * @throws IllegalArgumentException if {@code instructionParser} is {@code null} or
+     *                                  if {@code programBuilderFactory} is {@code null}
+     */
+    public CodeProgramCompiler(IInstructionParser instructionParser, IProgramBuilderFactory programBuilderFactory) {
+        this.instructionParser = checkArgumentNotNull(instructionParser, "Instruction parser");
         this.programBuilderFactory = checkArgumentNotNull(programBuilderFactory, "Program builder factory");
     }
 
@@ -90,21 +116,18 @@ public class CodeProgramCompiler implements IProgramCompiler {
         return false;
     }
 
-    // try to parse instruction line using provided instruction parsers
     private IInstruction parseInstruction(String instructionLine, int position) throws InvalidSyntaxException {
-        for (IInstructionParser parser : this.instructionParsers) {
-            // find first parser capable of parsing this instruction line
-            if (!parser.canParseInstruction(instructionLine)) {
-                continue;
-            }
+        try {
+            Optional<IInstruction> instruction = this.instructionParser.parseInstruction(instructionLine);
 
-            try {
-                return parser.parseInstruction(instructionLine);
-            } catch (ParseException e) {
-                throw new InvalidSyntaxException("Exception occurred during instruction parsing!", e, position);
+            if (instruction.isPresent()) {
+                return instruction.get();
             }
+        } catch (InstructionParseException e) {
+            throw new InvalidSyntaxException("Exception occurred during instruction parsing!", e, position);
         }
-        // no parser capable of parsing this instruction line was found
+
+        // parser was not capable of parsing this instruction line
         throw new InvalidSyntaxException("Unknown instruction!", position);
     }
 

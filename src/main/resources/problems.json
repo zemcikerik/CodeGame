@@ -1,13 +1,27 @@
 [
   {
-    "id": "07716f15-dd3a-47f9-89d7-1dac6bbfd772",
-    "name": "Test Problem",
-    "description": "Hello, World!",
+    "id": "a63cf079-f802-4e90-92c5-93acf2295ca5",
+    "name": "Simple Input/Output",
+    "description": "Take a value from the input and emit it to output.\n\nIntroducing instructions:\n • in - takes a value from an input into working cell\n • out - emits a value from the working cell into output\n\nIntroducing comments:\n → any text starting with ';' will be ignored until the end of line",
     "difficulty": 1,
     "cases": [
       {
-        "inputs": [1, 2, 3],
-        "expectedOutputs": [4, 5, 6],
+        "inputs": [1],
+        "expectedOutputs": [1],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [4],
+        "expectedOutputs": [4],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [-11],
+        "expectedOutputs": [-11],
         "memorySettings": {
           "size": 1
         }
@@ -15,29 +29,190 @@
     ]
   },
   {
-    "id": "ac69ab77-c798-4b3e-9d65-fb2921a664b2",
-    "name": "Test Problem with initial values",
-    "description": "Hello, World 2!",
-    "difficulty": 2,
+    "id": "145285de-8b4b-4488-8efc-b45eaf18d0c9",
+    "name": "More simple IO",
+    "description": "Take at least three values from input and emit them to output.",
+    "difficulty": 1,
     "cases": [
       {
         "inputs": [1, 2, 3],
-        "expectedOutputs": [4, 5, 6],
+        "expectedOutputs": [1, 2, 3],
         "memorySettings": {
-          "size": 2,
-          "initialValues": {
-            "1": 42
-          }
+          "size": 1
         }
       },
       {
-        "inputs": [1, 3, -5, 0],
-        "expectedOutputs": [4, 6, -2, 3],
+        "inputs": [11, -17],
+        "expectedOutputs": [11, -17],
         "memorySettings": {
-          "size": 2,
-          "initialValues": {
-            "1": 42
-          }
+          "size": 1
+        }
+      },
+      {
+        "inputs": [42],
+        "expectedOutputs": [42],
+        "memorySettings": {
+          "size": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "83242df9-04b4-420b-b227-227de135ce97",
+    "name": "Duplicate simple IO",
+    "description": "Take at least three values from input and emit them to output twice.",
+    "difficulty": 2,
+    "cases": [
+      {
+        "inputs": [1, 2, 6],
+        "expectedOutputs": [1, 1, 2, 2, 6, 6],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [7],
+        "expectedOutputs": [7, 7],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [2, 3, -11],
+        "expectedOutputs": [2, 2, 3, 3, -11, -11],
+        "memorySettings": {
+          "size": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "40329857-e312-4f3f-a183-211249c50e88",
+    "name": "Infinite simple IO",
+    "description": "Take all values from input and emit them to output.\n\nIntroducing instruction:\n • jump [label_name] - jumps to the first instruction defined after the jump label\n\nIntroducing jump labels:\n → indicate where your program should jump to\n → can be defined in a following way: \">[label_name]\"\n → they can contain any character except for space",
+    "difficulty": 3,
+    "cases": [
+      {
+        "inputs": [1, 2, 4, -11, 13, 37],
+        "expectedOutputs": [1, 2, 4, -11, 13, 37],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [7, -7, 7],
+        "expectedOutputs": [7, -7, 7],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [1, 1, 1, -1, 1, 1, 1, -1, 0, 0, 0, 8, 2, 4, 6, 1, 2, 3, 6, 7, 4, 12, 11, 44, 12, 34, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "expectedOutputs": [1, 1, 1, -1, 1, 1, 1, -1, 0, 0, 0, 8, 2, 4, 6, 1, 2, 3, 6, 7, 4, 12, 11, 44, 12, 34, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "memorySettings": {
+          "size": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "60837575-b949-4031-9b0e-1f03ede2854c",
+    "name": "Beginning of arithmetic",
+    "description": "Take at least three values from input and emit value bigger by two for each of them.\n\nIntroducing instruction:\n • add [constant] - adds an integer constant to value in the working cell",
+    "difficulty": 3,
+    "cases": [
+      {
+        "inputs": [6, 4, -2],
+        "expectedOutputs": [8, 6, 0],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [0, 4, 8],
+        "expectedOutputs": [2, 6, 10],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [42],
+        "expectedOutputs": [44],
+        "memorySettings": {
+          "size": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "3106f836-5c63-4064-a589-347bc95c9181",
+    "name": "Zero destroyer",
+    "description": "Take all values from input and emit only non-zero values.\n\nIntroducing instruction:\n • jumpzero [label_name] - jumps to the first instruction defined after the jump label if value in the working cell is 0",
+    "difficulty": 4,
+    "cases": [
+      {
+        "inputs": [3, 0, 2],
+        "expectedOutputs": [3, 2],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [11, 22, -33],
+        "expectedOutputs": [11, 22, -33],
+        "memorySettings": {
+          "size": 1
+        }
+      },
+      {
+        "inputs": [0, 0, 0, 0, 0, 0, 0, 0, 4],
+        "expectedOutputs": [4],
+        "memorySettings": {
+          "size": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "a195c0a6-525b-4f0c-af69-a7c43405cdcf",
+    "name": "Value switcher",
+    "description": "For each two values in input emit them in the reverse order.\n\nThe input is guaranteed to have a pair number of values. Memory has 3 additional cells available for all problem cases.\n\nIntroducing instructions:\n • save [address] - saves a value from the working cell in cell with the given address\n • load [address] - loads a value from cell with the given address into the working cell\n\nIntroducing memory:\n → stores values for later use\n → consists of cells with addresses starting at 1",
+    "difficulty": 5,
+    "cases": [
+      {
+        "inputs": [1, 2, 3, 7],
+        "expectedOutputs": [2, 1, 7, 3],
+        "memorySettings": {
+          "size": 4
+        }
+      },
+      {
+        "inputs": [1, 1],
+        "expectedOutputs": [1, 1],
+        "memorySettings": {
+          "size": 4
+        }
+      },
+      {
+        "inputs": [8, 16, -1, 1, 2, 4, 6, 4, 2, 3, 4, 5, 6, 4],
+        "expectedOutputs": [16, 8, 1, -1, 4, 2, 4, 6, 3, 2, 5, 4, 4, 6],
+        "memorySettings": {
+          "size": 4
+        }
+      }
+    ]
+  },
+  {
+    "id": "8a17a67f-8223-4fa3-a217-bd8fe60855bf",
+    "name": "Basic sums",
+    "description": "For each two values in input emit their sum.\n\nThe input is guaranteed to have a pair number of values. All values are guaranteed to be positive. Memory has 3 additional cells available for all problem cases.",
+    "difficulty": 7,
+    "cases": [
+      {
+        "inputs": [3, 2, 2, 1],
+        "expectedOutputs": [5, 3],
+        "memorySettings": {
+          "size": 4
         }
       }
     ]

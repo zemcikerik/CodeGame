@@ -41,7 +41,7 @@
                         <padding>
                             <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
                         </padding>
-                        <Label fx:id="problemDescriptionLabel"/>
+                        <Label fx:id="problemDescriptionLabel" wrapText="true"/>
                     </ScrollPane>
                 </TitledPane>
                 <TitledPane fx:id="executionPane" animated="false" text="Execution (Memory)">

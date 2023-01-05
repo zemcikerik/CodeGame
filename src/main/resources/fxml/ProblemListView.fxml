@@ -23,8 +23,8 @@
                 <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
             </padding>
             <VBox spacing="8.0" VBox.vgrow="ALWAYS">
-                <Label fx:id="problemNameLabel" text="Problem Name"/>
-                <Label fx:id="problemDescriptionLabel" text="Problem Description"/>
+                <Label fx:id="problemNameLabel"/>
+                <Label fx:id="problemDescriptionLabel" wrapText="true"/>
             </VBox>
             <HBox alignment="TOP_RIGHT">
                 <Button mnemonicParsing="false" onAction="#onPlayButtonClicked" text="Play"/>

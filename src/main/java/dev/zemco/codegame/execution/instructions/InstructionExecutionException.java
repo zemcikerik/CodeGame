@@ -2,10 +2,6 @@ package dev.zemco.codegame.execution.instructions;
 
 public class InstructionExecutionException extends Exception {
 
-    public InstructionExecutionException() {
-        super();
-    }
-
     public InstructionExecutionException(String message) {
         super(message);
     }
