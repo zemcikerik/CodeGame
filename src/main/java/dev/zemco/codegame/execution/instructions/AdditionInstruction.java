@@ -4,10 +4,10 @@ import dev.zemco.codegame.execution.IExecutionContext;
 import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 
-// TODO: abstract away binary operation
+import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 /**
- * {@link IInstruction Instruction} that adds constant to value held in working cell.
+ * Instruction that adds constant to value held in working {@link IMemoryCell memory cell}.
  * @author Erik Zemčík
  */
 public class AdditionInstruction implements IInstruction {
@@ -15,20 +15,24 @@ public class AdditionInstruction implements IInstruction {
     private final int addend;
 
     /**
-     * Creates an instance of {@link AdditionInstruction} with addition constant.
-     * @param addend constant to add to working cell during execution
+     * Creates an instance of {@link AdditionInstruction} with the specified addition constant.
+     * @param addend constant to add to working {@link IMemoryCell memory cell} during execution
      */
     public AdditionInstruction(int addend) {
         this.addend = addend;
     }
 
     /**
-     * Adds constant to value held in working cell.
+     * Adds constant to value held in working {@link IMemoryCell memory cell}.
      * @param executionContext context on which the instruction is executed
-     * @throws InstructionExecutionException if working cell has no value
+     *
+     * @throws IllegalArgumentException if {@code executionContext} is {@code null}
+     * @throws InstructionExecutionException if working {@link IMemoryCell memory cell} has no value
      */
     @Override
     public void execute(IExecutionContext executionContext) throws InstructionExecutionException {
+        checkArgumentNotNull(executionContext, "Execution context");
+
         IMemory memory = executionContext.getMemory();
         IMemoryCell workingCell = memory.getWorkingCell();
 

@@ -12,6 +12,8 @@ public interface IInstruction {
     /**
      * Executes instruction on a given {@link IExecutionContext context}.
      * @param executionContext context on which the instruction is executed
+     *
+     * @throws IllegalArgumentException if {@code executionContext} is {@code null}
      * @throws InstructionExecutionException if illegal state during execution is reached
      */
     void execute(IExecutionContext executionContext) throws InstructionExecutionException;
