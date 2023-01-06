@@ -34,7 +34,10 @@ public class UrlObjectMapperProblemRepositoryTest {
 
     @Test
     public void constructorShouldThrowIllegalArgumentExceptionIfUrlIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> new UrlObjectMapperProblemRepository(null, this.objectMapper));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new UrlObjectMapperProblemRepository(null, this.objectMapper)
+        );
     }
 
     @Test

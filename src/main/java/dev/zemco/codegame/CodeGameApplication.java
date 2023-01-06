@@ -54,7 +54,6 @@ import java.util.Set;
 
 // global todos (some people have global variables, others have global todos)
 // TODO: fix issues with UI scaling - min/pref/max sizes
-// TODO: fix formatting in tests
 public class CodeGameApplication extends Application {
 
     private INavigator navigator;
