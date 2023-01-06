@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.zemco.codegame.compilation.CodeProgramCompiler;
 import dev.zemco.codegame.compilation.IProgramCompiler;
 import dev.zemco.codegame.compilation.parsing.DelegatingInstructionParser;
+import dev.zemco.codegame.compilation.parsing.FactorySingleAddressParameterInstructionParser;
 import dev.zemco.codegame.compilation.parsing.FactorySingleIntegerParameterInstructionParser;
 import dev.zemco.codegame.compilation.parsing.FactorySingleParameterInstructionParser;
 import dev.zemco.codegame.compilation.parsing.IInstructionParser;
@@ -168,8 +169,8 @@ public final class Bootstrap {
             new FactorySingleIntegerParameterInstructionParser("add", AdditionInstruction::new),
             new FactorySingleParameterInstructionParser("jump", JumpInstruction::new),
             new FactorySingleParameterInstructionParser("jumpzero", JumpIfZeroInstruction::new),
-            new FactorySingleIntegerParameterInstructionParser("save", CopyToInstruction::new),
-            new FactorySingleIntegerParameterInstructionParser("load", CopyFromInstruction::new)
+            new FactorySingleAddressParameterInstructionParser("save", CopyToInstruction::new),
+            new FactorySingleAddressParameterInstructionParser("load", CopyFromInstruction::new)
         ));
 
         IProgramBuilderFactory programBuilderFactory = ProgramBuilder::new;
