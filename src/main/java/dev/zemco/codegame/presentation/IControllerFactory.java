@@ -14,7 +14,6 @@ public interface IControllerFactory {
      * @return controller
      *
      * @throws IllegalArgumentException if {@code controllerClass} is {@code null}
-     * TODO: throws when not known?
      */
     Object createController(Class<?> controllerClass);
 
