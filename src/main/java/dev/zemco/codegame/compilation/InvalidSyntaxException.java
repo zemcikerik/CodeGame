@@ -8,6 +8,9 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger
  */
 public class InvalidSyntaxException extends Exception {
 
+    /**
+     * Zero-based line position where the syntax error is located.
+     */
     private final int linePosition;
 
     /**

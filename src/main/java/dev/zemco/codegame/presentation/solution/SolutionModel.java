@@ -16,7 +16,6 @@ import dev.zemco.codegame.presentation.execution.IMemoryCellObserver;
 import dev.zemco.codegame.presentation.execution.UpdatableMemoryCellObserverAdapter;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.problems.ProblemCase;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableBooleanValue;
@@ -29,14 +28,20 @@ import java.util.List;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
-// TODO: either split this up into smaller classes or use state pattern
+/**
+ * Implementation of {@link SolutionModel solution model} evaluating solution created by player.
+ * Target {@link Problem problem} is provided by the {@link IProblemListModel problem list model}.
+ * This model uses the provided {@link IProgramCompiler} for compilation and {@link IEvaluationService} for evaluation.
+ *
+ * @author Erik Zemčík
+ * @see ISolutionModel
+ */
 public class SolutionModel implements ISolutionModel {
 
     private final ObservableObjectValue<Problem> problemProperty;
     private final ReadOnlyBooleanWrapper canCompileProperty;
-    private final ReadOnlyBooleanWrapper canExecuteProperty;
+    private final ReadOnlyBooleanWrapper canEvaluateProperty;
     private final ReadOnlyBooleanWrapper executionRunningProperty;
-    private final ReadOnlyBooleanWrapper executionAutoEnabledProperty;
     private final ReadOnlyBooleanWrapper canSubmitProperty;
 
     private final ReadOnlyObjectWrapper<Integer> nextInstructionLinePositionProperty;
@@ -49,77 +54,101 @@ public class SolutionModel implements ISolutionModel {
     private final IProgramCompiler programCompiler;
     private final IEvaluationService evaluationService;
 
-    private Program program;
+    private Program solution;
     private ISolutionEvaluator solutionEvaluator;
     private List<UpdatableMemoryCellObserverAdapter> cellObservers;
 
+    /**
+     * Creates an instance of {@link SolutionModel}.
+     *
+     * @param problemListModel source of the target {@link Problem problem}
+     * @param programCompiler compiler for compilation of player's solution source code
+     * @param evaluationService service for evaluating the player's solution
+     * @param programErrorModelFactory factory for creating errors indicating details about failure of player's solution
+     *
+     * @throws IllegalArgumentException if any parameter is {@code null}
+     */
     public SolutionModel(
         IProblemListModel problemListModel,
-        ISolutionErrorModelFactory programErrorModelFactory,
         IProgramCompiler programCompiler,
-        IEvaluationService evaluationService
+        IEvaluationService evaluationService,
+        ISolutionErrorModelFactory programErrorModelFactory
     ) {
         checkArgumentNotNull(problemListModel, "Problem list model");
+        this.programCompiler = checkArgumentNotNull(programCompiler, "Program compiler");
+        this.evaluationService = checkArgumentNotNull(evaluationService, "Evaluation service");
         this.programErrorModelFactory = checkArgumentNotNull(
             programErrorModelFactory, "Program error model factory"
         );
-        this.programCompiler = checkArgumentNotNull(programCompiler, "Program compiler");
-        this.evaluationService = checkArgumentNotNull(evaluationService, "Evaluation service");
-
-        this.program = null;
-        this.solutionEvaluator = null;
-        this.cellObservers = null;
 
         this.problemProperty = problemListModel.selectedProblemProperty();
+        this.canCompileProperty = new ReadOnlyBooleanWrapper();
+        this.canEvaluateProperty = new ReadOnlyBooleanWrapper();
+        this.executionRunningProperty = new ReadOnlyBooleanWrapper();
+        this.canSubmitProperty = new ReadOnlyBooleanWrapper();
 
-        this.canCompileProperty = new ReadOnlyBooleanWrapper(true);
-        this.canExecuteProperty = new ReadOnlyBooleanWrapper(false);
-        this.executionRunningProperty = new ReadOnlyBooleanWrapper(false);
-        this.executionAutoEnabledProperty = new ReadOnlyBooleanWrapper(false);
-        this.canSubmitProperty = new ReadOnlyBooleanWrapper(false);
+        this.nextInstructionLinePositionProperty = new ReadOnlyObjectWrapper<>();
+        this.memoryCellsProperty = new ReadOnlyObjectWrapper<>();
 
-        this.nextInstructionLinePositionProperty = new ReadOnlyObjectWrapper<>(null);
-        this.memoryCellsProperty = new ReadOnlyObjectWrapper<>(null);
+        this.syntaxErrorProperty = new ReadOnlyObjectWrapper<>();
+        this.executionErrorProperty = new ReadOnlyObjectWrapper<>();
 
-        this.syntaxErrorProperty = new ReadOnlyObjectWrapper<>(null);
-        this.executionErrorProperty = new ReadOnlyObjectWrapper<>(null);
+        this.resetAttempt();
     }
 
     @Override
-    public void compileSolution(String program) {
-        if (!this.canCompileProperty.get()) {
-            throw new IllegalStateException("Cannot compile program!");
-        }
+    public void resetAttempt() {
+        this.canCompileProperty.set(true);
+        this.canEvaluateProperty.set(false);
+        this.executionRunningProperty.set(false);
+        this.canSubmitProperty.set(false);
 
-        checkArgumentNotNull(program, "Program");
+        this.nextInstructionLinePositionProperty.set(null);
+        this.memoryCellsProperty.set(null);
+
+        this.syntaxErrorProperty.set(null);
+        this.executionErrorProperty.set(null);
+
+        this.solution = null;
+        this.solutionEvaluator = null;
+        this.cellObservers = null;
+    }
+
+    @Override
+    public void compileSolution(String sourceCode) {
+        checkArgumentNotNull(sourceCode, "Source code");
+        this.checkValidState(this.canCompileProperty, "compile solution");
+
         this.canCompileProperty.set(false);
 
         try {
-            this.program = this.programCompiler.compileProgram(program);
+            this.solution = this.programCompiler.compileProgram(sourceCode);
         } catch (InvalidSyntaxException e) {
-            ISolutionErrorModel errorModel = this.programErrorModelFactory.createSolutionErrorModel(e);
-            this.syntaxErrorProperty.set(errorModel);
+            this.syntaxErrorProperty.set(this.programErrorModelFactory.createSolutionErrorModel(e));
             return;
         }
 
-        this.canExecuteProperty.set(true);
+        this.canEvaluateProperty.set(true);
+        this.canSubmitProperty.set(true);
     }
 
     @Override
-    public void startExecution() {
-        if (!this.canExecuteProperty.get()) {
-            throw new IllegalStateException("Cannot start program execution!");
-        }
+    public void startTestEvaluation() {
+        this.checkValidState(this.canEvaluateProperty, "start test evaluation");
 
-        // grab first problem case
-        ProblemCase problemCase = this.problemProperty.get().getCases().get(0);
-        this.solutionEvaluator = this.evaluationService.getEvaluatorForProblemCaseSolution(this.program, problemCase);
+        ProblemCase problemCase = this.getTestProblemCase();
+        this.solutionEvaluator = this.evaluationService.getEvaluatorForProblemCaseSolution(this.solution, problemCase);
 
         IMemory memory = this.solutionEvaluator.getExecutionContext().getMemory();
         this.observeMemoryCells(memory, problemCase);
 
         this.updateNextInstructionLinePositionFromEvaluator();
         this.executionRunningProperty.set(true);
+    }
+
+    private ProblemCase getTestProblemCase() {
+        // every problem is guaranteed to have at least one problem case
+        return this.problemProperty.get().getCases().get(0);
     }
 
     private void observeMemoryCells(IMemory memory, ProblemCase problemCase) {
@@ -135,25 +164,23 @@ public class SolutionModel implements ISolutionModel {
     }
 
     @Override
-    public void stepExecution() {
-        if (!this.executionRunningProperty.get()) {
-            throw new IllegalStateException("Cannot step execution while it is not running!");
-        }
+    public void stepTestEvaluation() {
+        this.checkValidState(this.executionRunningProperty, "step test execution");
 
         try {
             this.solutionEvaluator.step();
         } catch (StepEvaluationException e) {
             this.executionErrorProperty.set(this.programErrorModelFactory.createSolutionErrorModel(e));
-            this.stopExecution();
+            this.stopTestEvaluation();
+            this.canSubmitProperty.set(false);
             return;
         }
 
+        // update memory cell observers as the state of the underlying execution may have changed due to the step
         this.cellObservers.forEach(UpdatableMemoryCellObserverAdapter::updateValue);
 
         if (this.solutionEvaluator.hasFinished()) {
-            this.canSubmitProperty.set(this.solutionEvaluator.isSuccessful());
-            this.stopExecution();
-            this.canExecuteProperty.set(false);
+            this.stopTestEvaluation();
         } else {
             this.updateNextInstructionLinePositionFromEvaluator();
         }
@@ -170,10 +197,8 @@ public class SolutionModel implements ISolutionModel {
     }
 
     @Override
-    public void stopExecution() {
-        if (!this.executionRunningProperty.get()) {
-            throw new IllegalStateException("Cannot stop execution while it is not running!");
-        }
+    public void stopTestEvaluation() {
+        this.checkValidState(this.executionRunningProperty, "stop test evaluation");
 
         this.executionRunningProperty.set(false);
         this.nextInstructionLinePositionProperty.set(null);
@@ -181,26 +206,19 @@ public class SolutionModel implements ISolutionModel {
 
     @Override
     public boolean submitSolution() {
-        if (!this.canSubmitProperty.get()) {
-            // TODO: message
-            throw new IllegalStateException("Cannot submit attempt without validation!");
-        }
+        this.checkValidState(this.canSubmitProperty, "submit solution");
 
         this.canSubmitProperty.set(false);
 
         Problem problem = this.problemProperty.get();
-        return this.evaluationService.evaluateSolutionOnAllProblemCases(this.program, problem);
+        return this.evaluationService.evaluateSolutionOnAllProblemCases(this.solution, problem);
     }
 
-    @Override
-    public void resetAttempt() {
-        // TODO: implement this properly
-        this.canCompileProperty.set(true);
-        this.canExecuteProperty.set(false);
-        this.canSubmitProperty.set(false);
-        this.memoryCellsProperty.set(null);
-        this.syntaxErrorProperty.set(null);
-        this.executionErrorProperty.set(null);
+    private void checkValidState(ObservableBooleanValue stateValidProperty, String operationName) {
+        if (!stateValidProperty.get()) {
+            String message = String.format("Solution model cannot currently %s!", operationName);
+            throw new IllegalStateException(message);
+        }
     }
 
     @Override
@@ -214,17 +232,17 @@ public class SolutionModel implements ISolutionModel {
     }
 
     @Override
-    public ObservableBooleanValue canExecuteProperty() {
-        return this.canExecuteProperty.getReadOnlyProperty();
+    public ObservableBooleanValue canEvaluateProperty() {
+        return this.canEvaluateProperty.getReadOnlyProperty();
     }
 
     @Override
     public ObservableBooleanValue canStepProperty() {
-        return Bindings.and(this.executionRunningProperty, this.executionAutoEnabledProperty.not());
+        return this.executionRunningProperty.getReadOnlyProperty();
     }
 
     @Override
-    public ObservableBooleanValue executionRunningProperty() {
+    public ObservableBooleanValue evaluationRunningProperty() {
         return this.executionRunningProperty.getReadOnlyProperty();
     }
 

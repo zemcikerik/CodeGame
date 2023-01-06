@@ -20,9 +20,8 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
  * <ul>
  *     <li>every {@link IInstruction instruction} is exactly one line long</li>
  *     <li>every jump label is exactly one line long</li>
- *     <li>jump labels are prefixed using the {@link #JUMP_LABEL_PREFIX jump label prefix} and can contain
- *         any non-whitespace character</li>
- *     <li>comments are prefixed using the {@link #COMMENT_PREFIX comment prefix} and end at the end of the line</li>
+ *     <li>jump labels are prefixed using '>' and can contain any non-whitespace character</li>
+ *     <li>comments are prefixed using ';' and end at the end of the line</li>
  *     <li>comments are completely ignored during compilation and may be placed
  *         behind {@link IInstruction instructions} or jump labels</li>
  *     <li>black lines / lines containing only whitespace/comments are completely ignored</li>
@@ -33,8 +32,8 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
  */
 public class CodeProgramCompiler implements IProgramCompiler {
 
-    public static final String COMMENT_PREFIX = ";";
-    public static final String JUMP_LABEL_PREFIX = ">";
+    private static final String COMMENT_PREFIX = ";";
+    private static final String JUMP_LABEL_PREFIX = ">";
 
     private final IInstructionParser instructionParser;
     private final IProgramBuilderFactory programBuilderFactory;

@@ -111,10 +111,8 @@ public class CodeGameApplication extends Application {
         IProblemListModel problemListModel = new ProblemListModel(problemRepository);
 
         ISolutionModel solutionModel = new SolutionModel(
-            problemListModel,
-            new SimpleSolutionErrorModelFactory(),
-            compiler,
-            evaluationService
+            problemListModel, compiler, evaluationService,
+            new SimpleSolutionErrorModelFactory()
         );
 
         // TODO: do this properly based on the contract

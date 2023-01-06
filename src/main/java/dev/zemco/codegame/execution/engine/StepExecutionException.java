@@ -8,13 +8,16 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentPositiveInteger
  */
 public class StepExecutionException extends RuntimeException {
 
+    /**
+     * Zero-based line position related to the executed instruction.
+     */
     private final int linePosition;
 
     /**
      * Creates an instance of {@link StepExecutionException}.
      * @param message detail message containing information about the state of the execution
      * @param cause exception thrown by instruction during execution
-     * @param linePosition index of the line that was executed
+     * @param linePosition zero-based index of the line that was executed
      * @throws IllegalArgumentException if {@code linePosition} is not a positive integer
      */
     public StepExecutionException(String message, Throwable cause, int linePosition) {

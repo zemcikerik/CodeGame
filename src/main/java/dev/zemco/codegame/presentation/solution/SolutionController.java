@@ -38,13 +38,16 @@ import static javafx.beans.binding.Bindings.not;
  * <p>
  * User solves this problem by writing a source code for a program that satisfies the {@link Problem problem's}
  * conditions. When user wants to test his solution, he can try to compile the program. If compilation fails,
- * information about the failure is presented. When compilation succeeds, evaluation of the solution becomes available.
+ * information about the failure is presented. When compilation succeeds, test evaluation of the solution
+ * becomes available.
  * <p>
- * Once user starts the evaluation, he is presented with the current state of the execution. He may step through
- * the execution. Once the execution successfully satisfies the given {@link Problem problem}, execution ends,
- * and he may submit the solution for evaluation on all hidden cases. If this final evaluation succeeds,
- * the written source code is considered as a valid solution to a given {@link Problem problem}. If the evaluation
- * however fails, user is presented with the information about the failure.
+ * Once user starts the test evaluation, he is presented with the current state of the execution. He may step through
+ * the execution. Once the execution successfully satisfies the given {@link Problem problem}, the execution ends.
+ * If the execution however fails, user is presented with detailed information about the failure.
+ * <p>
+ * When the user is sure about validity of his solution, he may submit the solution for evaluation on all cases.
+ * If this final evaluation succeeds, the written source code is considered as a valid solution to a given
+ * {@link Problem problem}. If this final evaluation fails, no details about the failure are provided.
  * <p>
  * This controller is intended to be {@link #initialize() initialized} using the JavaFX FXML toolkit, as it requires
  * view nodes to be injected using property injection. Target properties are annotated with the {@link FXML} annotation.
@@ -90,7 +93,7 @@ public class SolutionController {
     private Button compileButton;
 
     @FXML
-    private Button toggleExecutionButton;
+    private Button toggleEvaluation;
 
     @FXML
     private Button submitButton;
@@ -138,7 +141,7 @@ public class SolutionController {
     private void initialize() {
         this.listenerSubscriptions = new ArrayList<>();
 
-        this.backButton.disableProperty().bind(this.model.executionRunningProperty());
+        this.backButton.disableProperty().bind(this.model.evaluationRunningProperty());
 
         this.initializeProblemDetailPresentation();
         this.initializeSourceCodeEditorPresentation();
@@ -159,7 +162,7 @@ public class SolutionController {
     }
 
     private void initializeSourceCodeEditorPresentation() {
-        this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
+        this.codeArea.disableProperty().bind(this.model.evaluationRunningProperty());
         this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
 
         // trigger alert, thanks RichTextFX
@@ -179,9 +182,9 @@ public class SolutionController {
     private void initializeEvaluationControlPresentation() {
         this.compileButton.disableProperty().bind(not(this.model.canCompileProperty()));
 
-        this.toggleExecutionButton.disableProperty().bind(not(this.model.canExecuteProperty()));
-        this.toggleExecutionButton.textProperty().bind(
-            Bindings.when(this.model.executionRunningProperty())
+        this.toggleEvaluation.disableProperty().bind(not(this.model.canEvaluateProperty()));
+        this.toggleEvaluation.textProperty().bind(
+            Bindings.when(this.model.evaluationRunningProperty())
                 .then("Stop")
                 .otherwise("Start")
         );
@@ -189,7 +192,7 @@ public class SolutionController {
         this.stepButton.disableProperty().bind(not(this.model.canStepProperty()));
         this.submitButton.disableProperty().bind(not(this.model.canSubmitProperty()));
 
-        this.executionPane.disableProperty().bind(not(this.model.executionRunningProperty()));
+        this.executionPane.disableProperty().bind(not(this.model.evaluationRunningProperty()));
         this.memoryView.itemsProperty().bind(this.model.memoryCellsProperty());
 
         this.subscribeToProperty(this.model.nextInstructionLinePositionProperty(), this::onNextInstructionLineChanged);
@@ -228,12 +231,12 @@ public class SolutionController {
     }
 
     @FXML
-    private void onToggleExecutionButtonClicked() {
-        if (this.model.executionRunningProperty().get()) {
-            this.model.stopExecution();
+    private void onToggleEvaluationButtonClicked() {
+        if (this.model.evaluationRunningProperty().get()) {
+            this.model.stopTestEvaluation();
             this.infoAccordion.setExpandedPane(this.descriptionPane);
         } else {
-            this.model.startExecution();
+            this.model.startTestEvaluation();
             this.infoAccordion.setExpandedPane(this.executionPane);
         }
     }
@@ -245,14 +248,14 @@ public class SolutionController {
             this.dialogService.showInformationDialog("Submission Success", message);
             this.navigateToPreviousRoute();
         } else {
-            String message = "Evaluation failed for some hidden problem cases!";
+            String message = "Evaluation failed for some cases!";
             this.dialogService.showErrorDialog("Evaluation Failure", message);
         }
     }
 
     @FXML
     private void onStepButtonClicked() {
-        this.model.stepExecution();
+        this.model.stepTestEvaluation();
     }
 
     /**
