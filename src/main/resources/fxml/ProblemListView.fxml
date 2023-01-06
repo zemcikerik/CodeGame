@@ -8,25 +8,28 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ScrollPane?>
 <VBox xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="dev.zemco.codegame.presentation.problems.ProblemListController">
-    <HBox alignment="CENTER_LEFT" minWidth="40.0" prefHeight="40.0">
+    <HBox alignment="CENTER_LEFT" minHeight="40">
         <padding>
-            <Insets left="16.0" right="16.0"/>
+            <Insets left="16" right="16"/>
         </padding>
         <Label text="CodeGame" styleClass="title-label"/>
     </HBox>
     <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
-        <ListView fx:id="problemListView" prefHeight="200.0" prefWidth="200.0"/>
-        <VBox fx:id="detailBox" spacing="8.0">
+        <ListView fx:id="problemListView" minWidth="192"/>
+        <VBox fx:id="detailBox" minWidth="256" spacing="8">
             <padding>
-                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                <Insets top="16" right="16" bottom="16" left="16"/>
             </padding>
-            <VBox spacing="8.0" VBox.vgrow="ALWAYS">
-                <Label fx:id="problemNameLabel"/>
-                <Label fx:id="problemDescriptionLabel" wrapText="true"/>
-            </VBox>
-            <HBox alignment="TOP_RIGHT">
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                <VBox spacing="8">
+                    <Label fx:id="problemNameLabel"/>
+                    <Label fx:id="problemDescriptionLabel" wrapText="true"/>
+                </VBox>
+            </ScrollPane>
+            <HBox alignment="CENTER_RIGHT">
                 <Button mnemonicParsing="false" onAction="#onPlayButtonClicked" text="Play"/>
             </HBox>
         </VBox>

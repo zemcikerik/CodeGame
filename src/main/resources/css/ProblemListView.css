@@ -1,0 +1,8 @@
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+#problemNameLabel {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

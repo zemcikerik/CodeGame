@@ -67,7 +67,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
-import static java.util.Collections.emptyList;
 
 /**
  * Bootstraps all needed application components. If new components / dependencies are added to the project,
@@ -210,7 +209,7 @@ public final class Bootstrap {
 
     private IViewStylesheetProvider createViewStylesheetProvider() {
         return new ImmutableViewStylesheetProvider(Map.of(
-            "problem-list", emptyList(),
+            "problem-list", List.of("/css/ProblemListView.css"),
             "solution", List.of("/css/SolutionView.css")
         ));
     }

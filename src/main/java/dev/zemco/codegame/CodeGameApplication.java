@@ -14,7 +14,14 @@ import javafx.stage.Stage;
  */
 public class CodeGameApplication extends Application {
 
+    private static final String APP_TITLE = "CodeGame";
     private static final String INITIAL_VIEW_ID = "problem-list";
+
+    private static final int DEFAULT_WIDTH = 640;
+    private static final int DEFAULT_HEIGHT = 360;
+
+    private static final int MIN_WIDTH = 470;
+    private static final int MIN_HEIGHT = 240;
 
     /**
      * Entrypoint for CodeGame that launches the application.
@@ -33,10 +40,14 @@ public class CodeGameApplication extends Application {
         IViewProvider viewProvider = Bootstrap.bootstrap(CodeGameApplication.class, primaryStage);
 
         Parent problemListView = viewProvider.getViewById(INITIAL_VIEW_ID);
-        Scene scene = new Scene(problemListView, 640, 360);
+        Scene scene = new Scene(problemListView, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         scene.getStylesheets().add("/css/styles.css");
 
+        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(MIN_HEIGHT);
+
         primaryStage.setScene(scene);
+        primaryStage.setTitle(APP_TITLE);
         primaryStage.show();
     }
 

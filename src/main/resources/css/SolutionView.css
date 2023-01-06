@@ -22,3 +22,12 @@
 .execution-error {
     -fx-background-color: rgba(200, 0, 0, 0.5);
 }
+
+/* while we force memory view columns to only take half of the memory view table, sometimes */
+/* due to a rounding error horizontal scrollbar still appears, so we forcibly hide it through styles */
+#memoryView .scroll-bar:horizontal {
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+    -fx-opacity: 0;
+}

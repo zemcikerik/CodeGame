@@ -70,6 +70,7 @@ public class ProblemListController {
     private void initialize() {
         this.problemListView.itemsProperty().bind(this.model.problemsProperty());
         this.initializeProblemSelectionListener();
+        this.preselectCurrentProblemInListView();
 
         // show problem details only when a problem is selected
         this.detailBox.visibleProperty().bind(
@@ -97,6 +98,20 @@ public class ProblemListController {
         ChangeListener<Problem> selectionListener = this::onProblemListViewItemSelection;
         selectedItemProperty.addListener(selectionListener);
         this.problemSelectionSubscription = () -> selectedItemProperty.removeListener(selectionListener);
+    }
+
+    /**
+     * Preselects the currently selected problem by the {@link IProblemListModel problem list model} in
+     * the {@link #problemListView problem list view}. This is useful during initialization, when model can already
+     * have a problem selected, and the list view needs to be updated.
+     */
+    private void preselectCurrentProblemInListView() {
+        Problem problem = this.model.selectedProblemProperty().get();
+
+        if (problem != null) {
+            this.problemListView.getSelectionModel().select(problem);
+            this.problemListView.scrollTo(problem);
+        }
     }
 
     /**
