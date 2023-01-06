@@ -1,19 +1,21 @@
 package dev.zemco.codegame.presentation.solution;
 
+import dev.zemco.codegame.presentation.IListenerSubscription;
 import dev.zemco.codegame.presentation.INavigator;
 import dev.zemco.codegame.presentation.dialog.IDialogService;
+import dev.zemco.codegame.presentation.highlighting.IHighlightStyleComputer;
 import dev.zemco.codegame.presentation.solution.errors.ISolutionErrorModel;
 import dev.zemco.codegame.presentation.execution.MemoryView;
 import dev.zemco.codegame.problems.Problem;
 import dev.zemco.codegame.util.BindingUtils;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TitledPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -21,12 +23,38 @@ import org.fxmisc.richtext.model.Paragraph;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.collection.ListModification;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
+import static javafx.beans.binding.Bindings.not;
 
+/**
+ * Controller for the solution view that manipulates provided {@link ISolutionModel solution model}.
+ * The solution view presents the details about the {@link Problem problem} to solve.
+ * <p>
+ * User solves this problem by writing a source code for a program that satisfies the {@link Problem problem's}
+ * conditions. When user wants to test his solution, he can try to compile the program. If compilation fails,
+ * information about the failure is presented. When compilation succeeds, evaluation of the solution becomes available.
+ * <p>
+ * Once user starts the evaluation, he is presented with the current state of the execution. He may step through
+ * the execution. Once the execution successfully satisfies the given {@link Problem problem}, execution ends,
+ * and he may submit the solution for evaluation on all hidden cases. If this final evaluation succeeds,
+ * the written source code is considered as a valid solution to a given {@link Problem problem}. If the evaluation
+ * however fails, user is presented with the information about the failure.
+ * <p>
+ * This controller is intended to be {@link #initialize() initialized} using the JavaFX FXML toolkit, as it requires
+ * view nodes to be injected using property injection. Target properties are annotated with the {@link FXML} annotation.
+ * <p>
+ * Some event handler methods are directly referenced by the solution view, and are intended to be bound
+ * by JavaFX. These event handlers are also annotated with the {@link FXML} annotation.
+ *
+ * @author Erik Zemčík
+ * @see ISolutionModel
+ */
 public class SolutionController {
 
     private static final Collection<String> DEFAULT_LINE_STYLES = Collections.emptyList();
@@ -70,17 +98,24 @@ public class SolutionController {
     @FXML
     private Button stepButton;
 
-    @FXML
-    private CheckBox autoEnabledCheckbox;
-
-    @FXML
-    private Slider autoSpeedSlider;
-
     private final ISolutionModel model;
     private final INavigator navigator;
     private final IDialogService dialogService;
     private final IHighlightStyleComputer highlightStyleComputer;
+    private List<IListenerSubscription> listenerSubscriptions;
 
+    /**
+     * Creates an instance of {@link SolutionController}.
+     * Instances created using this constructor are not ready for use, as they are required to be initialized
+     * by the JavaFX FXML toolkit.
+     *
+     * @param model solution model to manipulate
+     * @param navigator navigator to use for navigation to different views
+     * @param dialogService dialog service for presenting modal dialogs about the state of evaluation
+     * @param highlightStyleComputer computer of highlight styles for user's solution
+     *
+     * @throws IllegalArgumentException if any argument is {@code null}
+     */
     public SolutionController(
         ISolutionModel model,
         INavigator navigator,
@@ -95,11 +130,25 @@ public class SolutionController {
         );
     }
 
-    // TODO: split this up into smaller parts
+    /**
+     * Invoked by the JavaFX FXML toolkit after property injection and event binding is finished.
+     * Initializes advanced bindings that are not available for use through FXML.
+     */
     @FXML
     private void initialize() {
+        this.listenerSubscriptions = new ArrayList<>();
+
         this.backButton.disableProperty().bind(this.model.executionRunningProperty());
 
+        this.initializeProblemDetailPresentation();
+        this.initializeSourceCodeEditorPresentation();
+        this.initializeEvaluationControlPresentation();
+        this.initializeSolutionErrorPresentation();
+
+        this.model.resetAttempt();
+    }
+
+    private void initializeProblemDetailPresentation() {
         this.problemNameLabel.textProperty().bind(
             BindingUtils.map(this.model.problemProperty(), Problem::getName)
         );
@@ -107,39 +156,65 @@ public class SolutionController {
         this.problemDescriptionLabel.textProperty().bind(
             BindingUtils.map(this.model.problemProperty(), Problem::getDescription)
         );
+    }
 
+    private void initializeSourceCodeEditorPresentation() {
         this.codeArea.disableProperty().bind(this.model.executionRunningProperty());
         this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
 
-        this.codeArea.getParagraphs().addModificationObserver(modification -> {
+        // trigger alert, thanks RichTextFX
+        // observes changed paragraphs in the code area
+        // wildcard in paragraph generic was used to simplify the type, as this observer does not need paragraph styles
+        Consumer<ListModification<? extends Paragraph<?, String, Collection<String>>>> observer = modification -> {
             // this observer is fired before the code area finishes its internal update process, so we queue up
             // this event handler to be run by the JavaFX event loop after the internal update process finishes
             Platform.runLater(() -> this.onCodeAreaParagraphChanged(modification));
-        });
+        };
 
-        this.executionPane.disableProperty().bind(Bindings.not(this.model.executionRunningProperty()));
-        this.memoryView.itemsProperty().bind(this.model.memoryCellsProperty());
+        var paragraphs = this.codeArea.getParagraphs();
+        paragraphs.addModificationObserver(observer);
+        this.listenerSubscriptions.add(() -> paragraphs.removeModificationObserver(observer));
+    }
 
-        this.compileButton.disableProperty().bind(Bindings.not(this.model.canCompileProperty()));
+    private void initializeEvaluationControlPresentation() {
+        this.compileButton.disableProperty().bind(not(this.model.canCompileProperty()));
 
-        this.toggleExecutionButton.disableProperty().bind(Bindings.not(this.model.canExecuteProperty()));
+        this.toggleExecutionButton.disableProperty().bind(not(this.model.canExecuteProperty()));
         this.toggleExecutionButton.textProperty().bind(
             Bindings.when(this.model.executionRunningProperty())
                 .then("Stop")
                 .otherwise("Start")
         );
 
-        this.submitButton.disableProperty().bind(Bindings.not(this.model.canSubmitProperty()));
-        this.stepButton.disableProperty().bind(Bindings.not(this.model.canStepProperty()));
+        this.stepButton.disableProperty().bind(not(this.model.canStepProperty()));
+        this.submitButton.disableProperty().bind(not(this.model.canSubmitProperty()));
 
-        this.model.syntaxErrorProperty().addListener(this::onSyntaxErrorChanged);
-        this.model.executionErrorProperty().addListener(this::onExecutionErrorChanged);
-        this.model.nextInstructionLinePositionProperty().addListener(this::onNextInstructionLineChanged);
+        this.executionPane.disableProperty().bind(not(this.model.executionRunningProperty()));
+        this.memoryView.itemsProperty().bind(this.model.memoryCellsProperty());
+
+        this.subscribeToProperty(this.model.nextInstructionLinePositionProperty(), this::onNextInstructionLineChanged);
+    }
+
+    private void initializeSolutionErrorPresentation() {
+        this.subscribeToProperty(this.model.syntaxErrorProperty(), this::onSyntaxErrorChanged);
+        this.subscribeToProperty(this.model.executionErrorProperty(), this::onExecutionErrorChanged);
+    }
+
+    /**
+     * Subscribes to a given property and tracks the subscription.
+     *
+     * @param property property to listen to
+     * @param listener listener of property changes
+     * @param <T> property value type
+     */
+    private <T> void subscribeToProperty(ObservableObjectValue<T> property, ChangeListener<T> listener) {
+        property.addListener(listener);
+        this.listenerSubscriptions.add(() -> property.removeListener(listener));
     }
 
     @FXML
     private void onBackButtonClicked() {
-        this.navigator.navigateTo("problem-list");
+        this.navigateToPreviousRoute();
     }
 
     @FXML
@@ -168,7 +243,7 @@ public class SolutionController {
         if (this.model.submitSolution()) {
             String message = "Congratulations! You solved this problem!";
             this.dialogService.showInformationDialog("Submission Success", message);
-            this.navigator.navigateTo("problem-list");
+            this.navigateToPreviousRoute();
         } else {
             String message = "Evaluation failed for some hidden problem cases!";
             this.dialogService.showErrorDialog("Evaluation Failure", message);
@@ -180,15 +255,21 @@ public class SolutionController {
         this.model.stepExecution();
     }
 
+    /**
+     * Recomputes highlight styles for modified paragraphs (lines) using the given {@link IHighlightStyleComputer}.
+     * This method is invoked by the code area when the source code is modified.
+     *
+     * @param modification information about the modified paragraphs
+     */
     private void onCodeAreaParagraphChanged(
-        ListModification<? extends Paragraph<Collection<String>, String, Collection<String>>> modification
+        ListModification<? extends Paragraph<?, String, Collection<String>>> modification
     ) {
         // prevent triggering of this observer by changes done by this observer or by deletion of entire lines
         if (modification.getAddedSize() == 0) {
             return;
         }
 
-        // for each modified paragraph
+        // for each modified paragraph (line)
         for (int paragraph = modification.getFrom(); paragraph < modification.getTo(); paragraph++) {
             int paragraphLength = this.codeArea.getParagraphLength(paragraph);
             String modifiedText = this.codeArea.getText(paragraph, 0, paragraph, paragraphLength);
@@ -220,15 +301,6 @@ public class SolutionController {
         this.updateLineStyles(oldPosition, newPosition, NEXT_INSTRUCTION_LINE_STYLES);
     }
 
-    private void showFormattedErrorDialog(String title, String errorTag, ISolutionErrorModel errorModel) {
-        String lineIndicator = errorModel.getLinePosition()
-            .map(linePosition -> String.format(" on line %d", linePosition + 1))
-            .orElse("");
-
-        String message = String.format("There was %s%s!%n%n%s", errorTag, lineIndicator, errorModel.getDescription());
-        this.dialogService.showErrorDialog(title, message);
-    }
-
     private void updateErrorLineStyles(
         ISolutionErrorModel oldError,
         ISolutionErrorModel newError,
@@ -243,14 +315,52 @@ public class SolutionController {
         return errorModel != null ? errorModel.getLinePosition().orElse(null) : null;
     }
 
+    /**
+     * Clears the paragraph styles at the old position when it contains the new position styles,
+     * and applies the new position styles to the new position.
+     * This can be interpreted as moving the styles to different paragraph.
+     *
+     * @param oldPosition old position to update
+     * @param newPosition new position to update
+     * @param newPositionStyles styles for new position
+     */
     private void updateLineStyles(Integer oldPosition, Integer newPosition, Collection<String> newPositionStyles) {
         if (oldPosition != null) {
-            this.codeArea.setParagraphStyle(oldPosition, DEFAULT_LINE_STYLES);
+            Collection<String> oldPositionStyles = this.codeArea.getParagraph(oldPosition).getParagraphStyle();
+
+            if (oldPositionStyles.equals(newPositionStyles)) {
+                this.codeArea.setParagraphStyle(oldPosition, DEFAULT_LINE_STYLES);
+            }
         }
 
         if (newPosition != null) {
             this.codeArea.setParagraphStyle(newPosition, newPositionStyles);
         }
+    }
+
+    private void showFormattedErrorDialog(String title, String errorTag, ISolutionErrorModel errorModel) {
+        String lineIndicator = errorModel.getLinePosition()
+            .map(linePosition -> String.format(" on line %d", linePosition + 1))
+            .orElse("");
+
+        String message = String.format("There was %s%s!%n%n%s", errorTag, lineIndicator, errorModel.getDescription());
+        this.dialogService.showErrorDialog(title, message);
+    }
+
+    /**
+     * Navigates back to the main view while performing the necessary cleanup.
+     */
+    private void navigateToPreviousRoute() {
+        this.navigator.navigateTo("problem-list");
+        this.cleanup();
+    }
+
+    /**
+     * Unsubscribes all current listener subscriptions.
+     * This method should be called when the view is no longer needed, as it is not presented to the user.
+     */
+    private void cleanup() {
+        this.listenerSubscriptions.forEach(IListenerSubscription::unsubscribe);
     }
 
 }

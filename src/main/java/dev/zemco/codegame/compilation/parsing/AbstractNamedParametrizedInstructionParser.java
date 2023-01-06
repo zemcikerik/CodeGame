@@ -48,9 +48,8 @@ public abstract class AbstractNamedParametrizedInstructionParser implements IIns
 
         // split into parameters separated by whitespace of 1 to n length (we treat multiple spaces as one separator)
         String[] instructionParts = trimmedInstruction.split("\\s+");
-        String instructionName = instructionParts[0];
 
-        if (!this.instructionName.equals(instructionName)) {
+        if (!this.instructionName.equals(instructionParts[0])) {
             return Optional.empty();
         }
 

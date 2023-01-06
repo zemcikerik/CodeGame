@@ -3,9 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.HBox?>
@@ -58,9 +56,7 @@
         <Button fx:id="toggleExecutionButton" mnemonicParsing="false" onAction="#onToggleExecutionButtonClicked"
                 text="Toggle"/>
         <Button fx:id="submitButton" mnemonicParsing="false" onMouseClicked="#onSubmitButtonClicked" text="Submit"/>
-        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+        <Pane HBox.hgrow="ALWAYS"/>
         <Button fx:id="stepButton" mnemonicParsing="false" onAction="#onStepButtonClicked" text="Step"/>
-        <CheckBox fx:id="autoEnabledCheckbox" mnemonicParsing="false" text="Auto"/>
-        <Slider fx:id="autoSpeedSlider"/>
     </HBox>
 </VBox>

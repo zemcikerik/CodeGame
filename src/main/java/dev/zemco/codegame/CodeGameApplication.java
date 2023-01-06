@@ -36,8 +36,8 @@ import dev.zemco.codegame.presentation.solution.errors.SimpleSolutionErrorModelF
 import dev.zemco.codegame.presentation.problems.IProblemListModel;
 import dev.zemco.codegame.presentation.problems.ProblemListController;
 import dev.zemco.codegame.presentation.problems.ProblemListModel;
-import dev.zemco.codegame.presentation.solution.CodeHighlightStyleComputer;
-import dev.zemco.codegame.presentation.solution.IHighlightStyleComputer;
+import dev.zemco.codegame.presentation.highlighting.CodeHighlightStyleComputer;
+import dev.zemco.codegame.presentation.highlighting.IHighlightStyleComputer;
 import dev.zemco.codegame.presentation.solution.ISolutionModel;
 import dev.zemco.codegame.presentation.solution.SolutionController;
 import dev.zemco.codegame.presentation.solution.SolutionModel;

@@ -200,6 +200,7 @@ public class SolutionModel implements ISolutionModel {
         this.canSubmitProperty.set(false);
         this.memoryCellsProperty.set(null);
         this.syntaxErrorProperty.set(null);
+        this.executionErrorProperty.set(null);
     }
 
     @Override
