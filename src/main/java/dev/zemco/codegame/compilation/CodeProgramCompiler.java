@@ -20,7 +20,7 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
  * <ul>
  *     <li>every {@link IInstruction instruction} is exactly one line long</li>
  *     <li>every jump label is exactly one line long</li>
- *     <li>jump labels are prefixed using '>' and can contain any non-whitespace character</li>
+ *     <li>jump labels are prefixed using '&gt;' and can contain any non-whitespace character</li>
  *     <li>comments are prefixed using ';' and end at the end of the line</li>
  *     <li>comments are completely ignored during compilation and may be placed
  *         behind {@link IInstruction instructions} or jump labels</li>
