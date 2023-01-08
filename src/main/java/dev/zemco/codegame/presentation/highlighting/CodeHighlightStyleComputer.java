@@ -79,6 +79,8 @@ public class CodeHighlightStyleComputer implements IHighlightStyleComputer {
             .collect(Collectors.joining("|"));
     }
 
+    // this method was partially taken and refactored from
+    // https://github.com/FXMisc/RichTextFX/blob/5f70d254ab44889cfdcf4451a8c2e18483ec33ac/richtextfx-demos/src/main/java/org/fxmisc/richtext/demo/JavaKeywordsDemo.java#L150-L171
     @Override
     public StyleSpans<Collection<String>> computeHighlightStyles(String text) {
         checkArgumentNotNull(text, "Text");
