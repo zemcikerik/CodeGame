@@ -30,7 +30,7 @@
                 </VBox>
             </ScrollPane>
             <HBox alignment="CENTER_RIGHT">
-                <Button mnemonicParsing="false" onAction="#onPlayButtonClicked" text="Play"/>
+                <Button mnemonicParsing="false" onAction="#onSolveButtonClicked" text="Solve"/>
             </HBox>
         </VBox>
     </SplitPane>

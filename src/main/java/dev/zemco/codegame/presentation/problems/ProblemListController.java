@@ -128,12 +128,12 @@ public class ProblemListController {
 
     /**
      * Navigates to the view responsible for solution of the currently selected problem.
-     * This method is invoked when the play button is clicked.
+     * This method is invoked when the solve button is clicked.
      *
      * @throws IllegalStateException if no problem is selected
      */
     @FXML
-    private void onPlayButtonClicked() {
+    private void onSolveButtonClicked() {
         if (this.model.selectedProblemProperty().get() == null) {
             throw new IllegalStateException("No problem is currently selected!");
         }
