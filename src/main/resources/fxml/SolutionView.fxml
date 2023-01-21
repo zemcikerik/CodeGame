@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import dev.zemco.codegame.presentation.execution.MemoryView?>
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
@@ -20,7 +21,11 @@
         <padding>
             <Insets left="16" right="16"/>
         </padding>
-        <Button fx:id="backButton" onAction="#onBackButtonClicked" text="Back"/>
+        <Button fx:id="backButton" onAction="#onBackButtonClicked" styleClass="icon-button">
+            <graphic>
+                <Region styleClass="back-button-icon"/>
+            </graphic>
+        </Button>
         <Label fx:id="problemNameLabel" text="Level Name" styleClass="title-label"/>
     </HBox>
     <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS">
