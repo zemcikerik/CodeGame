@@ -147,6 +147,7 @@ public final class Bootstrap {
             if (ProblemListController.class.isAssignableFrom(controllerClass)) {
                 return new ProblemListController(problemListModel, this.navigator);
             } else if (SolutionController.class.isAssignableFrom(controllerClass)) {
+                solutionModel.resetAttempt();
                 return new SolutionController(solutionModel, this.navigator, dialogService, highlightStyleComputer);
             }
 

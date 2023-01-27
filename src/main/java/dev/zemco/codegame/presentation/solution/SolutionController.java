@@ -147,8 +147,6 @@ public class SolutionController {
         this.initializeSourceCodeEditorPresentation();
         this.initializeEvaluationControlPresentation();
         this.initializeSolutionErrorPresentation();
-
-        this.model.resetAttempt();
     }
 
     private void initializeProblemDetailPresentation() {
