@@ -25,6 +25,9 @@ jobs:
       - name: Build & Test
         run: mvn --batch-mode --update-snapshots test
 
+      - name: Checkstyle
+        run: mvn --batch-mode checkstyle:checkstyle
+
       - name: Package
         run: mvn --batch-mode package -DskipTests
 
