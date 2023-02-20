@@ -56,6 +56,8 @@ import dev.zemco.codegame.presentation.solution.SolutionModel;
 import dev.zemco.codegame.presentation.solution.errors.ISolutionErrorModelFactory;
 import dev.zemco.codegame.presentation.solution.errors.SimpleSolutionErrorModelFactory;
 import dev.zemco.codegame.problems.IProblemRepository;
+import dev.zemco.codegame.problems.IProblemService;
+import dev.zemco.codegame.problems.ProblemService;
 import dev.zemco.codegame.problems.UrlObjectMapperProblemRepository;
 import dev.zemco.codegame.programs.IProgramBuilderFactory;
 import dev.zemco.codegame.programs.ProgramBuilder;
@@ -124,8 +126,8 @@ public final class Bootstrap {
 
     private IControllerFactory createControllerFactory() {
         // dependencies for ProblemListModel
-        IProblemRepository problemRepository = this.createProblemRepository();
-        IProblemListModel problemListModel = new ProblemListModel(problemRepository);
+        IProblemService problemService = this.createProblemService();
+        IProblemListModel problemListModel = new ProblemListModel(problemService);
 
         // dependencies for SolutionModel
         IProgramCompiler programCompiler = this.createProgramCompiler();
@@ -155,11 +157,11 @@ public final class Bootstrap {
         };
     }
 
-    private IProblemRepository createProblemRepository() {
+    private IProblemService createProblemService() {
         URL problemListResource = this.resourceClass.getResource("/problems.json");
         ObjectMapper objectMapper = new ObjectMapper();
-
-        return new UrlObjectMapperProblemRepository(problemListResource, objectMapper);
+        IProblemRepository repository = new UrlObjectMapperProblemRepository(problemListResource, objectMapper);
+        return new ProblemService(repository);
     }
 
     private IProgramCompiler createProgramCompiler() {

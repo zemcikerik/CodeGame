@@ -11,8 +11,8 @@ import java.util.List;
 public interface IProblemRepository {
 
     /**
-     * Returns all known {@link Problem problems}.
-     * @return unmodifiable {@link List} of all {@link Problem problems}
+     * Returns all known problems.
+     * @return unmodifiable list of all problems
      */
     List<Problem> getAllProblems();
 

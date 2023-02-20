@@ -1,6 +1,6 @@
 package dev.zemco.codegame.presentation.problems;
 
-import dev.zemco.codegame.problems.IProblemRepository;
+import dev.zemco.codegame.problems.IProblemService;
 import dev.zemco.codegame.problems.Problem;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableObjectValue;
@@ -12,8 +12,8 @@ import java.util.List;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 /**
- * Implementation of {@link IProblemListModel problem list model} using {@link Problem problems}
- * managed by {@link IProblemRepository problem repository}.
+ * Implementation of problem list model using {@link Problem problems}
+ * managed by {@link IProblemService problem service}.
  *
  * @author Erik Zemčík
  * @see IProblemListModel
@@ -25,17 +25,15 @@ public class ProblemListModel implements IProblemListModel {
 
     /**
      * Creates an instance of {@link ProblemListModel} using {@link Problem problems} from the given
-     * {@link IProblemRepository problem repository}.
+     * {@link IProblemService problem service}.
      *
-     * @param problemRepository problem repository to use as the source of {@link Problem problems}
-     * @throws IllegalArgumentException if {@code problemRepository} is {@code null}
-     *
-     * @see IProblemRepository#getAllProblems()
+     * @param problemService problem service to use as the source of {@link Problem problems}
+     * @throws IllegalArgumentException if {@code problemService} is {@code null}
      */
-    public ProblemListModel(IProblemRepository problemRepository) {
-        checkArgumentNotNull(problemRepository, "Problem repository");
+    public ProblemListModel(IProblemService problemService) {
+        checkArgumentNotNull(problemService, "Problem service");
 
-        List<Problem> problems = problemRepository.getAllProblems();
+        List<Problem> problems = problemService.getAllProblems();
         ObservableList<Problem> observableProblems = FXCollections.observableList(problems);
         this.problemsProperty = new ReadOnlyObjectWrapper<>(observableProblems);
 
