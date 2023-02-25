@@ -42,7 +42,13 @@ public class JumpInstructionTest {
     }
 
     @Test
-    public void executeShouldRequestExecutionEngineToJumpToLabel() throws InstructionExecutionException {
+    public void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
+        JumpInstruction instruction = new JumpInstruction("test");
+        assertThrows(IllegalArgumentException.class, () -> instruction.execute(null));
+    }
+
+    @Test
+    public void executeShouldRequestEngineToJumpToLabel() throws InstructionExecutionException {
         doNothing().when(this.engine).jumpToLabel(anyString());
         new JumpInstruction("test").execute(this.executionContext);
         verify(this.engine, times(1)).jumpToLabel("test");

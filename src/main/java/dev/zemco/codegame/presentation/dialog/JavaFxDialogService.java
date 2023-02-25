@@ -19,6 +19,17 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
  */
 public class JavaFxDialogService implements IDialogService {
 
+    private final IAlertFactory alertFactory;
+
+    /**
+     * Creates an instance of {@link JavaFxDialogService} that presents popup dialogs to user using JavaFX.
+     * @param alertFactory source of alerts
+     * @throws IllegalArgumentException if {@code alertFactory} is {@code null}
+     */
+    public JavaFxDialogService(IAlertFactory alertFactory) {
+        this.alertFactory = checkArgumentNotNull(alertFactory, "Alert factory");
+    }
+
     @Override
     public void showErrorDialog(String title, String message) {
         this.showDialog(AlertType.ERROR, title, message);
@@ -33,7 +44,7 @@ public class JavaFxDialogService implements IDialogService {
         checkArgumentNotNull(title, "Title");
         checkArgumentNotNull(message, "Message");
 
-        Alert alert = new Alert(type);
+        Alert alert = this.alertFactory.createAlert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
@@ -41,3 +52,4 @@ public class JavaFxDialogService implements IDialogService {
     }
 
 }
+

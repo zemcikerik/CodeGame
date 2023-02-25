@@ -1,0 +1,1 @@
+Simple resource file used for testing!
