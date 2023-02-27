@@ -46,6 +46,11 @@ public class OutputInstructionTest {
     }
 
     @Test
+    public void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> this.outputInstruction.execute(null));
+    }
+
+    @Test
     public void executeShouldOutputValueFromWorkingCellToOutputSink() throws InstructionExecutionException {
         when(this.workingCell.hasValue()).thenReturn(true);
         when(this.workingCell.getValue()).thenReturn(42);

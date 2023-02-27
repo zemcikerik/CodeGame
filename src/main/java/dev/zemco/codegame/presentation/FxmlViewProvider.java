@@ -24,6 +24,7 @@ public class FxmlViewProvider implements IViewProvider {
     private final IFxmlViewSourceProvider viewSourceProvider;
     private final IControllerFactory controllerFactory;
     private final IViewStylesheetProvider viewStylesheetProvider;
+    private final IFxmlLoaderFactory fxmlLoaderFactory;
 
     /**
      * Creates an instance of {@link FxmlViewProvider} ready for use.
@@ -31,19 +32,20 @@ public class FxmlViewProvider implements IViewProvider {
      * @param viewSourceProvider raw fxml view source provider for the sources of views
      * @param controllerFactory factory used to create controllers for views
      * @param viewStylesheetProvider view stylesheet provider used as a source of needed styles for views
+     * @param fxmlLoaderFactory factory used to create {@link FXMLLoader fxml loaders}
      *
      * @throws IllegalArgumentException if any argument is {@code null}
      */
     public FxmlViewProvider(
         IFxmlViewSourceProvider viewSourceProvider,
         IControllerFactory controllerFactory,
-        IViewStylesheetProvider viewStylesheetProvider
+        IViewStylesheetProvider viewStylesheetProvider,
+        IFxmlLoaderFactory fxmlLoaderFactory
     ) {
         this.viewSourceProvider = checkArgumentNotNull(viewSourceProvider, "View source provider");
         this.controllerFactory = checkArgumentNotNull(controllerFactory, "Controller factory");
-        this.viewStylesheetProvider = checkArgumentNotNull(
-            viewStylesheetProvider, "View stylesheet provider"
-        );
+        this.viewStylesheetProvider = checkArgumentNotNull(viewStylesheetProvider, "View stylesheet provider");
+        this.fxmlLoaderFactory = checkArgumentNotNull(fxmlLoaderFactory, "Fxml loader factory");
     }
 
     /**
@@ -74,7 +76,7 @@ public class FxmlViewProvider implements IViewProvider {
     }
 
     private Parent loadViewFromSource(InputStream fxmlSource) {
-        FXMLLoader fxmlLoader = new FXMLLoader();
+        FXMLLoader fxmlLoader = this.fxmlLoaderFactory.createFxmlLoader();
         fxmlLoader.setControllerFactory(this.controllerFactory::createController);
 
         try {

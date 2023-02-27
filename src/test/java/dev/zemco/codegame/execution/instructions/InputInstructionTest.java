@@ -44,6 +44,11 @@ public class InputInstructionTest {
     }
 
     @Test
+    public void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> this.inputInstruction.execute(null));
+    }
+
+    @Test
     public void executeShouldSetWorkingCellValueToNextValueFromInputSource() throws InstructionExecutionException {
         when(this.inputSource.hasNextValue()).thenReturn(true);
         when(this.inputSource.getNextValue()).thenReturn(42);

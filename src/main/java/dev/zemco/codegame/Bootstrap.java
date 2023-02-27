@@ -34,6 +34,7 @@ import dev.zemco.codegame.execution.memory.MemoryService;
 import dev.zemco.codegame.execution.memory.SimpleMemoryCell;
 import dev.zemco.codegame.presentation.FxmlViewProvider;
 import dev.zemco.codegame.presentation.IControllerFactory;
+import dev.zemco.codegame.presentation.IFxmlLoaderFactory;
 import dev.zemco.codegame.presentation.IFxmlViewSourceProvider;
 import dev.zemco.codegame.presentation.INavigator;
 import dev.zemco.codegame.presentation.IStageProvider;
@@ -43,6 +44,7 @@ import dev.zemco.codegame.presentation.ImmutableStageProvider;
 import dev.zemco.codegame.presentation.ImmutableViewStylesheetProvider;
 import dev.zemco.codegame.presentation.ResourceFxmlViewSourceProvider;
 import dev.zemco.codegame.presentation.SimpleViewIdNavigator;
+import dev.zemco.codegame.presentation.dialog.IAlertFactory;
 import dev.zemco.codegame.presentation.dialog.IDialogService;
 import dev.zemco.codegame.presentation.dialog.JavaFxDialogService;
 import dev.zemco.codegame.presentation.highlighting.CodeHighlightStyleComputer;
@@ -61,6 +63,8 @@ import dev.zemco.codegame.problems.ProblemService;
 import dev.zemco.codegame.problems.UrlObjectMapperProblemRepository;
 import dev.zemco.codegame.programs.IProgramBuilderFactory;
 import dev.zemco.codegame.programs.ProgramBuilder;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -113,9 +117,10 @@ public final class Bootstrap {
         IFxmlViewSourceProvider fxmlViewSourceProvider = this.createFxmlViewSourceProvider();
         IControllerFactory controllerFactory = this.createControllerFactory();
         IViewStylesheetProvider viewStylesheetProvider = this.createViewStylesheetProvider();
+        IFxmlLoaderFactory fxmlLoaderFactory = FXMLLoader::new;
 
         IViewProvider viewProvider = new FxmlViewProvider(
-            fxmlViewSourceProvider, controllerFactory, viewStylesheetProvider
+            fxmlViewSourceProvider, controllerFactory, viewStylesheetProvider, fxmlLoaderFactory
         );
 
         IStageProvider stageProvider = new ImmutableStageProvider(this.primaryStage);
@@ -139,7 +144,8 @@ public final class Bootstrap {
         );
 
         // dependencies for SolutionController
-        IDialogService dialogService = new JavaFxDialogService();
+        IAlertFactory alertFactory = Alert::new;
+        IDialogService dialogService = new JavaFxDialogService(alertFactory);
         IHighlightStyleComputer highlightStyleComputer = this.createHighlightStyleComputer();
 
         // we only want to create controllers on the go, everything else is created beforehand and captured

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import dev.zemco.codegame.resources.ResourceLoadException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,19 +20,22 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class UrlObjectMapperProblemRepositoryTest {
 
+    @Mock
     private URL url;
+
+    @Mock
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() throws MalformedURLException {
-        this.url = new URL("file://test");
-        this.objectMapper = mock(ObjectMapper.class);
-        when(this.objectMapper.getTypeFactory()).thenReturn(TypeFactory.defaultInstance());
+        lenient().when(this.objectMapper.getTypeFactory()).thenReturn(TypeFactory.defaultInstance());
     }
 
     @Test
