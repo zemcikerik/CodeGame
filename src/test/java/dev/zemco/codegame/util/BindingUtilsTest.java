@@ -3,16 +3,19 @@ package dev.zemco.codegame.util;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@Tag(UNIT_TEST)
 public class BindingUtilsTest {
 
     @Test

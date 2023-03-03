@@ -1,12 +1,14 @@
 package dev.zemco.codegame.problems;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
+import static dev.zemco.codegame.TestConstants.COMPONENT_TEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.anEmptyMap;
@@ -17,6 +19,7 @@ import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
+@Tag(COMPONENT_TEST)
 public class UrlObjectMapperProblemRepositoryComponentTest {
 
     @Test

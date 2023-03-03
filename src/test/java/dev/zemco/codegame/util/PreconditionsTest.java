@@ -1,13 +1,16 @@
 package dev.zemco.codegame.util;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag(UNIT_TEST)
 public class PreconditionsTest {
 
     @Test

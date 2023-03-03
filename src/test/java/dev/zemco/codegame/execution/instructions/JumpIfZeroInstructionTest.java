@@ -6,11 +6,13 @@ import dev.zemco.codegame.execution.engine.UnknownJumpLabelException;
 import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -20,6 +22,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
 public class JumpIfZeroInstructionTest {
 

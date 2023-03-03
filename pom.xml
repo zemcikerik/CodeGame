@@ -26,8 +26,13 @@
         <hamcrest.version>2.2</hamcrest.version>
         <maven.plugin.surefire.version>2.22.2</maven.plugin.surefire.version>
 
+        <!-- Testing related properties which are modified by selected profiles -->
+        <test.skip.unit>true</test.skip.unit>
+        <test.skip.component>true</test.skip.component>
+        <test.skip.integration>true</test.skip.integration>
+
         <!-- Building -->
-        <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+        <maven.plugin.javafx.version>0.0.8</maven.plugin.javafx.version>
         <maven.plugin.compiler.version>3.10.1</maven.plugin.compiler.version>
         <maven.plugin.shade.version>3.2.4</maven.plugin.shade.version>
 
@@ -134,12 +139,54 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.plugin.surefire.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <configuration>
+                            <!-- Prevent default surefire test execution -->
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>test-unit</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <groups>unit</groups>
+                            <skip>${test.skip.unit}</skip>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>test-component</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <groups>component</groups>
+                            <skip>${test.skip.component}</skip>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>test-integration</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <groups>integration</groups>
+                            <skip>${test.skip.integration}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>${javafx.maven.plugin.version}</version>
+                <version>${maven.plugin.javafx.version}</version>
                 <configuration>
                     <mainClass>dev.zemco.codegame.CodeGameApplication</mainClass>
                 </configuration>
@@ -191,4 +238,36 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>unit</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <test.skip.unit>false</test.skip.unit>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>component</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <test.skip.component>false</test.skip.component>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>integration</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <test.skip.integration>false</test.skip.integration>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -7,6 +7,7 @@ import dev.zemco.codegame.programs.IProgramBuilder;
 import dev.zemco.codegame.programs.IProgramBuilderFactory;
 import dev.zemco.codegame.programs.Program;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -29,6 +31,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
 public class CodeProgramCompilerTest {
 

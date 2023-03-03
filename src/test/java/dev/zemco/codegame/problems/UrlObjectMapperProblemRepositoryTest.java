@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import dev.zemco.codegame.resources.ResourceLoadException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -15,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,6 +26,7 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
 public class UrlObjectMapperProblemRepositoryTest {
 

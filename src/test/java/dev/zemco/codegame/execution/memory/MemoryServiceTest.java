@@ -1,6 +1,7 @@
 package dev.zemco.codegame.execution.memory;
 
 import dev.zemco.codegame.problems.ProblemCaseMemorySettings;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,6 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
 public class MemoryServiceTest {
 

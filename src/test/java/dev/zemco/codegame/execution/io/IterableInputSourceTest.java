@@ -1,15 +1,18 @@
 package dev.zemco.codegame.execution.io;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag(UNIT_TEST)
 public class IterableInputSourceTest {
 
     @Test

@@ -2,8 +2,10 @@ package dev.zemco.codegame.programs;
 
 import dev.zemco.codegame.execution.instructions.IInstruction;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -14,6 +16,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
+@Tag(UNIT_TEST)
 public class ProgramBuilderTest {
 
     private ProgramBuilder programBuilder;

@@ -5,11 +5,13 @@ import dev.zemco.codegame.execution.io.IInputSource;
 import dev.zemco.codegame.execution.memory.IMemory;
 import dev.zemco.codegame.execution.memory.IMemoryCell;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
@@ -18,6 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
 public class InputInstructionTest {
 

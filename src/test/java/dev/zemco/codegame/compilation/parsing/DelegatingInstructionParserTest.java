@@ -1,11 +1,13 @@
 package dev.zemco.codegame.compilation.parsing;
 
 import dev.zemco.codegame.execution.instructions.IInstruction;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -17,6 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Tag(UNIT_TEST)
 public class DelegatingInstructionParserTest {
 
     @Test

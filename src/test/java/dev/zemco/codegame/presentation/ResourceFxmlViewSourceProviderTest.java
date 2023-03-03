@@ -2,16 +2,19 @@ package dev.zemco.codegame.presentation;
 
 import dev.zemco.codegame.resources.ResourceLoadException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.util.Map;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static java.util.Collections.emptyMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag(UNIT_TEST)
 public class ResourceFxmlViewSourceProviderTest {
 
     private Class<?> resourceClass;

@@ -2,17 +2,20 @@ package dev.zemco.codegame.presentation.dialog;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
 public class JavaFxDialogServiceTest {
 

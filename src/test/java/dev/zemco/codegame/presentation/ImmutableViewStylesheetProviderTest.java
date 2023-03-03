@@ -1,15 +1,18 @@
 package dev.zemco.codegame.presentation;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
+import static dev.zemco.codegame.TestConstants.UNIT_TEST;
 import static java.util.Collections.emptyMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag(UNIT_TEST)
 public class ImmutableViewStylesheetProviderTest {
 
     @Test
