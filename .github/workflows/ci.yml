@@ -28,8 +28,8 @@ jobs:
       - name: Checkstyle
         run: mvn --batch-mode checkstyle:checkstyle
 
-      - name: Integration Test
-        run: mvn --batch-mode --activate-profiles !unit,integration test
+      - name: End-to-end Test
+        run: mvn --batch-mode --activate-profiles !unit,e2e,headless test
 
       - name: Package
         run: mvn --batch-mode package -DskipTests

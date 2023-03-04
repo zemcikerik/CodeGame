@@ -25,7 +25,7 @@ public class UrlObjectMapperProblemRepositoryComponentTest {
     @Test
     public void repositoryShouldProvideProblemsFromJsonFile() {
         ObjectMapper mapper = new ObjectMapper();
-        URL source = UrlObjectMapperProblemRepositoryComponentTest.class.getResource("/test-problems.json");
+        URL source = UrlObjectMapperProblemRepositoryComponentTest.class.getResource("/problems.json");
         UrlObjectMapperProblemRepository repository = new UrlObjectMapperProblemRepository(source, mapper);
 
         List<Problem> result = repository.getAllProblems();

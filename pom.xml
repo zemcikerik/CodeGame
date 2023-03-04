@@ -24,12 +24,15 @@
         <junit.version>5.9.2</junit.version>
         <mockito.version>5.1.1</mockito.version>
         <hamcrest.version>2.2</hamcrest.version>
+        <testfx.version>4.0.15-alpha</testfx.version>
+        <monocle.version>jdk-11+26</monocle.version>
         <maven.plugin.surefire.version>2.22.2</maven.plugin.surefire.version>
 
         <!-- Testing related properties which are modified by selected profiles -->
         <test.skip.unit>true</test.skip.unit>
         <test.skip.component>true</test.skip.component>
-        <test.skip.integration>true</test.skip.integration>
+        <test.skip.e2e>true</test.skip.e2e>
+        <test.argLine/>
 
         <!-- Building -->
         <maven.plugin.javafx.version>0.0.8</maven.plugin.javafx.version>
@@ -121,6 +124,20 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-junit5</artifactId>
+            <version>${testfx.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>openjfx-monocle</artifactId>
+            <version>${monocle.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -139,6 +156,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.plugin.surefire.version}</version>
+                <configuration>
+                    <argLine>${test.argLine}</argLine>
+                </configuration>
                 <executions>
                     <execution>
                         <id>default-test</id>
@@ -171,13 +191,13 @@
                     </execution>
 
                     <execution>
-                        <id>test-integration</id>
+                        <id>test-e2e</id>
                         <goals>
                             <goal>test</goal>
                         </goals>
                         <configuration>
-                            <groups>integration</groups>
-                            <skip>${test.skip.integration}</skip>
+                            <groups>e2e</groups>
+                            <skip>${test.skip.e2e}</skip>
                         </configuration>
                     </execution>
                 </executions>
@@ -261,12 +281,22 @@
         </profile>
 
         <profile>
-            <id>integration</id>
+            <id>e2e</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <test.skip.integration>false</test.skip.integration>
+                <test.skip.e2e>false</test.skip.e2e>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>headless</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <test.argLine>-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dglass.platform=Monocle -Dprism.order=sw</test.argLine>
             </properties>
         </profile>
     </profiles>
