@@ -13,6 +13,8 @@ import org.testfx.framework.junit5.Start;
 import static dev.zemco.codegame.TestConstants.E2E_TEST;
 import static org.hamcrest.Matchers.containsString;
 import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.isDisabled;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.base.WindowMatchers.isFocused;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
@@ -43,6 +45,23 @@ public class SolutionE2ETest {
 
         verifyThat(robot.window("Syntax Error"), isFocused());
         verifyThat(".dialog-pane .content", hasText(containsString("syntax error on line 2!")));
+
+        robot.clickOn(".dialog-pane .button");
+
+        verifyThat(".syntax-error", isVisible());
+        verifyThat("#compileButton", isDisabled());
+        verifyThat("#submitButton", isDisabled());
+    }
+
+    @Test
+    public void invalidSolutionShouldFailSubmission(FxRobot robot) {
+        robot.clickOn("#codeArea").write("in\nadd 1\nout");
+        robot.clickOn("Compile").clickOn("Submit");
+
+        verifyThat(robot.window("Evaluation Failure"), isFocused());
+        robot.clickOn(".dialog-pane .button");
+
+        verifyThat("#submitButton", isDisabled());
     }
 
 }
