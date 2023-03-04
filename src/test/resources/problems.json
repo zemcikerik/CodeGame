@@ -20,8 +20,8 @@
     "difficulty": 13,
     "cases": [
       {
-        "inputs": [13, 37, 42, 0],
-        "expectedOutputs": [111],
+        "inputs": [1, 2, 3],
+        "expectedOutputs": [1, 2, 3],
         "memorySettings": {
           "size": 5,
           "initialValues": {

@@ -48,9 +48,8 @@ public class UrlObjectMapperProblemRepositoryComponentTest {
         assertThat(result.get(1).getDescription(), equalTo("other"));
         assertThat(result.get(1).getDifficulty(), is(13));
         assertThat(result.get(1).getCases(), hasSize(1));
-        assertThat(result.get(1).getCases().get(0).getInputs(), equalTo(List.of(13, 37, 42, 0)));
-        assertThat(result.get(1).getCases().get(0).getExpectedOutputs(), hasSize(1));
-        assertThat(result.get(1).getCases().get(0).getExpectedOutputs(), contains(111));
+        assertThat(result.get(1).getCases().get(0).getInputs(), equalTo(List.of(1, 2, 3)));
+        assertThat(result.get(1).getCases().get(0).getExpectedOutputs(), equalTo(List.of(1, 2, 3)));
         assertThat(result.get(1).getCases().get(0).getMemorySettings().getSize(), is(5));
         assertThat(result.get(1).getCases().get(0).getMemorySettings().getInitialValues(), aMapWithSize(1));
         assertThat(result.get(1).getCases().get(0).getMemorySettings().getInitialValues(), hasEntry(2, -100000));
