@@ -1,7 +1,8 @@
-package dev.zemco.codegame.e2e;
+package dev.zemco.codegame.it;
 
 import dev.zemco.codegame.CodeGameApplication;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.matcher.control.TextFlowMatchers;
 
-import static dev.zemco.codegame.TestConstants.E2E_TEST;
+import static dev.zemco.codegame.TestConstants.INTEGRATION_TEST;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -20,9 +22,9 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.base.WindowMatchers.isFocused;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
-@Tag(E2E_TEST)
+@Tag(INTEGRATION_TEST)
 @ExtendWith(ApplicationExtension.class)
-public class SolutionE2ETest {
+public class SolutionItTest {
 
     private static final String CODE_AREA = "#codeArea";
     private static final String PROBLEM_NAME = "#problemNameLabel";
@@ -53,6 +55,12 @@ public class SolutionE2ETest {
         robot.clickOn(hasText(containsString("Test Problem 2"))).clickOn("Solve");
     }
 
+    @AfterEach
+    public void cleanupActiveDialogs(FxRobot robot) {
+        // close all unclosed dialogs, in case any test with dialog fails
+        robot.lookup(DIALOG_CLOSE).queryAll().forEach(robot::clickOn);
+    }
+
     @Test
     public void problemDetailsShouldBeDisplayed() {
         verifyThat(PROBLEM_NAME, hasText("Test Problem 2"));
@@ -76,7 +84,7 @@ public class SolutionE2ETest {
 
         robot.clickOn(DIALOG_CLOSE);
 
-        verifyThat(SYNTAX_ERROR, isVisible());
+        verifyThat(SYNTAX_ERROR, TextFlowMatchers.hasText("out 2"));
         verifyThat(COMPILE, isDisabled());
         verifyThat(SUBMIT, isDisabled());
     }

@@ -1,4 +1,4 @@
-package dev.zemco.codegame.e2e;
+package dev.zemco.codegame.it;
 
 import dev.zemco.codegame.CodeGameApplication;
 import javafx.stage.Stage;
@@ -9,7 +9,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
-import static dev.zemco.codegame.TestConstants.E2E_TEST;
+import static dev.zemco.codegame.TestConstants.INTEGRATION_TEST;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -19,9 +19,9 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 import static org.testfx.matcher.control.ListViewMatchers.isEmpty;
 
-@Tag(E2E_TEST)
+@Tag(INTEGRATION_TEST)
 @ExtendWith(ApplicationExtension.class)
-public class ProblemListE2ETest {
+public class ProblemListItTest {
 
     private static final String PROBLEM_LIST = "#problemListView";
     private static final String DETAILS = "#detailBox";

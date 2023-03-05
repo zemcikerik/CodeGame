@@ -1,4 +1,4 @@
-package dev.zemco.codegame.e2e;
+package dev.zemco.codegame.it;
 
 import dev.zemco.codegame.CodeGameApplication;
 import javafx.stage.Stage;
@@ -9,13 +9,13 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
-import static dev.zemco.codegame.TestConstants.E2E_TEST;
+import static dev.zemco.codegame.TestConstants.INTEGRATION_TEST;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.WindowMatchers.isShowing;
 
-@Tag(E2E_TEST)
+@Tag(INTEGRATION_TEST)
 @ExtendWith(ApplicationExtension.class)
-public class ApplicationE2ETest {
+public class ApplicationItTest {
 
     @Start
     public void start(Stage stage) {
