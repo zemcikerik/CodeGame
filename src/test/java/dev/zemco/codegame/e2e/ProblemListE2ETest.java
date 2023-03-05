@@ -23,6 +23,14 @@ import static org.testfx.matcher.control.ListViewMatchers.isEmpty;
 @ExtendWith(ApplicationExtension.class)
 public class ProblemListE2ETest {
 
+    private static final String PROBLEM_LIST = "#problemListView";
+    private static final String DETAILS = "#detailBox";
+    private static final String PROBLEM_NAME = "#problemNameLabel";
+    private static final String PROBLEM_DESCRIPTION = "#problemDescriptionLabel";
+    private static final String SOLVE = "Solve";
+
+    private static final String CODE_AREA = "#codeArea";
+
     @Start
     public void start(Stage stage) {
         new CodeGameApplication().start(stage);
@@ -30,27 +38,27 @@ public class ProblemListE2ETest {
 
     @Test
     public void nonEmptyProblemListShouldBeDisplayed() {
-        verifyThat("#problemListView", isVisible());
-        verifyThat("#problemListView", not(isEmpty()));
+        verifyThat(PROBLEM_LIST, isVisible());
+        verifyThat(PROBLEM_LIST, not(isEmpty()));
     }
 
     @Test
     public void problemDetailsShouldBeHiddenWhenNoProblemIsSelected() {
-        verifyThat("#detailBox", isInvisible());
+        verifyThat(DETAILS, isInvisible());
     }
 
     @Test
     public void problemDetailsShouldDisplayDetailsOfSelectedProblem(FxRobot robot) {
         robot.clickOn(hasText(containsString("Test Problem 1")));
-        verifyThat("#problemNameLabel", hasText("Test Problem 1"));
-        verifyThat("#problemDescriptionLabel", hasText("Description"));
+        verifyThat(PROBLEM_NAME, hasText("Test Problem 1"));
+        verifyThat(PROBLEM_DESCRIPTION, hasText("Description"));
     }
 
     @Test
     public void solveButtonShouldNavigateToSolutionView(FxRobot robot) {
-        robot.clickOn(hasText(containsString("Test Problem 1"))).clickOn("Solve");
-        verifyThat(robot.lookup("#problemListView").tryQuery().isEmpty(), is(true));
-        verifyThat("#codeArea", isVisible());
+        robot.clickOn(hasText(containsString("Test Problem 1"))).clickOn(SOLVE);
+        verifyThat(robot.lookup(PROBLEM_LIST).tryQuery().isEmpty(), is(true));
+        verifyThat(CODE_AREA, isVisible());
     }
 
 }
