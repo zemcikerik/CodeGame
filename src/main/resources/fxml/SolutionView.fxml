@@ -15,7 +15,7 @@
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <?import org.fxmisc.richtext.CodeArea?>
 
-<VBox xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="dev.zemco.codegame.presentation.solution.SolutionController">
     <HBox alignment="CENTER_LEFT" minHeight="40" spacing="8">
         <padding>

@@ -10,11 +10,11 @@
     <packaging>jar</packaging>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Presentation -->
-        <javafx.version>11.0.2</javafx.version>
+        <javafx.version>17.0.6</javafx.version>
         <richtextfx.version>0.11.0</richtextfx.version>
 
         <!-- Deserialization -->
@@ -25,7 +25,7 @@
         <mockito.version>5.1.1</mockito.version>
         <hamcrest.version>2.2</hamcrest.version>
         <testfx.version>4.0.15-alpha</testfx.version>
-        <monocle.version>jdk-11+26</monocle.version>
+        <monocle.version>jdk-12.0.1+2</monocle.version>
         <maven.plugin.surefire.version>2.22.2</maven.plugin.surefire.version>
 
         <!-- Testing related properties which are modified by selected profiles -->
