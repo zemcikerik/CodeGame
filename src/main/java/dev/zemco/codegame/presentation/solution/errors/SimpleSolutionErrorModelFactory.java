@@ -27,8 +27,8 @@ public class SimpleSolutionErrorModelFactory implements ISolutionErrorModelFacto
         // step evaluation exception always has a root cause (check javadoc)
         Throwable cause = exception.getCause();
 
-        Integer linePosition = cause instanceof StepExecutionException
-            ? ((StepExecutionException)cause).getLinePosition()
+        Integer linePosition = cause instanceof StepExecutionException stepExecutionCause
+            ? stepExecutionCause.getLinePosition()
             : null;
 
         return new ImmutableSolutionErrorModel(this.createDescription(cause), linePosition);
