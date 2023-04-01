@@ -9,9 +9,9 @@ import java.util.function.Function;
 import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
 
 /**
- * Collection of utility methods for simplifying manipulation of JavaFX bindings.
+ * Collection of utility functions for simplifying manipulation of JavaFX bindings.
  * <p>
- * Currently, these methods only consist of helper mapping methods that allow us to transform
+ * Currently, these functions only consist of helper mapping functions that allow us to transform
  * observable properties using mappers. This was done because recommended solution that JavaFX provides
  * is walking properties using {@link Bindings#selectString(Object, String...)}.
  * This, in our opinion, is error-prone to changes, and alternatives tend to be harder to read.

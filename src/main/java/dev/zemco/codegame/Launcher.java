@@ -10,7 +10,7 @@ package dev.zemco.codegame;
  * which makes the recommended approach not usable by us.
  * <p>
  * As a workaround, we use Maven shade plugin for building the fat jar. This however introduces another issue,
- * where JavaFX checks if the {@code javafx.graphics} module is present when used main method is defined
+ * where JavaFX checks if the {@code javafx.graphics} module is present when used main function is defined
  * in a class that extends {@link javafx.application.Application}. To circumvent this issue, this class was created
  * to launch the application when launching from a fat jar.
  *

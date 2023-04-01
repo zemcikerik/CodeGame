@@ -230,5 +230,31 @@
         }
       }
     ]
+  },
+  {
+    "id": "133eaea4-2212-41ba-adc3-188734440719",
+    "name": "Fibonacci sequence",
+    "description": "Emit fibonacci sequence into the output. This sequence starts with numbers 0, 1, and continues by adding the previous two numbers together.\n\nThis problem has no input values. At the beginning of execution, working cell is guaranteed to contain value 0.\n\nMemory has 9 additional cells available for all problem cases.",
+    "difficulty": 20,
+    "cases": [
+      {
+        "expectedOutputs": [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55],
+        "memorySettings": {
+          "size": 10,
+          "initialValues": {
+            "0": 0
+          }
+        }
+      },
+      {
+        "expectedOutputs": [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181],
+        "memorySettings": {
+          "size": 10,
+          "initialValues": {
+            "0": 0
+          }
+        }
+      }
+    ]
   }
 ]

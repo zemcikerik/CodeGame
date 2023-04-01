@@ -3,7 +3,7 @@ package dev.zemco.codegame.util;
 import java.util.Collection;
 
 /**
- * Collection of utility methods for checking validity of arguments.
+ * Collection of utility functions for checking validity of arguments.
  * @author Erik Zemčík
  */
 public final class Preconditions {

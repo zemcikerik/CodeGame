@@ -21,7 +21,7 @@ public class SolutionEvaluator implements ISolutionEvaluator {
     private final IEvaluationStrategy evaluationStrategy;
     private final ProblemCase problemCase;
 
-    private boolean hasErrored;
+    private boolean errored;
     private boolean successful;
 
     /**
@@ -42,13 +42,13 @@ public class SolutionEvaluator implements ISolutionEvaluator {
         this.evaluationStrategy = checkArgumentNotNull(evaluationStrategy, "Evaluation strategy");
         this.problemCase = checkArgumentNotNull(problemCase, "Problem case");
 
-        this.hasErrored = false;
+        this.errored = false;
         this.successful = evaluationStrategy.evaluateSolutionForProblemCase(executionContext, problemCase);
     }
 
     @Override
     public boolean hasFinished() {
-        return this.hasErrored || this.successful;
+        return this.errored || this.successful;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SolutionEvaluator implements ISolutionEvaluator {
         try {
             this.executionContext.getExecutionEngine().step();
         } catch (NoNextInstructionException | StepExecutionException e) {
-            this.hasErrored = true;
+            this.errored = true;
             throw new StepEvaluationException("An exception occurred during an evaluation step!", e);
         }
 
