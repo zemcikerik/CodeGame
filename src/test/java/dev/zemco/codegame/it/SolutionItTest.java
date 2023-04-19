@@ -117,6 +117,17 @@ public class SolutionItTest {
     }
 
     @Test
+    public void solutionContainingInfiniteLoopShouldFailSubmission(FxRobot robot) {
+        robot.clickOn(CODE_AREA).write(">loop\njump loop");
+        robot.clickOn(COMPILE).clickOn(SUBMIT);
+
+        verifyThat(robot.window(EVALUATION_ERROR_TITLE), isFocused());
+        robot.clickOn(DIALOG_CLOSE);
+
+        verifyThat(SUBMIT, isDisabled());
+    }
+
+    @Test
     public void validSolutionShouldSuccessfullyPassSubmission(FxRobot robot) {
         robot.clickOn(CODE_AREA).write(VALID_SOLUTION);
         robot.clickOn(COMPILE).clickOn(SUBMIT);

@@ -18,6 +18,7 @@ import static dev.zemco.codegame.util.Preconditions.checkArgumentNotNull;
  */
 public class EvaluationService implements IEvaluationService {
 
+    private static final int MAXIMUM_STEP_COUNT_UNTIL_TIMEOUT = 1_000_000;
     private final IExecutionService executionService;
     private final IEvaluationStrategy evaluationStrategy;
 
@@ -64,7 +65,11 @@ public class EvaluationService implements IEvaluationService {
         checkArgumentNotNull(problemCase, "Problem case");
 
         IExecutionContext executionContext = this.executionService.getExecutionContextForProblemCaseSolution(solution, problemCase);
-        return new SolutionEvaluator(executionContext, this.evaluationStrategy, problemCase);
+
+        return new TimeoutSolutionEvaluatorDecorator(
+            new SolutionEvaluator(executionContext, this.evaluationStrategy, problemCase),
+            MAXIMUM_STEP_COUNT_UNTIL_TIMEOUT
+        );
     }
 
 }

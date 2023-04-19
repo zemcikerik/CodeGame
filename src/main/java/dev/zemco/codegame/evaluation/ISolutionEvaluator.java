@@ -19,7 +19,7 @@ public interface ISolutionEvaluator {
 
     /**
      * Checks if the evaluation of the {@link IExecutionContext execution context} is successful.
-     * Result of this function should be only considered if the evaluator {@link #hasFinished() has finished}
+     * Result of this method should only be considered if the evaluator {@link #hasFinished() has finished}
      * its evaluation.
      *
      * @return true if the evaluation has ended and is successful, else false
