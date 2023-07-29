@@ -42,6 +42,8 @@
         <!-- Documentation / Code Quality -->
         <maven.plugin.javadoc.version>3.4.1</maven.plugin.javadoc.version>
         <maven.plugin.checkstyle.version>3.2.1</maven.plugin.checkstyle.version>
+        <maven.plugin.sonar.version>3.9.1.2184</maven.plugin.sonar.version>
+        <sonar.projectName>CodeGame</sonar.projectName>
     </properties>
 
     <dependencies>
@@ -267,6 +269,12 @@
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <linkXRef>false</linkXRef>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${maven.plugin.sonar.version}</version>
             </plugin>
         </plugins>
     </build>
