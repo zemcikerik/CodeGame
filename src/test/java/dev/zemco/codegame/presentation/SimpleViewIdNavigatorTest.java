@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class SimpleViewIdNavigatorTest {
+class SimpleViewIdNavigatorTest {
 
     @Mock
     private IStageProvider stageProvider;
@@ -45,27 +45,27 @@ public class SimpleViewIdNavigatorTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionWhenStageProviderIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionWhenStageProviderIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new SimpleViewIdNavigator(null, this.viewProvider));
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionWhenViewProviderIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionWhenViewProviderIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new SimpleViewIdNavigator(this.stageProvider, null));
     }
 
     @Test
-    public void navigateToShouldThrowIllegalArgumentExceptionIfViewIdIsNull() {
+    void navigateToShouldThrowIllegalArgumentExceptionIfViewIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.navigator.navigateTo(null));
     }
 
     @Test
-    public void navigateToShouldThrowIllegalArgumentExceptionIfViewIdIsEmpty() {
+    void navigateToShouldThrowIllegalArgumentExceptionIfViewIdIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> this.navigator.navigateTo(""));
     }
 
     @Test
-    public void navigateToShouldSetSceneRootToViewByViewId() {
+    void navigateToShouldSetSceneRootToViewByViewId() {
         Parent root = mock(Parent.class);
         when(this.viewProvider.getViewById("viewId")).thenReturn(root);
 
@@ -75,7 +75,7 @@ public class SimpleViewIdNavigatorTest {
     }
 
     @Test
-    public void navigateToShouldThrowUnknownRouteExceptionIfViewIdIsNotKnownByViewProvider() {
+    void navigateToShouldThrowUnknownRouteExceptionIfViewIdIsNotKnownByViewProvider() {
         when(this.viewProvider.getViewById("unknown")).thenThrow(UnknownViewException.class);
         assertThrows(UnknownRouteException.class, () -> this.navigator.navigateTo("unknown"));
     }

@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class CopyToInstructionTest {
+class CopyToInstructionTest {
 
     @Mock
     private IExecutionContext executionContext;
@@ -41,18 +41,18 @@ public class CopyToInstructionTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfDestinationCellAddressIsNotPositiveInteger() {
+    void constructorShouldThrowIllegalArgumentExceptionIfDestinationCellAddressIsNotPositiveInteger() {
         assertThrows(IllegalArgumentException.class, () -> new CopyToInstruction(-1));
     }
 
     @Test
-    public void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
+    void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
         CopyToInstruction instruction = new CopyToInstruction(1);
         assertThrows(IllegalArgumentException.class, () -> instruction.execute(null));
     }
 
     @Test
-    public void executeShouldThrowInstructionExecutionExceptionIfDestinationCellAddressIsOutOfMemoryBounds() {
+    void executeShouldThrowInstructionExecutionExceptionIfDestinationCellAddressIsOutOfMemoryBounds() {
         when(this.workingCell.hasValue()).thenReturn(true);
         when(this.memory.getCellByAddress(5)).thenThrow(IndexOutOfBoundsException.class);
         CopyToInstruction instruction = new CopyToInstruction(5);
@@ -61,14 +61,14 @@ public class CopyToInstructionTest {
     }
 
     @Test
-    public void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHoldsNoValue() {
+    void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHoldsNoValue() {
         when(this.workingCell.hasValue()).thenReturn(false);
         CopyToInstruction instruction = new CopyToInstruction(2);
         assertThrows(InstructionExecutionException.class, () -> instruction.execute(this.executionContext));
     }
 
     @Test
-    public void executeShouldCopyValueFromWorkingCellToDestinationCell() throws InstructionExecutionException {
+    void executeShouldCopyValueFromWorkingCellToDestinationCell() throws InstructionExecutionException {
         when(this.workingCell.hasValue()).thenReturn(true);
         when(this.workingCell.getValue()).thenReturn(42);
 

@@ -15,7 +15,7 @@ import static org.testfx.matcher.base.WindowMatchers.isShowing;
 
 @Tag(INTEGRATION_TEST)
 @ExtendWith(ApplicationExtension.class)
-public class ApplicationItTest {
+class ApplicationItTest {
 
     @Start
     public void start(Stage stage) {
@@ -23,7 +23,7 @@ public class ApplicationItTest {
     }
 
     @Test
-    public void applicationShouldDisplayCodeGameWindow(FxRobot robot) {
+    void applicationShouldDisplayCodeGameWindow(FxRobot robot) {
         verifyThat(robot.window("CodeGame"), isShowing());
     }
 

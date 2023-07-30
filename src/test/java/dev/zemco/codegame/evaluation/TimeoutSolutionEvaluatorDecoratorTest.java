@@ -17,18 +17,18 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class TimeoutSolutionEvaluatorDecoratorTest {
+class TimeoutSolutionEvaluatorDecoratorTest {
 
     @Mock
     private ISolutionEvaluator solutionEvaluator;
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfWrappedEvaluatorIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfWrappedEvaluatorIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new TimeoutSolutionEvaluatorDecorator(null, 5));
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfMaxStepCountIsNegative() {
+    void constructorShouldThrowIllegalArgumentExceptionIfMaxStepCountIsNegative() {
         assertThrows(
             IllegalArgumentException.class,
             () -> new TimeoutSolutionEvaluatorDecorator(this.solutionEvaluator, -1)
@@ -36,7 +36,7 @@ public class TimeoutSolutionEvaluatorDecoratorTest {
     }
 
     @Test
-    public void evaluationShouldBeSuccessfulIfWrappedEvaluatorHasFinishedSuccessfully() {
+    void evaluationShouldBeSuccessfulIfWrappedEvaluatorHasFinishedSuccessfully() {
         when(this.solutionEvaluator.hasFinished()).thenReturn(true);
         when(this.solutionEvaluator.isSuccessful()).thenReturn(true);
         var decorator = new TimeoutSolutionEvaluatorDecorator(this.solutionEvaluator, 100);
@@ -46,7 +46,7 @@ public class TimeoutSolutionEvaluatorDecoratorTest {
     }
 
     @Test
-    public void evaluationShouldNotBeFinishedIfWrappedEvaluatorHasNotFinished() {
+    void evaluationShouldNotBeFinishedIfWrappedEvaluatorHasNotFinished() {
         when(this.solutionEvaluator.hasFinished()).thenReturn(false);
         when(this.solutionEvaluator.isSuccessful()).thenReturn(false);
         var decorator = new TimeoutSolutionEvaluatorDecorator(this.solutionEvaluator, 100);
@@ -56,7 +56,7 @@ public class TimeoutSolutionEvaluatorDecoratorTest {
     }
 
     @Test
-    public void evaluationShouldFailIfMaxStepCountReached() {
+    void evaluationShouldFailIfMaxStepCountReached() {
         when(this.solutionEvaluator.hasFinished()).thenReturn(false);
         when(this.solutionEvaluator.isSuccessful()).thenReturn(false);
         doNothing().when(this.solutionEvaluator).step();
@@ -71,7 +71,7 @@ public class TimeoutSolutionEvaluatorDecoratorTest {
     }
 
     @Test
-    public void getExecutionContextShouldReturnContextOfWrapperEvaluator() {
+    void getExecutionContextShouldReturnContextOfWrapperEvaluator() {
         IExecutionContext executionContext = mock(IExecutionContext.class);
         when(this.solutionEvaluator.getExecutionContext()).thenReturn(executionContext);
         var decorator = new TimeoutSolutionEvaluatorDecorator(this.solutionEvaluator, 100);

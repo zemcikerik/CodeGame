@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class JavaFxDialogServiceTest {
+class JavaFxDialogServiceTest {
 
     @Mock
     private IAlertFactory alertFactory;
@@ -29,22 +29,22 @@ public class JavaFxDialogServiceTest {
     private JavaFxDialogService dialogService;
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfAlertFactoryIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfAlertFactoryIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new JavaFxDialogService(null));
     }
 
     @Test
-    public void showErrorDialogShouldThrowIllegalArgumentExceptionIfTitleIsNull() {
+    void showErrorDialogShouldThrowIllegalArgumentExceptionIfTitleIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.dialogService.showErrorDialog(null, "message"));
     }
 
     @Test
-    public void showErrorDialogShouldThrowIllegalArgumentExceptionIfMessageIsNull() {
+    void showErrorDialogShouldThrowIllegalArgumentExceptionIfMessageIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.dialogService.showErrorDialog("title", null));
     }
 
     @Test
-    public void showErrorDialogShouldDisplayErrorAlert() {
+    void showErrorDialogShouldDisplayErrorAlert() {
         when(this.alertFactory.createAlert(AlertType.ERROR)).thenReturn(this.alert);
 
         this.dialogService.showErrorDialog("title", "message");
@@ -55,17 +55,17 @@ public class JavaFxDialogServiceTest {
     }
 
     @Test
-    public void showInformationDialogShouldThrowIllegalArgumentExceptionIfTitleIsNull() {
+    void showInformationDialogShouldThrowIllegalArgumentExceptionIfTitleIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.dialogService.showInformationDialog(null, "message"));
     }
 
     @Test
-    public void showInformationDialogShouldThrowIllegalArgumentExceptionIfMessageIsNull() {
+    void showInformationDialogShouldThrowIllegalArgumentExceptionIfMessageIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.dialogService.showInformationDialog("title", null));
     }
 
     @Test
-    public void showInformationDialogShouldDisplayErrorAlert() {
+    void showInformationDialogShouldDisplayErrorAlert() {
         when(this.alertFactory.createAlert(AlertType.INFORMATION)).thenReturn(this.alert);
 
         this.dialogService.showInformationDialog("title", "message");

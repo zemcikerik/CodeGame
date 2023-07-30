@@ -20,7 +20,7 @@ import static org.mockito.Mockito.lenient;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class SupplierInstructionParserTest {
+class SupplierInstructionParserTest {
 
     @Mock
     private Supplier<IInstruction> instructionSupplier;
@@ -37,7 +37,7 @@ public class SupplierInstructionParserTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfInstructionNameIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfInstructionNameIsNull() {
         assertThrows(
             IllegalArgumentException.class,
             () -> new SupplierInstructionParser(null, this.instructionSupplier)
@@ -45,7 +45,7 @@ public class SupplierInstructionParserTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfInstructionNameIsEmpty() {
+    void constructorShouldThrowIllegalArgumentExceptionIfInstructionNameIsEmpty() {
         assertThrows(
             IllegalArgumentException.class,
             () -> new SupplierInstructionParser("", this.instructionSupplier)
@@ -53,42 +53,42 @@ public class SupplierInstructionParserTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfSupplierIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfSupplierIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new SupplierInstructionParser("test", null));
     }
 
     @Test
-    public void parseInstructionShouldThrowIllegalArgumentExceptionIfRawInstructionIsNull() {
+    void parseInstructionShouldThrowIllegalArgumentExceptionIfRawInstructionIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.parser.parseInstruction(null));
     }
 
     @Test
-    public void parseInstructionShouldThrowIllegalArgumentExceptionIfRawInstructionIsEmpty() {
+    void parseInstructionShouldThrowIllegalArgumentExceptionIfRawInstructionIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> this.parser.parseInstruction(""));
     }
 
     @Test
-    public void parseInstructionShouldReturnEmptyOptionalIfRawInstructionNameDoesNotMatchSupportedInstruction() {
+    void parseInstructionShouldReturnEmptyOptionalIfRawInstructionNameDoesNotMatchSupportedInstruction() {
         Optional<IInstruction> result = this.parser.parseInstruction("unknown");
         assertThat(result.isEmpty(), is(true));
     }
 
     @Test
-    public void parseInstructionShouldReturnOptionalWithInstructionFromSupplierIfInstructionNameMatches() {
+    void parseInstructionShouldReturnOptionalWithInstructionFromSupplierIfInstructionNameMatches() {
         Optional<IInstruction> result = this.parser.parseInstruction("test");
         assertThat(result.isPresent(), is(true));
         assertThat(result.get(), equalTo(this.instruction));
     }
 
     @Test
-    public void parseInstructionShouldIgnoreLeadingAndTrailingWhitespace() {
+    void parseInstructionShouldIgnoreLeadingAndTrailingWhitespace() {
         Optional<IInstruction> result = this.parser.parseInstruction("   test \t");
         assertThat(result.isPresent(), is(true));
         assertThat(result.get(), equalTo(this.instruction));
     }
 
     @Test
-    public void parseInstructionShouldThrowInstructionParsingExceptionIfRawInstructionContainsParameters() {
+    void parseInstructionShouldThrowInstructionParsingExceptionIfRawInstructionContainsParameters() {
         assertThrows(InstructionParseException.class, () -> this.parser.parseInstruction("test 2"));
     }
 

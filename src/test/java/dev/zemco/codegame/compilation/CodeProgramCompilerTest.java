@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class CodeProgramCompilerTest {
+class CodeProgramCompilerTest {
 
     @Mock
     private IInstructionParser instructionParser;
@@ -57,22 +57,22 @@ public class CodeProgramCompilerTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfInstructionParserIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfInstructionParserIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new CodeProgramCompiler(null, this.programBuilderFactory));
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfProgramBuilderFactoryIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfProgramBuilderFactoryIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new CodeProgramCompiler(this.instructionParser, null));
     }
 
     @Test
-    public void compileProgramShouldThrowIllegalArgumentExceptionIfSourceCodeIsNull() {
+    void compileProgramShouldThrowIllegalArgumentExceptionIfSourceCodeIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.programCompiler.compileProgram(null));
     }
 
     @Test
-    public void compileProgramShouldReturnEmptyProgramIfSourceCodeIsBlank() throws InvalidSyntaxException {
+    void compileProgramShouldReturnEmptyProgramIfSourceCodeIsBlank() throws InvalidSyntaxException {
         Program result = this.programCompiler.compileProgram("");
 
         assertThat(result, equalTo(this.program));
@@ -81,14 +81,14 @@ public class CodeProgramCompilerTest {
     }
 
     @Test
-    public void compileProgramShouldParseInstructionsUsingInstructionParser() throws InvalidSyntaxException {
+    void compileProgramShouldParseInstructionsUsingInstructionParser() throws InvalidSyntaxException {
         IInstruction instruction = this.mockKnownInstruction("test");
         this.programCompiler.compileProgram("test");
         verify(this.programBuilder, times(1)).addInstruction(instruction, 0);
     }
 
     @Test
-    public void compileProgramShouldThrowInvalidSyntaxExceptionIfInstructionParserCannotParseInstruction()  {
+    void compileProgramShouldThrowInvalidSyntaxExceptionIfInstructionParserCannotParseInstruction()  {
         this.mockKnownInstruction("known");
         when(this.instructionParser.parseInstruction("unknown")).thenReturn(Optional.empty());
 
@@ -101,13 +101,13 @@ public class CodeProgramCompilerTest {
     }
 
     @Test
-    public void compileProgramShouldThrowInvalidSyntaxExceptionIfInstructionParserFailsToParseInstruction() {
+    void compileProgramShouldThrowInvalidSyntaxExceptionIfInstructionParserFailsToParseInstruction() {
         when(this.instructionParser.parseInstruction("throws")).thenThrow(InstructionParseException.class);
         this.assertCompilationThrowsInvalidSyntaxExceptionAtLine("throws", 0);
     }
 
     @Test
-    public void compileProgramShouldIgnoreWhitespace() throws InvalidSyntaxException {
+    void compileProgramShouldIgnoreWhitespace() throws InvalidSyntaxException {
         this.mockKnownInstruction("test");
 
         String sourceCode = this.createSourceCode(
@@ -123,7 +123,7 @@ public class CodeProgramCompilerTest {
     }
 
     @Test
-    public void compileProgramShouldIgnoreComments() throws InvalidSyntaxException {
+    void compileProgramShouldIgnoreComments() throws InvalidSyntaxException {
         this.mockKnownInstruction("instruction");
 
         String sourceCode = this.createSourceCode(
@@ -139,23 +139,23 @@ public class CodeProgramCompilerTest {
     }
 
     @Test
-    public void compileProgramShouldProcessJumpLabels() throws InvalidSyntaxException {
+    void compileProgramShouldProcessJumpLabels() throws InvalidSyntaxException {
         this.programCompiler.compileProgram(">label");
         verify(this.programBuilder, times(1)).addJumpLabelMapping("label", 0);
     }
 
     @Test
-    public void compileProgramShouldThrowInvalidSyntaxExceptionIfJumpLabelHasNoName() {
+    void compileProgramShouldThrowInvalidSyntaxExceptionIfJumpLabelHasNoName() {
         this.assertCompilationThrowsInvalidSyntaxExceptionAtLine(">", 0);
     }
 
     @Test
-    public void compileProgramShouldThrowInvalidSyntaxExceptionIfJumpLabelContainsWhitespace() {
+    void compileProgramShouldThrowInvalidSyntaxExceptionIfJumpLabelContainsWhitespace() {
         this.assertCompilationThrowsInvalidSyntaxExceptionAtLine(">test label", 0);
     }
 
     @Test
-    public void compileProgramShouldThrowInvalidSyntaxExceptionIfDuplicateJumpLabelIsDefined() {
+    void compileProgramShouldThrowInvalidSyntaxExceptionIfDuplicateJumpLabelIsDefined() {
         when(this.programBuilder.hasJumpLabelMapping("label")).thenReturn(false);
         when(this.programBuilder.hasJumpLabelMapping("duplicate")).thenReturn(false).thenReturn(true);
 

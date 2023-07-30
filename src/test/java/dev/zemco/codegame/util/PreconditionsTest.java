@@ -11,17 +11,17 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag(UNIT_TEST)
-public class PreconditionsTest {
+class PreconditionsTest {
 
     @Test
-    public void checkArgumentNotNullShouldReturnArgumentIfNotNull() {
+    void checkArgumentNotNullShouldReturnArgumentIfNotNull() {
         Object argument = new Object();
         Object result = Preconditions.checkArgumentNotNull(argument, "Argument name");
         assertThat(result, sameInstance(argument));
     }
 
     @Test
-    public void checkArgumentNotNullShouldThrowIllegalArgumentExceptionContainingArgumentNameIfArgumentIsNull() {
+    void checkArgumentNotNullShouldThrowIllegalArgumentExceptionContainingArgumentNameIfArgumentIsNull() {
         IllegalArgumentException e = assertThrows(
             IllegalArgumentException.class,
             () -> Preconditions.checkArgumentNotNull(null, "Test")
@@ -30,7 +30,7 @@ public class PreconditionsTest {
     }
 
     @Test
-    public void checkArgumentNotNullShouldThrowIllegalArgumentExceptionContainingDefaultArgumentName() {
+    void checkArgumentNotNullShouldThrowIllegalArgumentExceptionContainingDefaultArgumentName() {
         IllegalArgumentException e = assertThrows(
             IllegalArgumentException.class,
             () -> Preconditions.checkArgumentNotNull(null, null)
@@ -39,14 +39,14 @@ public class PreconditionsTest {
     }
 
     @Test
-    public void checkArgumentNotEmptyStringShouldReturnArgumentIfNotEmpty() {
+    void checkArgumentNotEmptyStringShouldReturnArgumentIfNotEmpty() {
         String argument = "Hello, World!";
         String result = Preconditions.checkArgumentNotEmpty(argument, "Argument name");
         assertThat(result, is(argument));
     }
 
     @Test
-    public void checkArgumentNotEmptyStringShouldThrowIllegalArgumentExceptionIfArgumentIsNull() {
+    void checkArgumentNotEmptyStringShouldThrowIllegalArgumentExceptionIfArgumentIsNull() {
         IllegalArgumentException e = assertThrows(
             IllegalArgumentException.class,
             () -> Preconditions.checkArgumentNotEmpty((String)null, "Test")
@@ -55,7 +55,7 @@ public class PreconditionsTest {
     }
 
     @Test
-    public void checkArgumentNotEmptyStringShouldThrowIllegalStateExceptionWithArgumentNameIfArgumentIsEmpty() {
+    void checkArgumentNotEmptyStringShouldThrowIllegalStateExceptionWithArgumentNameIfArgumentIsEmpty() {
         IllegalArgumentException e = assertThrows(
             IllegalArgumentException.class,
             () -> Preconditions.checkArgumentNotEmpty("", "Test")
@@ -64,7 +64,7 @@ public class PreconditionsTest {
     }
 
     @Test
-    public void checkArgumentNotEmptyStringShouldThrowIllegalStateExceptionWithDefaultArgumentName() {
+    void checkArgumentNotEmptyStringShouldThrowIllegalStateExceptionWithDefaultArgumentName() {
         IllegalArgumentException e = assertThrows(
             IllegalArgumentException.class,
             () -> Preconditions.checkArgumentNotEmpty("", null)

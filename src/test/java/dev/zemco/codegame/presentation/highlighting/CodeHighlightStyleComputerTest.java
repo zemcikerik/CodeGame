@@ -14,35 +14,35 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag(UNIT_TEST)
-public class CodeHighlightStyleComputerTest {
+class CodeHighlightStyleComputerTest {
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfInstructionNameSetIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfInstructionNameSetIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new CodeHighlightStyleComputer(null));
     }
 
     @Test
-    public void computeHighlightStylesShouldThrowIllegalArgumentExceptionIfInstructionLineIsNull() {
+    void computeHighlightStylesShouldThrowIllegalArgumentExceptionIfInstructionLineIsNull() {
         CodeHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(emptySet());
         assertThrows(IllegalArgumentException.class, () -> highlightStyleComputer.computeHighlightStyles(null));
     }
 
     @Test
-    public void computeHighlightStylesShouldReturnEmptyStyleSpansWhenInstructionLineIsEmpty() {
+    void computeHighlightStylesShouldReturnEmptyStyleSpansWhenInstructionLineIsEmpty() {
         CodeHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(emptySet());
         StyleSpans<Collection<String>> result = highlightStyleComputer.computeHighlightStyles("");
         assertThat(result.length(), is(0));
     }
 
     @Test
-    public void computeHighlightStylesShouldReturnDefaultStyles() {
+    void computeHighlightStylesShouldReturnDefaultStyles() {
         CodeHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(emptySet());
         StyleSpans<Collection<String>> result = highlightStyleComputer.computeHighlightStyles("Hello World!");
         assertThat(result.getSpanCount(), is(1));
     }
 
     @Test
-    public void computeHighlightStylesShouldHighlightInstructionNames() {
+    void computeHighlightStylesShouldHighlightInstructionNames() {
         Set<String> instructionNames = Set.of("first", "third");
         CodeHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(instructionNames);
 
@@ -55,7 +55,7 @@ public class CodeHighlightStyleComputerTest {
     }
 
     @Test
-    public void computeHighlightStylesShouldHighlightInstructionNamesContainingCharactersInvalidForRegex() {
+    void computeHighlightStylesShouldHighlightInstructionNamesContainingCharactersInvalidForRegex() {
         Set<String> instructionNames = Set.of("hello\\world");
         CodeHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(instructionNames);
 
@@ -67,7 +67,7 @@ public class CodeHighlightStyleComputerTest {
     }
 
     @Test
-    public void computeHighlightStylesShouldHighlightComments() {
+    void computeHighlightStylesShouldHighlightComments() {
         CodeHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(emptySet());
 
         StyleSpans<Collection<String>> result = highlightStyleComputer.computeHighlightStyles("ignored;comment");
@@ -78,7 +78,7 @@ public class CodeHighlightStyleComputerTest {
     }
 
     @Test
-    public void computeHighlightStylesShouldHighlightJumpLabels() {
+    void computeHighlightStylesShouldHighlightJumpLabels() {
         CodeHighlightStyleComputer highlightStyleComputer = new CodeHighlightStyleComputer(emptySet());
 
         StyleSpans<Collection<String>> result = highlightStyleComputer.computeHighlightStyles("  >label");

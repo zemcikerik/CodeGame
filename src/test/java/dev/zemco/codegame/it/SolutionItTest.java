@@ -26,7 +26,7 @@ import static org.testfx.matcher.control.TableViewMatchers.containsRow;
 
 @Tag(INTEGRATION_TEST)
 @ExtendWith(ApplicationExtension.class)
-public class SolutionItTest {
+class SolutionItTest {
 
     private static final String CODE_AREA = "#codeArea";
     private static final String PROBLEM_NAME = "#problemNameLabel";
@@ -69,20 +69,20 @@ public class SolutionItTest {
     }
 
     @Test
-    public void problemDetailsShouldBeDisplayed() {
+    void problemDetailsShouldBeDisplayed() {
         verifyThat(PROBLEM_NAME, hasText("Test Problem 2"));
         verifyThat(PROBLEM_DESCRIPTION, hasText("other"));
     }
 
     @Test
-    public void backShouldNavigateToProblemList(FxRobot robot) {
+    void backShouldNavigateToProblemList(FxRobot robot) {
         robot.clickOn(BACK);
         verifyThat(robot.lookup(CODE_AREA).tryQuery().isEmpty(), is(true));
         verifyThat(PROBLEM_LIST, isVisible());
     }
 
     @Test
-    public void invalidProgramShouldFailCompilation(FxRobot robot) {
+    void invalidProgramShouldFailCompilation(FxRobot robot) {
         robot.clickOn(CODE_AREA).write("in\nout 2");
         robot.clickOn(COMPILE);
 
@@ -97,7 +97,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void programModificationShouldResetAttempt(FxRobot robot) {
+    void programModificationShouldResetAttempt(FxRobot robot) {
         robot.clickOn(CODE_AREA).write("in").clickOn(COMPILE);
         verifyThat(COMPILE, isDisabled());
 
@@ -106,7 +106,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void invalidSolutionShouldFailSubmission(FxRobot robot) {
+    void invalidSolutionShouldFailSubmission(FxRobot robot) {
         robot.clickOn(CODE_AREA).write("in\nadd 1\nout");
         robot.clickOn(COMPILE).clickOn(SUBMIT);
 
@@ -117,7 +117,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void solutionContainingInfiniteLoopShouldFailSubmission(FxRobot robot) {
+    void solutionContainingInfiniteLoopShouldFailSubmission(FxRobot robot) {
         robot.clickOn(CODE_AREA).write(">loop\njump loop");
         robot.clickOn(COMPILE).clickOn(SUBMIT);
 
@@ -128,7 +128,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void validSolutionShouldSuccessfullyPassSubmission(FxRobot robot) {
+    void validSolutionShouldSuccessfullyPassSubmission(FxRobot robot) {
         robot.clickOn(CODE_AREA).write(VALID_SOLUTION);
         robot.clickOn(COMPILE).clickOn(SUBMIT);
 
@@ -140,7 +140,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void testEvaluationCanBeStarted(FxRobot robot) {
+    void testEvaluationCanBeStarted(FxRobot robot) {
         robot.clickOn(COMPILE);
         verifyThat(TOGGLE_EVALUATION, isEnabled());
         verifyThat(STEP, isDisabled());
@@ -151,7 +151,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void testEvaluationCanBeStepped(FxRobot robot) {
+    void testEvaluationCanBeStepped(FxRobot robot) {
         robot.clickOn(CODE_AREA).write(VALID_SOLUTION);
         robot.clickOn(COMPILE).clickOn(TOGGLE_EVALUATION);
 
@@ -163,7 +163,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void testEvaluationShouldDisplayMemoryStateOfUnderlyingExecution(FxRobot robot) {
+    void testEvaluationShouldDisplayMemoryStateOfUnderlyingExecution(FxRobot robot) {
         robot.clickOn(CODE_AREA).write(VALID_SOLUTION);
         robot.clickOn(COMPILE).clickOn(TOGGLE_EVALUATION);
 
@@ -173,7 +173,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void testEvaluationShouldDisplayErrorInfoIfUnderlyingExecutionFails(FxRobot robot) {
+    void testEvaluationShouldDisplayErrorInfoIfUnderlyingExecutionFails(FxRobot robot) {
         robot.clickOn(CODE_AREA).write("out");
         robot.clickOn(COMPILE).clickOn(TOGGLE_EVALUATION);
         robot.clickOn(STEP);
@@ -191,7 +191,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void testEvaluationShouldDisplayErrorInfoWhenNoNextInstructionAvailable(FxRobot robot) {
+    void testEvaluationShouldDisplayErrorInfoWhenNoNextInstructionAvailable(FxRobot robot) {
         robot.clickOn(COMPILE).clickOn(TOGGLE_EVALUATION);
         robot.clickOn(STEP);
 
@@ -204,7 +204,7 @@ public class SolutionItTest {
     }
 
     @Test
-    public void testEvaluationShouldHandleMemoryManipulation(FxRobot robot) {
+    void testEvaluationShouldHandleMemoryManipulation(FxRobot robot) {
         robot.clickOn(CODE_AREA).write("load 2\nadd 12\nsave 1");
         robot.clickOn(COMPILE).clickOn(TOGGLE_EVALUATION);
         robot.clickOn(STEP).clickOn(STEP).clickOn(STEP);

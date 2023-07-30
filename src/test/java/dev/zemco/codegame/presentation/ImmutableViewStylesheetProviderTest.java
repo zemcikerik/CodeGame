@@ -13,33 +13,33 @@ import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag(UNIT_TEST)
-public class ImmutableViewStylesheetProviderTest {
+class ImmutableViewStylesheetProviderTest {
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfMappingMapAreNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfMappingMapAreNull() {
         assertThrows(IllegalArgumentException.class, () -> new ImmutableViewStylesheetProvider(null));
     }
 
     @Test
-    public void getStylesheetsByViewIdShouldThrowIllegalArgumentExceptionIfViewIdIsNull() {
+    void getStylesheetsByViewIdShouldThrowIllegalArgumentExceptionIfViewIdIsNull() {
         ImmutableViewStylesheetProvider provider = new ImmutableViewStylesheetProvider(emptyMap());
         assertThrows(IllegalArgumentException.class, () -> provider.getStylesheetsByViewId(null));
     }
 
     @Test
-    public void getStylesheetsByViewIdShouldThrowIllegalArgumentExceptionIfViewIdIsEmpty() {
+    void getStylesheetsByViewIdShouldThrowIllegalArgumentExceptionIfViewIdIsEmpty() {
         ImmutableViewStylesheetProvider provider = new ImmutableViewStylesheetProvider(emptyMap());
         assertThrows(IllegalArgumentException.class, () -> provider.getStylesheetsByViewId(""));
     }
 
     @Test
-    public void getStylesheetsByViewIdShouldThrowUnknownViewExceptionIfViewIdIsNotIncludedInMappings() {
+    void getStylesheetsByViewIdShouldThrowUnknownViewExceptionIfViewIdIsNotIncludedInMappings() {
         ImmutableViewStylesheetProvider provider = new ImmutableViewStylesheetProvider(emptyMap());
         assertThrows(UnknownViewException.class, () -> provider.getStylesheetsByViewId("viewId"));
     }
 
     @Test
-    public void getStylesheetsByViewIdShouldReturnStylesheetsByMapping() {
+    void getStylesheetsByViewIdShouldReturnStylesheetsByMapping() {
         ImmutableViewStylesheetProvider provider = new ImmutableViewStylesheetProvider(Map.of(
             "viewId", List.of("sheet1", "sheet2")
         ));

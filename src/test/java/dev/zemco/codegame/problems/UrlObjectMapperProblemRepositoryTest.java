@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class UrlObjectMapperProblemRepositoryTest {
+class UrlObjectMapperProblemRepositoryTest {
 
     @Mock
     private URL url;
@@ -42,7 +42,7 @@ public class UrlObjectMapperProblemRepositoryTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfUrlIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfUrlIsNull() {
         assertThrows(
             IllegalArgumentException.class,
             () -> new UrlObjectMapperProblemRepository(null, this.objectMapper)
@@ -50,12 +50,12 @@ public class UrlObjectMapperProblemRepositoryTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfObjectMapperIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfObjectMapperIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new UrlObjectMapperProblemRepository(this.url, null));
     }
 
     @Test
-    public void getAllProblemsShouldParseProblemsFromUrlUsingObjectMapper() throws IOException {
+    void getAllProblemsShouldParseProblemsFromUrlUsingObjectMapper() throws IOException {
         List<Problem> problems = List.of(mock(Problem.class));
         when(this.objectMapper.readValue(eq(this.url), any(CollectionType.class))).thenReturn(problems);
 
@@ -64,7 +64,7 @@ public class UrlObjectMapperProblemRepositoryTest {
     }
 
     @Test
-    public void getAllProblemsShouldThrowResourceLoadExceptionWhenObjectMapperFails() throws IOException {
+    void getAllProblemsShouldThrowResourceLoadExceptionWhenObjectMapperFails() throws IOException {
         when(this.objectMapper.readValue(eq(this.url), any(CollectionType.class))).thenThrow(IOException.class);
         UrlObjectMapperProblemRepository repository = new UrlObjectMapperProblemRepository(this.url, this.objectMapper);
         assertThrows(ResourceLoadException.class, repository::getAllProblems);

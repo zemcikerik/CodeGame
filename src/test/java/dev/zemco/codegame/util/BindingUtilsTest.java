@@ -16,20 +16,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Tag(UNIT_TEST)
-public class BindingUtilsTest {
+class BindingUtilsTest {
 
     @Test
-    public void mapShouldThrowIllegalArgumentExceptionIfPropertyIsNull() {
+    void mapShouldThrowIllegalArgumentExceptionIfPropertyIsNull() {
         assertThrows(IllegalArgumentException.class, () -> BindingUtils.map(null, ignored -> ""));
     }
 
     @Test
-    public void mapShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
+    void mapShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
         assertThrows(IllegalArgumentException.class, () -> BindingUtils.map(new ReadOnlyIntegerWrapper(), null));
     }
 
     @Test
-    public void mapShouldBindPropertyValueToStringUsingMapper() {
+    void mapShouldBindPropertyValueToStringUsingMapper() {
         ReadOnlyIntegerWrapper propertyWrapper = new ReadOnlyIntegerWrapper(42);
         Function<Number, String> mapper = String::valueOf;
 
@@ -41,7 +41,7 @@ public class BindingUtilsTest {
     }
 
     @Test
-    public void mapOrDefaultShouldThrowIllegalArgumentExceptionIfPropertyIsNull() {
+    void mapOrDefaultShouldThrowIllegalArgumentExceptionIfPropertyIsNull() {
         assertThrows(
             IllegalArgumentException.class,
             () -> BindingUtils.mapOrDefault(null, ignored -> "", "default")
@@ -49,7 +49,7 @@ public class BindingUtilsTest {
     }
 
     @Test
-    public void mapOrDefaultShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
+    void mapOrDefaultShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
         assertThrows(
             IllegalArgumentException.class,
             () -> BindingUtils.mapOrDefault(new ReadOnlyIntegerWrapper(), null, "default")
@@ -57,7 +57,7 @@ public class BindingUtilsTest {
     }
 
     @Test
-    public void mapOrDefaultShouldBindPropertyValueToStringUsingMapper() {
+    void mapOrDefaultShouldBindPropertyValueToStringUsingMapper() {
         ReadOnlyObjectWrapper<String> propertyWrapper = new ReadOnlyObjectWrapper<>(" test");
         Function<String, String> mapper = String::trim;
 
@@ -67,7 +67,7 @@ public class BindingUtilsTest {
     }
 
     @Test
-    public void mapOrDefaultShouldUseDefaultValueIfPropertyValueIsNull() {
+    void mapOrDefaultShouldUseDefaultValueIfPropertyValueIsNull() {
         ReadOnlyObjectWrapper<String> propertyWrapper = new ReadOnlyObjectWrapper<>(null);
         Function<String, String> mapper = ignored -> fail("Mapper was invoked!");
 
@@ -77,17 +77,17 @@ public class BindingUtilsTest {
     }
 
     @Test
-    public void mapOrNullShouldThrowIllegalArgumentExceptionIfPropertyIsNull() {
+    void mapOrNullShouldThrowIllegalArgumentExceptionIfPropertyIsNull() {
         assertThrows(IllegalArgumentException.class, () -> BindingUtils.mapOrNull(null, ignored -> ""));
     }
 
     @Test
-    public void mapOrNullShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
+    void mapOrNullShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
         assertThrows(IllegalArgumentException.class, () -> BindingUtils.mapOrNull(new ReadOnlyIntegerWrapper(), null));
     }
 
     @Test
-    public void mapOrNullShouldBindPropertyValueToStringUsingMapper() {
+    void mapOrNullShouldBindPropertyValueToStringUsingMapper() {
         ReadOnlyObjectWrapper<String> propertyWrapper = new ReadOnlyObjectWrapper<>("test ");
         Function<String, String> mapper = String::trim;
 
@@ -97,7 +97,7 @@ public class BindingUtilsTest {
     }
 
     @Test
-    public void mapOrNullShouldUseNullValueIfPropertyValueIsNull() {
+    void mapOrNullShouldUseNullValueIfPropertyValueIsNull() {
         ReadOnlyObjectWrapper<String> propertyWrapper = new ReadOnlyObjectWrapper<>(null);
         Function<String, String> mapper = ignored -> fail("Mapper was invoked!");
 

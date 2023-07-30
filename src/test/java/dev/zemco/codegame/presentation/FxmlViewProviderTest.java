@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class FxmlViewProviderTest {
+class FxmlViewProviderTest {
 
     @Mock
     private IFxmlViewSourceProvider viewSourceProvider;
@@ -62,7 +62,7 @@ public class FxmlViewProviderTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfAnyArgumentIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfAnyArgumentIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
             new FxmlViewProvider(null, this.controllerFactory, this.viewStylesheetProvider, this.fxmlLoaderFactory);
         });
@@ -78,17 +78,17 @@ public class FxmlViewProviderTest {
     }
 
     @Test
-    public void getViewByIdShouldThrowIllegalArgumentExceptionIfViewIdIsNull() {
+    void getViewByIdShouldThrowIllegalArgumentExceptionIfViewIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.fxmlViewProvider.getViewById(null));
     }
 
     @Test
-    public void getViewByIdShouldThrowIllegalArgumentExceptionIfViewIdIsEmpty() {
+    void getViewByIdShouldThrowIllegalArgumentExceptionIfViewIdIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> this.fxmlViewProvider.getViewById(""));
     }
 
     @Test
-    public void getViewByIdShouldReturnRootNodeOfLoadedView() throws IOException {
+    void getViewByIdShouldReturnRootNodeOfLoadedView() throws IOException {
         Parent root = this.createMockRootElement();
         InputStream fxmlInputSource = mock(InputStream.class);
         when(this.viewSourceProvider.getFxmlViewSourceStreamById("viewId")).thenReturn(fxmlInputSource);
@@ -101,7 +101,7 @@ public class FxmlViewProviderTest {
     }
 
     @Test
-    public void getViewByIdShouldLoadViewsWithControllerFactory() throws IOException {
+    void getViewByIdShouldLoadViewsWithControllerFactory() throws IOException {
         Parent root = this.createMockRootElement();
         when(this.viewSourceProvider.getFxmlViewSourceStreamById("viewId")).thenReturn(mock(InputStream.class));
         when(this.fxmlLoader.load(any(InputStream.class))).thenReturn(root);
@@ -115,7 +115,7 @@ public class FxmlViewProviderTest {
     }
 
     @Test
-    public void getViewByIdShouldAddStylesheetsToViewRoots() throws IOException {
+    void getViewByIdShouldAddStylesheetsToViewRoots() throws IOException {
         Parent root = this.createMockRootElement();
         when(this.viewSourceProvider.getFxmlViewSourceStreamById("viewId")).thenReturn(mock(InputStream.class));
         when(this.viewStylesheetProvider.getStylesheetsByViewId("viewId")).thenReturn(List.of("sheet1", "sheet2"));
@@ -127,7 +127,7 @@ public class FxmlViewProviderTest {
     }
 
     @Test
-    public void getViewByIdShouldThrowResourceLoadExceptionIfFxmlLoaderFailsToLoadRootNode() throws IOException {
+    void getViewByIdShouldThrowResourceLoadExceptionIfFxmlLoaderFailsToLoadRootNode() throws IOException {
         when(this.viewSourceProvider.getFxmlViewSourceStreamById("viewId")).thenReturn(mock(InputStream.class));
         when(this.fxmlLoader.load(any(InputStream.class))).thenThrow(IOException.class);
 
