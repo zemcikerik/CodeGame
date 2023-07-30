@@ -20,34 +20,34 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
-public class DelegatingInstructionParserTest {
+class DelegatingInstructionParserTest {
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfInstructionParserListIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfInstructionParserListIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new DelegatingInstructionParser(null));
     }
 
     @Test
-    public void parseInstructionShouldThrowIllegalArgumentExceptionIfRawInstructionIsNull() {
+    void parseInstructionShouldThrowIllegalArgumentExceptionIfRawInstructionIsNull() {
         DelegatingInstructionParser parser = new DelegatingInstructionParser(emptyList());
         assertThrows(IllegalArgumentException.class, () -> parser.parseInstruction(null));
     }
 
     @Test
-    public void parseInstructionShouldThrowIllegalArgumentExceptionIfRawInstructionIsEmpty() {
+    void parseInstructionShouldThrowIllegalArgumentExceptionIfRawInstructionIsEmpty() {
         DelegatingInstructionParser parser = new DelegatingInstructionParser(emptyList());
         assertThrows(IllegalArgumentException.class, () -> parser.parseInstruction(""));
     }
 
     @Test
-    public void parseInstructionShouldReturnEmptyOptionalIfNoParserIsCapableOfParsingInstruction() {
+    void parseInstructionShouldReturnEmptyOptionalIfNoParserIsCapableOfParsingInstruction() {
         DelegatingInstructionParser parser = new DelegatingInstructionParser(List.of(this.mockIncapableParser()));
         Optional<IInstruction> result = parser.parseInstruction("unknown");
         assertThat(result.isEmpty(), is(true));
     }
 
     @Test
-    public void parseInstructionShouldReturnOptionalWithParsedInstructionFromFirstCapableParser() {
+    void parseInstructionShouldReturnOptionalWithParsedInstructionFromFirstCapableParser() {
         Optional<IInstruction> parsedInstruction = Optional.of(mock(IInstruction.class));
         IInstructionParser capableParser = mock(IInstructionParser.class);
         when(capableParser.parseInstruction(anyString())).thenReturn(parsedInstruction);

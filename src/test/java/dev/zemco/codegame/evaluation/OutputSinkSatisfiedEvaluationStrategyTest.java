@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class OutputSinkSatisfiedEvaluationStrategyTest {
+class OutputSinkSatisfiedEvaluationStrategyTest {
 
     @Mock
     private IExecutionContext executionContext;
@@ -39,7 +39,7 @@ public class OutputSinkSatisfiedEvaluationStrategyTest {
     }
 
     @Test
-    public void evaluateSolutionForProblemCaseShouldThrowIllegalArgumentExceptionIfAnyArgumentIsNull() {
+    void evaluateSolutionForProblemCaseShouldThrowIllegalArgumentExceptionIfAnyArgumentIsNull() {
         assertThrows(
             IllegalArgumentException.class,
             () -> this.strategy.evaluateSolutionForProblemCase(null, this.problemCase)
@@ -51,14 +51,14 @@ public class OutputSinkSatisfiedEvaluationStrategyTest {
     }
 
     @Test
-    public void evaluateSolutionForProblemCaseShouldReturnTrueIfOutputSinkIsSatisfied() {
+    void evaluateSolutionForProblemCaseShouldReturnTrueIfOutputSinkIsSatisfied() {
         when(this.outputSink.isSatisfied()).thenReturn(true);
         boolean result = this.strategy.evaluateSolutionForProblemCase(this.executionContext, this.problemCase);
         assertThat(result, is(true));
     }
 
     @Test
-    public void evaluateSolutionForProblemCaseShouldReturnFalseIfOutputSinkIsNotSatisfied() {
+    void evaluateSolutionForProblemCaseShouldReturnFalseIfOutputSinkIsNotSatisfied() {
         when(this.outputSink.isSatisfied()).thenReturn(false);
         boolean result = this.strategy.evaluateSolutionForProblemCase(this.executionContext, this.problemCase);
         assertThat(result, is(false));

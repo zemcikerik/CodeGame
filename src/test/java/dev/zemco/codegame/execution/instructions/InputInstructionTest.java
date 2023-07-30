@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class InputInstructionTest {
+class InputInstructionTest {
 
     @Mock
     private IExecutionContext executionContext;
@@ -47,12 +47,12 @@ public class InputInstructionTest {
     }
 
     @Test
-    public void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
+    void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.inputInstruction.execute(null));
     }
 
     @Test
-    public void executeShouldSetWorkingCellValueToNextValueFromInputSource() throws InstructionExecutionException {
+    void executeShouldSetWorkingCellValueToNextValueFromInputSource() throws InstructionExecutionException {
         when(this.inputSource.hasNextValue()).thenReturn(true);
         when(this.inputSource.getNextValue()).thenReturn(42);
         doNothing().when(this.workingCell).setValue(anyInt());
@@ -63,7 +63,7 @@ public class InputInstructionTest {
     }
 
     @Test
-    public void executeShouldThrowInstructionExecutionExceptionIfInputSourceHasNoMoreValues() {
+    void executeShouldThrowInstructionExecutionExceptionIfInputSourceHasNoMoreValues() {
         when(this.inputSource.hasNextValue()).thenReturn(false);
         assertThrows(InstructionExecutionException.class, () -> this.inputInstruction.execute(this.executionContext));
     }

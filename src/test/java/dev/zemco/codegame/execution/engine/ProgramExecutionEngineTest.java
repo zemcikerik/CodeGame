@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class ProgramExecutionEngineTest {
+class ProgramExecutionEngineTest {
 
     @Mock
     private Program program;
@@ -52,7 +52,7 @@ public class ProgramExecutionEngineTest {
     private ProgramExecutionEngine engine;
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfAnyArgumentIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfAnyArgumentIsNull() {
         assertThrows(
             IllegalArgumentException.class,
             () -> new ProgramExecutionEngine(null, this.memory, this.inputSource, this.outputSink)
@@ -72,23 +72,23 @@ public class ProgramExecutionEngineTest {
     }
 
     @Test
-    public void jumpToLabelShouldThrowIllegalArgumentExceptionIfLabelIsNull() {
+    void jumpToLabelShouldThrowIllegalArgumentExceptionIfLabelIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.engine.jumpToLabel(null));
     }
 
     @Test
-    public void jumpToLabelShouldThrowIllegalArgumentExceptionIfLabelIsEmpty() {
+    void jumpToLabelShouldThrowIllegalArgumentExceptionIfLabelIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> this.engine.jumpToLabel(""));
     }
 
     @Test
-    public void jumpToLabelShouldThrowUnknownJumpLabelExceptionIfLabelIsNotDefinedInExecutedProgram() {
+    void jumpToLabelShouldThrowUnknownJumpLabelExceptionIfLabelIsNotDefinedInExecutedProgram() {
         when(this.program.getJumpLabelToLinePositionMap()).thenReturn(emptyMap());
         assertThrows(UnknownJumpLabelException.class, () -> this.engine.jumpToLabel("unknown"));
     }
 
     @Test
-    public void jumpToLabelShouldSetNextInstructionToExecuteAfterJumpLabel() {
+    void jumpToLabelShouldSetNextInstructionToExecuteAfterJumpLabel() {
         InstructionDescriptor instructionToSkip = this.mockInstructionAtLine(0);
         InstructionDescriptor targetInstruction = this.mockInstructionAtLine(2);
         when(this.program.getInstructionDescriptors()).thenReturn(List.of(instructionToSkip, targetInstruction));
@@ -102,7 +102,7 @@ public class ProgramExecutionEngineTest {
     }
 
     @Test
-    public void jumpToLabelShouldSetNextInstructionToExecuteAtEndOfProgramIfLabelIsDefinedAfterAllInstructions() {
+    void jumpToLabelShouldSetNextInstructionToExecuteAtEndOfProgramIfLabelIsDefinedAfterAllInstructions() {
         when(this.program.getInstructionDescriptors()).thenReturn(List.of(this.mockInstructionAtLine(5)));
         when(this.program.getJumpLabelToLinePositionMap()).thenReturn(Map.of("label", 7));
 
@@ -112,7 +112,7 @@ public class ProgramExecutionEngineTest {
     }
 
     @Test
-    public void stepShouldExecuteInstructionsInOrderAsDefinedByProgram() throws InstructionExecutionException {
+    void stepShouldExecuteInstructionsInOrderAsDefinedByProgram() throws InstructionExecutionException {
         InstructionDescriptor firstInstruction = this.mockInstructionAtLine(0);
         InstructionDescriptor secondInstruction = this.mockInstructionAtLine(1);
         when(this.program.getInstructionDescriptors()).thenReturn(List.of(firstInstruction, secondInstruction));
@@ -125,7 +125,7 @@ public class ProgramExecutionEngineTest {
     }
 
     @Test
-    public void stepShouldThrowStepExecutionExceptionWithContextIfInstructionExecutionHasFailed() throws InstructionExecutionException {
+    void stepShouldThrowStepExecutionExceptionWithContextIfInstructionExecutionHasFailed() throws InstructionExecutionException {
         InstructionDescriptor descriptor = this.mockInstructionAtLine(42);
 
         doThrow(InstructionExecutionException.class)
@@ -142,13 +142,13 @@ public class ProgramExecutionEngineTest {
     }
 
     @Test
-    public void stepShouldThrowNoNextInstructionExceptionIfEndOfProgramWasReached() {
+    void stepShouldThrowNoNextInstructionExceptionIfEndOfProgramWasReached() {
         when(this.program.getInstructionDescriptors()).thenReturn(List.of());
         assertThrows(NoNextInstructionException.class, () -> this.engine.step());
     }
 
     @Test
-    public void getExecutionContextReturnsContextWithProvidedExecutionComponents() {
+    void getExecutionContextReturnsContextWithProvidedExecutionComponents() {
         IExecutionContext result = this.engine.getExecutionContext();
 
         assertThat(result.getExecutionEngine(), equalTo(this.engine));

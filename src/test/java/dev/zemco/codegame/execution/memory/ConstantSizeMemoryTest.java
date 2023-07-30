@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
-public class ConstantSizeMemoryTest {
+class ConstantSizeMemoryTest {
 
     private IMemoryCellFactory memoryCellFactory;
 
@@ -26,7 +26,7 @@ public class ConstantSizeMemoryTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfSizeIsNegative() {
+    void constructorShouldThrowIllegalArgumentExceptionIfSizeIsNegative() {
         assertThrows(
             IllegalArgumentException.class,
             () -> new ConstantSizeMemory(-5, this.memoryCellFactory)
@@ -34,42 +34,42 @@ public class ConstantSizeMemoryTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfMemoryCellFactoryIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfMemoryCellFactoryIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new ConstantSizeMemory(42, null));
     }
 
     @Test
-    public void constructorShouldCreateMemoryCellsUsingMemoryCellFactory() {
+    void constructorShouldCreateMemoryCellsUsingMemoryCellFactory() {
         new ConstantSizeMemory(5, this.memoryCellFactory);
         verify(this.memoryCellFactory, times(5)).createMemoryCell();
     }
 
     @Test
-    public void getCellByAddressShouldReturnNonNullMemoryCell() {
+    void getCellByAddressShouldReturnNonNullMemoryCell() {
         ConstantSizeMemory memory = new ConstantSizeMemory(2, this.memoryCellFactory);
         assertThat(memory.getCellByAddress(1), notNullValue());
     }
 
     @Test
-    public void getCellByAddressShouldReturnWorkingCellIfAddressIsZero() {
+    void getCellByAddressShouldReturnWorkingCellIfAddressIsZero() {
         ConstantSizeMemory memory = new ConstantSizeMemory(1, this.memoryCellFactory);
         assertThat(memory.getWorkingCell(), is(memory.getCellByAddress(0)));
     }
 
     @Test
-    public void getCellByAddressShouldThrowIndexOutOfBoundsExceptionIfAddressIsNegative() {
+    void getCellByAddressShouldThrowIndexOutOfBoundsExceptionIfAddressIsNegative() {
         ConstantSizeMemory memory = new ConstantSizeMemory(2, this.memoryCellFactory);
         assertThrows(IndexOutOfBoundsException.class, () -> memory.getCellByAddress(-1));
     }
 
     @Test
-    public void getCellByAddressShouldThrowIndexOutOfBoundsExceptionIfAddressIsOutOfMemoryRange() {
+    void getCellByAddressShouldThrowIndexOutOfBoundsExceptionIfAddressIsOutOfMemoryRange() {
         ConstantSizeMemory memory = new ConstantSizeMemory(2, this.memoryCellFactory);
         assertThrows(IndexOutOfBoundsException.class, () -> memory.getCellByAddress(5));
     }
 
     @Test
-    public void getWorkingCellShouldReturnNonNullMemoryCell() {
+    void getWorkingCellShouldReturnNonNullMemoryCell() {
         ConstantSizeMemory memory = new ConstantSizeMemory(1, this.memoryCellFactory);
         assertThat(memory.getWorkingCell(), notNullValue());
     }

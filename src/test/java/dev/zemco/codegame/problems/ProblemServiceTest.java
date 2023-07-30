@@ -13,15 +13,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
-public class ProblemServiceTest {
+class ProblemServiceTest {
 
     @Test
-    public void constructorShouldThrowIfProblemRepositoryIsNull() {
+    void constructorShouldThrowIfProblemRepositoryIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new ProblemService(null));
     }
 
     @Test
-    public void getAllProblemsShouldReturnProblemsFromProblemRepository() {
+    void getAllProblemsShouldReturnProblemsFromProblemRepository() {
         List<Problem> problems = List.of(mock(Problem.class));
         IProblemRepository repository = mock(IProblemRepository.class);
         when(repository.getAllProblems()).thenReturn(problems);

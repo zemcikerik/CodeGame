@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 @Tag(UNIT_TEST)
-public class ProgramBuilderTest {
+class ProgramBuilderTest {
 
     private ProgramBuilder programBuilder;
 
@@ -27,18 +27,18 @@ public class ProgramBuilderTest {
     }
 
     @Test
-    public void addInstructionShouldThrowIllegalArgumentExceptionIfInstructionIsNull() {
+    void addInstructionShouldThrowIllegalArgumentExceptionIfInstructionIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.programBuilder.addInstruction(null, 1));
     }
 
     @Test
-    public void addInstructionShouldThrowIllegalArgumentExceptionIfLinePositionIsNotPositiveInteger() {
+    void addInstructionShouldThrowIllegalArgumentExceptionIfLinePositionIsNotPositiveInteger() {
         IInstruction instruction = mock(IInstruction.class);
         assertThrows(IllegalArgumentException.class, () -> this.programBuilder.addInstruction(instruction, -1));
     }
 
     @Test
-    public void addInstructionShouldAddInstructionWithCorrectDescriptor() {
+    void addInstructionShouldAddInstructionWithCorrectDescriptor() {
         IInstruction instruction = mock(IInstruction.class);
 
         this.programBuilder.addInstruction(instruction, 1);
@@ -51,50 +51,50 @@ public class ProgramBuilderTest {
     }
 
     @Test
-    public void addJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLabelIsNull() {
+    void addJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLabelIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.programBuilder.addJumpLabelMapping(null, 1));
     }
 
     @Test
-    public void addJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLabelIsEmpty() {
+    void addJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLabelIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> this.programBuilder.addJumpLabelMapping("", 1));
     }
 
     @Test
-    public void addJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLinePositionIsNotPositiveInteger() {
+    void addJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLinePositionIsNotPositiveInteger() {
         assertThrows(IllegalArgumentException.class, () -> this.programBuilder.addJumpLabelMapping("test", -1));
     }
 
     @Test
-    public void addJumpLabelMappingShouldAddMapping() {
+    void addJumpLabelMappingShouldAddMapping() {
         this.programBuilder.addJumpLabelMapping("test", 1);
         Program program = this.programBuilder.build();
         assertThat(program.getJumpLabelToLinePositionMap(), hasEntry("test", 1));
     }
 
     @Test
-    public void addJumpLabelMappingShouldThrowIllegalStateExceptionWhenDuplicateLabelUsed() {
+    void addJumpLabelMappingShouldThrowIllegalStateExceptionWhenDuplicateLabelUsed() {
         this.programBuilder.addJumpLabelMapping("test", 1);
         assertThrows(IllegalStateException.class, () -> this.programBuilder.addJumpLabelMapping("test", 1));
     }
 
     @Test
-    public void hasJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLabelIsNull() {
+    void hasJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLabelIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.programBuilder.hasJumpLabelMapping(null));
     }
 
     @Test
-    public void hasJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLabelIsEmpty() {
+    void hasJumpLabelMappingShouldThrowIllegalArgumentExceptionIfLabelIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> this.programBuilder.hasJumpLabelMapping(""));
     }
 
     @Test
-    public void hasJumpLabelMappingShouldReturnFalseIfNoMappingAdded() {
+    void hasJumpLabelMappingShouldReturnFalseIfNoMappingAdded() {
         assertThat(this.programBuilder.hasJumpLabelMapping("test"), is(false));
     }
 
     @Test
-    public void hasJumpLabelMappingShouldReturnTrueIfMappingWasAlreadyAdded() {
+    void hasJumpLabelMappingShouldReturnTrueIfMappingWasAlreadyAdded() {
         this.programBuilder.addJumpLabelMapping("test", 1);
         assertThat(this.programBuilder.hasJumpLabelMapping("test"), is(true));
     }

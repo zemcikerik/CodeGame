@@ -21,7 +21,7 @@ import static org.testfx.matcher.control.ListViewMatchers.isEmpty;
 
 @Tag(INTEGRATION_TEST)
 @ExtendWith(ApplicationExtension.class)
-public class ProblemListItTest {
+class ProblemListItTest {
 
     private static final String PROBLEM_LIST = "#problemListView";
     private static final String DETAILS = "#detailBox";
@@ -37,25 +37,25 @@ public class ProblemListItTest {
     }
 
     @Test
-    public void nonEmptyProblemListShouldBeDisplayed() {
+    void nonEmptyProblemListShouldBeDisplayed() {
         verifyThat(PROBLEM_LIST, isVisible());
         verifyThat(PROBLEM_LIST, not(isEmpty()));
     }
 
     @Test
-    public void problemDetailsShouldBeHiddenWhenNoProblemIsSelected() {
+    void problemDetailsShouldBeHiddenWhenNoProblemIsSelected() {
         verifyThat(DETAILS, isInvisible());
     }
 
     @Test
-    public void problemDetailsShouldDisplayDetailsOfSelectedProblem(FxRobot robot) {
+    void problemDetailsShouldDisplayDetailsOfSelectedProblem(FxRobot robot) {
         robot.clickOn(hasText(containsString("Test Problem 1")));
         verifyThat(PROBLEM_NAME, hasText("Test Problem 1"));
         verifyThat(PROBLEM_DESCRIPTION, hasText("Description"));
     }
 
     @Test
-    public void solveButtonShouldNavigateToSolutionView(FxRobot robot) {
+    void solveButtonShouldNavigateToSolutionView(FxRobot robot) {
         robot.clickOn(hasText(containsString("Test Problem 1"))).clickOn(SOLVE);
         verifyThat(robot.lookup(PROBLEM_LIST).tryQuery().isEmpty(), is(true));
         verifyThat(CODE_AREA, isVisible());

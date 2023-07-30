@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class JumpIfZeroInstructionTest {
+class JumpIfZeroInstructionTest {
 
     @Mock
     private IExecutionContext executionContext;
@@ -46,44 +46,44 @@ public class JumpIfZeroInstructionTest {
     }
 
     @Test
-    public void constructorShouldThrowIfLabelIsNull() {
+    void constructorShouldThrowIfLabelIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new JumpIfZeroInstruction(null));
     }
 
     @Test
-    public void constructorShouldThrowIfLabelIsEmpty() {
+    void constructorShouldThrowIfLabelIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> new JumpIfZeroInstruction(""));
     }
 
     @Test
-    public void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
+    void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
         JumpIfZeroInstruction instruction = new JumpIfZeroInstruction("label");
         assertThrows(IllegalArgumentException.class, () -> instruction.execute(null));
     }
 
     @Test
-    public void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHoldsNoValue() {
+    void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHoldsNoValue() {
         when(this.workingCell.hasValue()).thenReturn(false);
         JumpIfZeroInstruction instruction = new JumpIfZeroInstruction("label");
         assertThrows(InstructionExecutionException.class, () -> instruction.execute(this.executionContext));
     }
 
     @Test
-    public void executeShouldNotRequestEngineToJumpWhenValueInWorkingCellIsNotZero() throws InstructionExecutionException {
+    void executeShouldNotRequestEngineToJumpWhenValueInWorkingCellIsNotZero() throws InstructionExecutionException {
         this.setUpWorkingCellValue(-80);
         new JumpIfZeroInstruction("label").execute(this.executionContext);
         verify(this.engine, never()).jumpToLabel(anyString());
     }
 
     @Test
-    public void executeShouldRequestEngineToJumpWhenValueInWorkingCellIsZero() throws InstructionExecutionException {
+    void executeShouldRequestEngineToJumpWhenValueInWorkingCellIsZero() throws InstructionExecutionException {
         this.setUpWorkingCellValue(0);
         new JumpIfZeroInstruction("label").execute(this.executionContext);
         verify(this.engine, times(1)).jumpToLabel("label");
     }
 
     @Test
-    public void executeShouldThrowInstructionExecutionExceptionIfEngineFailsToJumpToLabel() {
+    void executeShouldThrowInstructionExecutionExceptionIfEngineFailsToJumpToLabel() {
         this.setUpWorkingCellValue(0);
         doThrow(UnknownJumpLabelException.class).when(this.engine).jumpToLabel("label");
         JumpIfZeroInstruction instruction = new JumpIfZeroInstruction("label");

@@ -21,18 +21,18 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class ProblemListModelTest {
+class ProblemListModelTest {
 
     @Mock
     private IProblemService problemService;
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionWhenProblemServiceIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionWhenProblemServiceIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new ProblemListModel(null));
     }
 
     @Test
-    public void problemsPropertyShouldHoldProblemsProvidedByProblemService() {
+    void problemsPropertyShouldHoldProblemsProvidedByProblemService() {
         List<Problem> problems = List.of(mock(Problem.class), mock(Problem.class));
         when(this.problemService.getAllProblems()).thenReturn(problems);
         ProblemListModel model = new ProblemListModel(this.problemService);
@@ -43,7 +43,7 @@ public class ProblemListModelTest {
     }
 
     @Test
-    public void selectProblemShouldSelectProvidedProblem() {
+    void selectProblemShouldSelectProvidedProblem() {
         Problem problem = mock(Problem.class);
         ProblemListModel model = new ProblemListModel(this.problemService);
 
@@ -53,7 +53,7 @@ public class ProblemListModelTest {
     }
 
     @Test
-    public void selectProblemShouldUnselectProblemWhenNullIsUsed() {
+    void selectProblemShouldUnselectProblemWhenNullIsUsed() {
         ProblemListModel model = new ProblemListModel(this.problemService);
         model.selectProblem(mock(Problem.class));
 

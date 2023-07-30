@@ -11,15 +11,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 @Tag(UNIT_TEST)
-public class ImmutableStageProviderTest {
+class ImmutableStageProviderTest {
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfPrimaryStageIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfPrimaryStageIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new ImmutableStageProvider(null));
     }
 
     @Test
-    public void getPrimaryStageShouldReturnPrimaryStage() {
+    void getPrimaryStageShouldReturnPrimaryStage() {
         Stage primaryStage = mock(Stage.class);
         ImmutableStageProvider provider = new ImmutableStageProvider(primaryStage);
         assertThat(provider.getPrimaryStage(), is(primaryStage));

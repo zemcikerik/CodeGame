@@ -20,10 +20,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 @Tag(COMPONENT_TEST)
-public class UrlObjectMapperProblemRepositoryComponentTest {
+class UrlObjectMapperProblemRepositoryComponentTest {
 
     @Test
-    public void repositoryShouldProvideProblemsFromJsonFile() {
+    void repositoryShouldProvideProblemsFromJsonFile() {
         ObjectMapper mapper = new ObjectMapper();
         URL source = UrlObjectMapperProblemRepositoryComponentTest.class.getResource("/problems.json");
         UrlObjectMapperProblemRepository repository = new UrlObjectMapperProblemRepository(source, mapper);

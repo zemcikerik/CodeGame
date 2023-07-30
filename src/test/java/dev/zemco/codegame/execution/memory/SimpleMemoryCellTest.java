@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag(UNIT_TEST)
-public class SimpleMemoryCellTest {
+class SimpleMemoryCellTest {
 
     private SimpleMemoryCell memoryCell;
 
@@ -20,23 +20,23 @@ public class SimpleMemoryCellTest {
     }
 
     @Test
-    public void shouldHaveNoValueAfterCreation() {
+    void shouldHaveNoValueAfterCreation() {
         assertThat(this.memoryCell.hasValue(), is(false));
     }
 
     @Test
-    public void hasValueShouldReturnTrueAfterValueWasSet() {
+    void hasValueShouldReturnTrueAfterValueWasSet() {
         this.memoryCell.setValue(0);
         assertThat(this.memoryCell.hasValue(), is(true));
     }
 
     @Test
-    public void getValueShouldThrowIllegalStateExceptionIfHasNoValue() {
+    void getValueShouldThrowIllegalStateExceptionIfHasNoValue() {
         assertThrows(IllegalStateException.class, () -> this.memoryCell.getValue());
     }
 
     @Test
-    public void getValueShouldReturnLastSetValue() {
+    void getValueShouldReturnLastSetValue() {
         this.memoryCell.setValue(5);
         this.memoryCell.setValue(10);
         assertThat(this.memoryCell.getValue(), is(10));

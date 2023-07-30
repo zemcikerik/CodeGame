@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
-public class VerifyingInputSourceToOutputSinkAdapterTest {
+class VerifyingInputSourceToOutputSinkAdapterTest {
 
     private IInputSource inputSource;
     private VerifyingInputSourceToOutputSinkAdapter adapter;
@@ -24,38 +24,38 @@ public class VerifyingInputSourceToOutputSinkAdapterTest {
     }
 
     @Test
-    public void constructorShouldThrowIfInputSourceNull() {
+    void constructorShouldThrowIfInputSourceNull() {
         assertThrows(IllegalArgumentException.class, () -> new VerifyingInputSourceToOutputSinkAdapter(null));
     }
 
     @Test
-    public void acceptShouldThrowNotAcceptedExceptionIfInputSourceHasNoNextValue() {
+    void acceptShouldThrowNotAcceptedExceptionIfInputSourceHasNoNextValue() {
         when(this.inputSource.hasNextValue()).thenReturn(false);
         assertThrows(NotAcceptedException.class, () -> this.adapter.accept(42));
     }
 
     @Test
-    public void acceptShouldThrowNotAcceptedExceptionIfValueFromInputSourceDiffersFromPassedValue() {
+    void acceptShouldThrowNotAcceptedExceptionIfValueFromInputSourceDiffersFromPassedValue() {
         when(this.inputSource.hasNextValue()).thenReturn(true);
         when(this.inputSource.getNextValue()).thenReturn(10);
         assertThrows(NotAcceptedException.class, () -> this.adapter.accept(2));
     }
 
     @Test
-    public void acceptShouldAcceptPassedValueIfItMatchesValueFromInputSource() {
+    void acceptShouldAcceptPassedValueIfItMatchesValueFromInputSource() {
         when(this.inputSource.hasNextValue()).thenReturn(true);
         when(this.inputSource.getNextValue()).thenReturn(42);
         this.adapter.accept(42);
     }
 
     @Test
-    public void isSatisfiedShouldReturnTrueIfInputSourceHasNoNextValue() {
+    void isSatisfiedShouldReturnTrueIfInputSourceHasNoNextValue() {
         when(this.inputSource.hasNextValue()).thenReturn(false);
         assertThat(this.adapter.isSatisfied(), is(true));
     }
 
     @Test
-    public void isSatisfiedShouldReturnFalseIfInputSourceHasNextValue() {
+    void isSatisfiedShouldReturnFalseIfInputSourceHasNextValue() {
         when(this.inputSource.hasNextValue()).thenReturn(true);
         assertThat(this.adapter.isSatisfied(), is(false));
     }

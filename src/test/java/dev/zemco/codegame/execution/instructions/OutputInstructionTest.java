@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class OutputInstructionTest {
+class OutputInstructionTest {
 
     @Mock
     private IExecutionContext executionContext;
@@ -49,12 +49,12 @@ public class OutputInstructionTest {
     }
 
     @Test
-    public void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
+    void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
         assertThrows(IllegalArgumentException.class, () -> this.outputInstruction.execute(null));
     }
 
     @Test
-    public void executeShouldOutputValueFromWorkingCellToOutputSink() throws InstructionExecutionException {
+    void executeShouldOutputValueFromWorkingCellToOutputSink() throws InstructionExecutionException {
         when(this.workingCell.hasValue()).thenReturn(true);
         when(this.workingCell.getValue()).thenReturn(42);
         doNothing().when(this.outputSink).accept(anyInt());
@@ -65,13 +65,13 @@ public class OutputInstructionTest {
     }
 
     @Test
-    public void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHasNoValue() {
+    void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHasNoValue() {
         when(this.workingCell.hasValue()).thenReturn(false);
         assertThrows(InstructionExecutionException.class, () -> this.outputInstruction.execute(this.executionContext));
     }
 
     @Test
-    public void executeShouldThrowInstructionExecutionExceptionIfOutputSinkRejectedTheValue() {
+    void executeShouldThrowInstructionExecutionExceptionIfOutputSinkRejectedTheValue() {
         when(this.workingCell.hasValue()).thenReturn(true);
         when(this.workingCell.getValue()).thenReturn(-5);
         doThrow(NotAcceptedException.class).when(this.outputSink).accept(anyInt());

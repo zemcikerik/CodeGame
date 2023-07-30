@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class AdditionInstructionTest {
+class AdditionInstructionTest {
 
     @Mock
     private IExecutionContext executionContext;
@@ -39,13 +39,13 @@ public class AdditionInstructionTest {
     }
 
     @Test
-    public void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
+    void executeShouldThrowIllegalArgumentExceptionIfExecutionContextIsNull() {
         AdditionInstruction instruction = new AdditionInstruction(42);
         assertThrows(IllegalArgumentException.class, () -> instruction.execute(null));
     }
 
     @Test
-    public void executeShouldAddAddendToValueOfWorkingCell() throws InstructionExecutionException {
+    void executeShouldAddAddendToValueOfWorkingCell() throws InstructionExecutionException {
         when(this.workingCell.hasValue()).thenReturn(true);
         when(this.workingCell.getValue()).thenReturn(-15);
         doNothing().when(this.workingCell).setValue(anyInt());
@@ -56,7 +56,7 @@ public class AdditionInstructionTest {
     }
 
     @Test
-    public void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHoldsNoValue() {
+    void executeShouldThrowInstructionExecutionExceptionIfWorkingCellHoldsNoValue() {
         when(this.workingCell.hasValue()).thenReturn(false);
 
         AdditionInstruction instruction = new AdditionInstruction(1);

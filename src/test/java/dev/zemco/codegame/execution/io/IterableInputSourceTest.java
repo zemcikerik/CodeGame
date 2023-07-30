@@ -13,21 +13,21 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag(UNIT_TEST)
-public class IterableInputSourceTest {
+class IterableInputSourceTest {
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfIterableNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfIterableNull() {
         assertThrows(IllegalArgumentException.class, () -> new IterableInputSource(null));
     }
 
     @Test
-    public void shouldHaveNoValueIfCreatedWithEmptyIterable() {
+    void shouldHaveNoValueIfCreatedWithEmptyIterable() {
         IterableInputSource inputSource = new IterableInputSource(emptyList());
         assertThat(inputSource.hasNextValue(), is(false));
     }
 
     @Test
-    public void shouldProvideInputValuesInOrder() {
+    void shouldProvideInputValuesInOrder() {
         List<Integer> values = List.of(1, 2, 3);
         IterableInputSource inputSource = new IterableInputSource(values);
 
@@ -44,7 +44,7 @@ public class IterableInputSourceTest {
     }
 
     @Test
-    public void getNextValueShouldThrowNoSuchElementExceptionIfHasNoNextValue() {
+    void getNextValueShouldThrowNoSuchElementExceptionIfHasNoNextValue() {
         IterableInputSource inputSource = new IterableInputSource(emptyList());
         assertThrows(NoSuchElementException.class, inputSource::getNextValue);
     }

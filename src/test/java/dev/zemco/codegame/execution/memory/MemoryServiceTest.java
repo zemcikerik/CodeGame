@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class MemoryServiceTest {
+class MemoryServiceTest {
 
     @Mock
     private IMemoryFactory memoryFactory;
@@ -30,17 +30,17 @@ public class MemoryServiceTest {
     private MemoryService memoryService;
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfMemoryFactoryIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfMemoryFactoryIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new MemoryService(null));
     }
 
     @Test
-    public void getConfiguredMemoryShouldThrowIllegalArgumentExceptionIfMemorySettingsAreNull() {
+    void getConfiguredMemoryShouldThrowIllegalArgumentExceptionIfMemorySettingsAreNull() {
         assertThrows(IllegalArgumentException.class, () -> this.memoryService.getConfiguredMemory(null));
     }
 
     @Test
-    public void getConfiguredMemoryShouldReturnMemoryInitializedAsDefinedByMemorySettings() {
+    void getConfiguredMemoryShouldReturnMemoryInitializedAsDefinedByMemorySettings() {
         // memory holding 4 cells, cell at address 2 should be initialized to value -42
         ProblemCaseMemorySettings settings = new ProblemCaseMemorySettings(4, Map.of(2, -42));
 

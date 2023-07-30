@@ -16,29 +16,29 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class UpdatableMemoryCellObserverAdapterTest {
+class UpdatableMemoryCellObserverAdapterTest {
 
     @Mock
     private IMemoryCell memoryCell;
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfAddressIsNotPositiveInteger() {
+    void constructorShouldThrowIllegalArgumentExceptionIfAddressIsNotPositiveInteger() {
         assertThrows(IllegalArgumentException.class, () -> new UpdatableMemoryCellObserverAdapter(-1, this.memoryCell));
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfMemoryCellIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfMemoryCellIsNull() {
         assertThrows(IllegalArgumentException.class, () -> new UpdatableMemoryCellObserverAdapter(2, null));
     }
 
     @Test
-    public void getAddressShouldReturnMemoryCellAddress() {
+    void getAddressShouldReturnMemoryCellAddress() {
         UpdatableMemoryCellObserverAdapter adapter = new UpdatableMemoryCellObserverAdapter(1, this.memoryCell);
         assertThat(adapter.getAddress(), is(1));
     }
 
     @Test
-    public void valuePropertyShouldHoldMemoryCellValue() {
+    void valuePropertyShouldHoldMemoryCellValue() {
         when(this.memoryCell.hasValue()).thenReturn(true);
         when(this.memoryCell.getValue()).thenReturn(42);
         UpdatableMemoryCellObserverAdapter adapter = new UpdatableMemoryCellObserverAdapter(1, this.memoryCell);
@@ -47,7 +47,7 @@ public class UpdatableMemoryCellObserverAdapterTest {
     }
 
     @Test
-    public void valuePropertyShouldHoldNullIfMemoryCellDoesNotHaveValue() {
+    void valuePropertyShouldHoldNullIfMemoryCellDoesNotHaveValue() {
         when(this.memoryCell.hasValue()).thenReturn(false);
         UpdatableMemoryCellObserverAdapter adapter = new UpdatableMemoryCellObserverAdapter(1, this.memoryCell);
 
@@ -55,7 +55,7 @@ public class UpdatableMemoryCellObserverAdapterTest {
     }
 
     @Test
-    public void updateValueShouldUpdateValueFromMemoryCell() {
+    void updateValueShouldUpdateValueFromMemoryCell() {
         when(this.memoryCell.hasValue()).thenReturn(true);
         when(this.memoryCell.getValue()).thenReturn(42).thenReturn(-13);
         UpdatableMemoryCellObserverAdapter adapter = new UpdatableMemoryCellObserverAdapter(1, this.memoryCell);

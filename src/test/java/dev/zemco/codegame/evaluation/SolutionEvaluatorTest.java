@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 @Tag(UNIT_TEST)
 @ExtendWith(MockitoExtension.class)
-public class SolutionEvaluatorTest {
+class SolutionEvaluatorTest {
 
     @Mock
     private IExecutionContext executionContext;
@@ -49,7 +49,7 @@ public class SolutionEvaluatorTest {
     }
 
     @Test
-    public void constructorShouldThrowIllegalArgumentExceptionIfAnyArgumentIsNull() {
+    void constructorShouldThrowIllegalArgumentExceptionIfAnyArgumentIsNull() {
         assertThrows(
             IllegalArgumentException.class,
             () -> new SolutionEvaluator(null, this.evaluationStrategy, this.problemCase)
@@ -65,7 +65,7 @@ public class SolutionEvaluatorTest {
     }
 
     @Test
-    public void evaluationShouldBeCompletedIfEvaluationStrategyAlreadySatisfiedDuringConstruction() {
+    void evaluationShouldBeCompletedIfEvaluationStrategyAlreadySatisfiedDuringConstruction() {
         this.mockEvaluationStrategyResult(true);
 
         SolutionEvaluator evaluator = new SolutionEvaluator(this.executionContext, this.evaluationStrategy, this.problemCase);
@@ -75,14 +75,14 @@ public class SolutionEvaluatorTest {
     }
 
     @Test
-    public void stepShouldStepUnderlyingExecution() {
+    void stepShouldStepUnderlyingExecution() {
         this.mockEvaluationStrategyResult(false);
         this.solutionEvaluator.step();
         verify(this.executionEngine, times(1)).step();
     }
 
     @Test
-    public void stepShouldFinishEvaluationSuccessfullyWhenEvaluationStrategyIsSatisfied() {
+    void stepShouldFinishEvaluationSuccessfullyWhenEvaluationStrategyIsSatisfied() {
         this.mockEvaluationStrategyResult(true);
 
         this.solutionEvaluator.step();
@@ -92,7 +92,7 @@ public class SolutionEvaluatorTest {
     }
 
     @Test
-    public void stepShouldThrowStepEvaluationExceptionAndFinishEvaluationIfExecutionHasNoNextInstruction() {
+    void stepShouldThrowStepEvaluationExceptionAndFinishEvaluationIfExecutionHasNoNextInstruction() {
         doThrow(NoNextInstructionException.class).when(this.executionEngine).step();
         assertThrows(StepEvaluationException.class, () -> this.solutionEvaluator.step());
         assertThat(this.solutionEvaluator.hasFinished(), is(true));
@@ -100,7 +100,7 @@ public class SolutionEvaluatorTest {
     }
 
     @Test
-    public void stepShouldThrowStepEvaluationExceptionAndFinishEvaluationIfExecutionStepFails() {
+    void stepShouldThrowStepEvaluationExceptionAndFinishEvaluationIfExecutionStepFails() {
         doThrow(StepExecutionException.class).when(this.executionEngine).step();
         assertThrows(StepEvaluationException.class, () -> this.solutionEvaluator.step());
         assertThat(this.solutionEvaluator.hasFinished(), is(true));
@@ -108,7 +108,7 @@ public class SolutionEvaluatorTest {
     }
 
     @Test
-    public void stepShouldThrowIllegalStateExceptionIfEvaluationHasAlreadyFinished() {
+    void stepShouldThrowIllegalStateExceptionIfEvaluationHasAlreadyFinished() {
         this.mockEvaluationStrategyResult(true);
         this.solutionEvaluator.step();
 
@@ -116,7 +116,7 @@ public class SolutionEvaluatorTest {
     }
 
     @Test
-    public void getExecutionContextShouldReturnUnderlyingExecutionContext() {
+    void getExecutionContextShouldReturnUnderlyingExecutionContext() {
         assertThat(this.solutionEvaluator.getExecutionContext(), equalTo(this.executionContext));
     }
 
