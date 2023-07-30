@@ -26,16 +26,16 @@ jobs:
           cache: maven
 
       - name: Build & Test
-        run: mvn --batch-mode --update-snapshots --activate-profiles unit,component test
+        run: mvn --batch-mode --update-snapshots --activate-profiles unit,component,coverage test
 
       - name: Checkstyle
         run: mvn --batch-mode checkstyle:checkstyle
 
       - name: Integration Test
-        run: mvn --batch-mode --activate-profiles !unit,integration,headless test
+        run: mvn --batch-mode --activate-profiles integration,headless test
 
       - name: Package
-        run: mvn --batch-mode package -DskipTests
+        run: mvn --batch-mode --activate-profiles coverage package -DskipTests
 
       - name: Upload package
         uses: actions/upload-artifact@v3
