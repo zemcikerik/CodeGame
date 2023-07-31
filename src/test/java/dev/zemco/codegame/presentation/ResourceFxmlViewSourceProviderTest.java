@@ -26,7 +26,8 @@ class ResourceFxmlViewSourceProviderTest {
 
     @Test
     void constructorShouldThrowIllegalArgumentExceptionIfResourceClassIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> new ResourceFxmlViewSourceProvider(null, emptyMap()));
+        Map<String, String> resourcePathMap = emptyMap();
+        assertThrows(IllegalArgumentException.class, () -> new ResourceFxmlViewSourceProvider(null, resourcePathMap));
     }
 
     @Test

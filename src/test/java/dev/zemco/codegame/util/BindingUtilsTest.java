@@ -3,6 +3,7 @@ package dev.zemco.codegame.util;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableIntegerValue;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,8 @@ class BindingUtilsTest {
 
     @Test
     void mapShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> BindingUtils.map(new ReadOnlyIntegerWrapper(), null));
+        ObservableIntegerValue property = new ReadOnlyIntegerWrapper().getReadOnlyProperty();
+        assertThrows(IllegalArgumentException.class, () -> BindingUtils.map(property, null));
     }
 
     @Test
@@ -50,9 +52,10 @@ class BindingUtilsTest {
 
     @Test
     void mapOrDefaultShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
+        ObservableIntegerValue property = new ReadOnlyIntegerWrapper().getReadOnlyProperty();
         assertThrows(
             IllegalArgumentException.class,
-            () -> BindingUtils.mapOrDefault(new ReadOnlyIntegerWrapper(), null, "default")
+            () -> BindingUtils.mapOrDefault(property, null, "default")
         );
     }
 
@@ -83,7 +86,8 @@ class BindingUtilsTest {
 
     @Test
     void mapOrNullShouldThrowIllegalArgumentExceptionIfMapperIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> BindingUtils.mapOrNull(new ReadOnlyIntegerWrapper(), null));
+        ObservableIntegerValue property = new ReadOnlyIntegerWrapper().getReadOnlyProperty();
+        assertThrows(IllegalArgumentException.class, () -> BindingUtils.mapOrNull(property, null));
     }
 
     @Test
