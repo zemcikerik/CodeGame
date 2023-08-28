@@ -6,11 +6,12 @@
 
     <groupId>dev.zemco</groupId>
     <artifactId>CodeGame</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <properties>
         <java.version>17</java.version>
+        <revision>1.0-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Presentation -->
