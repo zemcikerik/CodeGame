@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    with:
+      enable-sonarqube-scan: false
+      package-version: ${{ github.event.release.tag_name }}
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [build]
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Package
+        id: download-package
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact
+
+      - name: Get Filename
+        id: get-filename
+        run: |
+          FILENAME=$(ls -1a ${{ steps.download-package.outputs.download-path }} | grep CodeGame-.*\.jar)
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+
+      - name: Add Package to Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: ${{ steps.download-package.outputs.download-path }}/${{ steps.get-filename.outputs.filename }}
+
+  deploy-javadoc:
+    name: Deploy Javadoc
+    runs-on: ubuntu-latest
+    needs: [build]
+
+    permissions:
+      contents: read
+      id-token: write
+      pages: write
+
+    environment:
+      name: Javadoc
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Deploy Javadoc to Github Pages
+        id: deploy
+        uses: actions/deploy-pages@v2
+        with:
+          artifact_name: javadoc
