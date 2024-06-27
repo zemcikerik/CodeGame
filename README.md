@@ -1,9 +1,6 @@
 # CodeGame
 
 ![CI Pipeline](https://github.com/zemcikerik/CodeGame/actions/workflows/ci.yml/badge.svg?branch=master&event=push)
-[![Quality Gate Status](https://sonar.zemco.dev/api/project_badges/measure?project=CodeGame&metric=alert_status&token=sqb_0e782313409937c724cd23f19bbabd37800b0620)](https://sonar.zemco.dev/dashboard?id=CodeGame)
-[![Maintainability Rating](https://sonar.zemco.dev/api/project_badges/measure?project=CodeGame&metric=sqale_rating&token=sqb_0e782313409937c724cd23f19bbabd37800b0620)](https://sonar.zemco.dev/dashboard?id=CodeGame)
-[![Reliability Rating](https://sonar.zemco.dev/api/project_badges/measure?project=CodeGame&metric=reliability_rating&token=sqb_0e782313409937c724cd23f19bbabd37800b0620)](https://sonar.zemco.dev/dashboard?id=CodeGame)
 
 CodeGame is a project created for courses Informatics 1 and 2 in the Faculty of Management Science and Informatics of the University of Zilina. It is a game where the player attempts to solve given problems using a basic programming language similar to assembly.
 

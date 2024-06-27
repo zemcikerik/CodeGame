@@ -3,11 +3,6 @@ name: Build
 on:
   workflow_call:
     inputs:
-      enable-sonarqube-scan:
-        type: boolean
-        required: true
-        description: Enable static analysis using SonarQube
-
       package-version:
         type: string
         required: false
@@ -36,7 +31,7 @@ jobs:
           cache: maven
 
       - name: Build & Test
-        run: mvn --batch-mode --update-snapshots --activate-profiles unit,component,coverage test
+        run: mvn --batch-mode --update-snapshots --activate-profiles unit,component test
 
       - name: Checkstyle
         run: mvn --batch-mode checkstyle:checkstyle
@@ -49,7 +44,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Package
-        run: mvn --batch-mode --activate-profiles coverage package -DskipTests -Drevision=${{ steps.get-version.outputs.version }}
+        run: mvn --batch-mode package -DskipTests -Drevision=${{ steps.get-version.outputs.version }}
 
       - name: Upload Package
         uses: actions/upload-artifact@v3
@@ -66,13 +61,6 @@ jobs:
           name: javadoc
           path: target/site/apidocs
           retention-days: 7
-
-      - name: SonarQube Scan
-        run: mvn --batch-mode -DskipTests -Dsonar.projectKey=CodeGame sonar:sonar
-        if: ${{ inputs.enable-sonarqube-scan }}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   integration-test:
     name: Integration Test

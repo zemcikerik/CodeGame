@@ -10,7 +10,6 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      enable-sonarqube-scan: false
       package-version: ${{ github.event.release.tag_name }}
 
   release:
